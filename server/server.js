@@ -5,6 +5,7 @@ const cors = require('cors');
 const dotenv = require("dotenv").config();
 const users = require('./routes/Users')
 const documents = require('./routes/Documents')
+const offices = require('./routes/Offices')
 const config = require('./config/db');
 const MySQLStore = require('express-mysql-session')(session);
 
@@ -62,6 +63,7 @@ app.listen(process.env.PORT || 5000, () => {
 
 app.use('/users', users)
 app.use('/documents', documents)
+app.use('/offices', offices)
 
 
 
