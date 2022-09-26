@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
 import Dashboard from './pages/Dashboard';
@@ -13,9 +13,8 @@ import AppSetting from './pages/AppSetting';
 import AccountSetting from './pages/AccountSetting';
 import Doctype from './pages/Doctype';
 import ResetPassword from './pages/ResetPassword';
-import Registration from './pages/Registration';
 import { UserContextProvider } from './context/UserContext';
-import Document from './pages/Documents';
+// import Document from './pages/Documents';
 
 const App = () => {
 
@@ -36,9 +35,8 @@ const App = () => {
                             </Route>
                         </Route>
                     </Route>
-                    <Route path="/documents" element={<Document/>} />
+                    {/* <Route path="/documents" element={<Document/>} /> */}
                     <Route path="/login" element={<Login/>} />
-                    <Route path="/register" element={<Registration/>} />
                     <Route path="/reset-password" element={<ResetPassword/>} />
                     <Route path="*" element={<ErrorPage/>} />
                 </Routes>
