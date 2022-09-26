@@ -11,8 +11,24 @@ const saltRounds = 10;
 let conn = config.connection
 //
 
+
+// Get document types
+
+router.get('/type', async (req, res) => {
+
+    conn.query("SELECT * FROM `doctypes`", 
+    (error, result) => {
+        if(result) {
+            res.status(200).json(result)
+        }
+        if(error) {
+            res.send(error)
+        }
+    })
+})
+
 // Get all document
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
 
     conn.query("SELECT d.id, u.name userFullName, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id ORDER BY d.id", 
     (error, result) => {
@@ -26,7 +42,7 @@ router.get('/', async (req, res) => {
 })
 
 // Get documents of a certain user
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
     const userId = req.params.id
 
     conn.query("SELECT d.id, u.name userFullName, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id WHERE user_id = ? ORDER BY d.id", 
@@ -43,25 +59,11 @@ router.get('/:id', async (req, res) => {
 
 
 
-// Get document types
-
-router.get('/type', async (req, res) => {
-
-    conn.query("SELECT * FROM `doctypes`", 
-    (error, result) => {
-        if(result) {
-            res.status(200).json(result)
-        }
-        if(error) {
-            res.status(400).send(error)
-        }
-    })
-})
 
 
 
 // Add Document
-router.post('/add-document', async (req, res) => {
+router.post('/add-document', (req, res) => {
 
     const userId = req.body.userId
     const docType = req.body.docType

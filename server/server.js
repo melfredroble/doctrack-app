@@ -42,14 +42,15 @@ var sessionStore = new MySQLStore({
 
 
 app.use(session({
-	key: 'keyin',
-    secret: process.env.SECRET,
+    secret: process.env.SESSION_SECRET,
 	store: sessionStore,
     resave: false,
     saveUninitialized: true,
 	cookie: {
+		// httpOnly: true,
 		secure: false,
-		maxAge: 1000 * 60 * 60 * 24
+		maxAge: parseInt(process.env.SESSION_MAX_AGE),
+		// sameSite: 'none'
 	}
 }));
 
@@ -67,27 +68,17 @@ app.use('/offices', offices)
 
 
 
-app.get('/logout', (req, res) => {
-	if(req.session.user){
-		req.session.destroy((err) => {
-			if(!err){
-				res.redirect('http://localhost:3000/login')
-			}
-		})
-	}
-})
-
 
 
 //   app.post("/register", (req, res) => {
 // 	const email = req.body.email;
 // 	const password = req.body.password;
-  
+
 // 	bcrypt.hash(password, saltRounds, (err, hash) => {
 // 	  if (err) {
 // 		console.log(err);
 // 	  }
-  
+
 // 	  conn.query(
 // 		"INSERT INTO users (email, password) VALUES (?,?)",
 // 		[email, hash],
@@ -97,40 +88,64 @@ app.get('/logout', (req, res) => {
 // 	  );
 // 	});
 //   });
-  
-  app.get("/login", (req, res) => {
-	if (req.session.user) {
-	  res.send({ loggedIn: true, user: req.session.user });
-	}
-  });
-  
-  app.post("/login", (req, res) => {
-	const email = req.body.email;
-	const password = req.body.password;
-  
-	conn.query(
-	  "SELECT * FROM users WHERE email = ?;",
-	  email,
-	  (err, result) => {
-		if (err) {
-		  res.send({ err: err });
-		}
-  
-		if (result.length > 0) {
-		  bcrypt.compare(password, result[0].password, (error, response) => {
-
-			if (response) {
-			  req.session.user = result[0];
-			  res.send({loggedIn: true, user: req.session.user});
-			  res.status(200);
-			} else {
-			  res.send({ loggedIn: false, message: "Wrong email/password combination!" });
-			}
-		  });
+	
+	// app.get("/login", (req, res) => {
+	// 	if (req.session.user) {
+	// 	res.send({ loggedIn: true, user: req.session.user });
+	// 	}
+	// });
+	
+	app.post("/login", (req, res) => {
+		const email = req.body.email;
+		const password = req.body.password;
+	
+		if(email || password) {
+			conn.query(
+				"SELECT * FROM users WHERE email = ?;",
+				email,
+				(err, result) => {
+					if (err) {
+					res.send({ err: err });
+					}
+					const role = result.role;
+		
+					if(result.role !== role) {
+						res.send({message: "User doesn't exist"})
+					} else {
+						if (result.length > 0) {
+						bcrypt.compare(password, result[0].password, (error, response) => {
+			
+							if (response) {
+								req.session.user = result[0];
+								res.json({loggedIn: true, user: req.session.user});
+								console.log(req.session.user)
+							} else {
+								res.send({ loggedIn: false, message: "Wrong email/password combination!" });
+							}
+							
+						});
+					} else {
+						res.send({ message: "User doesn't exist" });
+					}
+				}
+			});
 		} else {
-		  res.send({ message: "User doesn't exist" });
+			res.send({message: "Email and password required."})
 		}
-	  }
-	);
-  });
-  
+	});
+	
+// Logout
+app.get('/logout', async(req, res, next) => {
+	try {
+		if(req.session) {
+			req.session.destroy((err) => {
+				if(!err){
+					res.redirect('http://localhost:3000/login')
+					res.clearCookie("connect.sid", {path: "/"})
+				}
+			})
+		}
+	} catch (err){
+		res.status(400).send(err)
+	}
+})
