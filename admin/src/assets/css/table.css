@@ -1,0 +1,44 @@
+.dataTable {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    margin: 20px 0 !important;
+}
+
+.dataTables_filter {
+    margin-bottom: 15px;
+}
+
+.dataTables_filter label {
+    color: gray;
+}
+
+.dataTables_filter label input {
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+.dataTables_length label{
+    color: gray;
+}
+
+.dataTables_length label select{
+    color: gray;
+}
+
+tr.odd > .sorting_1  {
+    box-shadow: inset 0 0 0 9999px rgb(0 0 0 / 3%) !important;
+}
+
+th {
+    border: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 10px !important;
+}
+
+.current {
+    background-color: #eeee !important;
+    border: none !important;
+}
+
+.paginate_button.current:hover  {
+    color: #ffff !important;
+    outline: none !important;
+}
