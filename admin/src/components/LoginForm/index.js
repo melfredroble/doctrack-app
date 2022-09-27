@@ -4,7 +4,7 @@ import {  } from "react-icons/fa";
 import {CardContainer, CardHeader, CardBody, FormGroup, CardFooter, LogoText} from './styles';
 
 import Axios from 'axios';
-// import UserContext from '../../context/UserContext';
+import UserContext from '../../context/UserContext';
 
 
 const LoginForm = () => {
@@ -17,7 +17,7 @@ const LoginForm = () => {
 
     Axios.defaults.withCredentials = true;
 
-    // const {isAuth, setIsAuth} = useContext(UserContext)
+    const {isAuth, setIsAuth} = useContext(UserContext)
 
     // const handleLogin = async () => {
     //     await Axios.post("http://localhost:5000/login", {
@@ -38,12 +38,14 @@ const LoginForm = () => {
             e.preventDefault();
             const response = await Axios.post("http://localhost:5000/login", {
                 email: email,
-                password: password,
+                password: password
             })
-            if(response.data.loggedIn === true) {
-                const user = response.data.user;
-                localStorage.setItem("auth", '"yes"');
-                localStorage.setItem("user", JSON.stringify(user));
+            if(response) {
+                // const user = response.data.user;
+                // localStorage.setItem("auth", '"yes"');
+                // console.log(isAuth)
+                // setIsAuth(true)
+                // localStorage.setItem("user", JSON.stringify(user));
                 navigate('/');
             }
 

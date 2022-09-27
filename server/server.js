@@ -28,7 +28,7 @@ let conn = config.connection
 //
 
 var sessionStore = new MySQLStore({
-	expiration: 10800000,
+	expiration: 1000 * 60 * 60 * 24,
 	createDatabaseTable: true,
 	schema: {
 		tableName: 'sessiontbl',
@@ -41,59 +41,38 @@ var sessionStore = new MySQLStore({
 },conn)
 
 
+// app.set('trust proxy', 1)
 app.use(session({
+	key: "keyin",
     secret: process.env.SESSION_SECRET,
 	store: sessionStore,
-    resave: false,
-    saveUninitialized: true,
+    resave: false, //true
+    saveUninitialized: false, //true
 	cookie: {
-		// httpOnly: true,
+		httpOnly: true,
 		secure: false,
-		maxAge: parseInt(process.env.SESSION_MAX_AGE),
-		// sameSite: 'none'
+		maxAge: 1000 * 60 * 60 * 24,
+		sameSite: true
 	}
 }));
 
+
+// app.use((req, res, next)=>{
+// 	console.log(req.session);
+// 	next()
+// })
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server is listening on port 5000');
 });
 
+app.get('/login', (req, res)=> {
+	const {user} = req.session;
+	if(user){
+		res.json({loggedIn: true, user: user})
+	}
+})
 
-// Route Middlewares
-
-app.use('/users', users)
-app.use('/documents', documents)
-app.use('/offices', offices)
-
-
-
-
-
-//   app.post("/register", (req, res) => {
-// 	const email = req.body.email;
-// 	const password = req.body.password;
-
-// 	bcrypt.hash(password, saltRounds, (err, hash) => {
-// 	  if (err) {
-// 		console.log(err);
-// 	  }
-
-// 	  conn.query(
-// 		"INSERT INTO users (email, password) VALUES (?,?)",
-// 		[email, hash],
-// 		(err, result) => {
-// 		  console.log(err);
-// 		}
-// 	  );
-// 	});
-//   });
-	
-	// app.get("/login", (req, res) => {
-	// 	if (req.session.user) {
-	// 	res.send({ loggedIn: true, user: req.session.user });
-	// 	}
-	// });
 	
 	app.post("/login", (req, res) => {
 		const email = req.body.email;
@@ -116,11 +95,11 @@ app.use('/offices', offices)
 						bcrypt.compare(password, result[0].password, (error, response) => {
 			
 							if (response) {
-								req.session.user = result[0];
-								res.json({loggedIn: true, user: req.session.user});
-								console.log(req.session.user)
+								req.session.user = result;
+								res.send(result)
+								// res.end()
 							} else {
-								res.send({ loggedIn: false, message: "Wrong email/password combination!" });
+								res.send({ message: "Wrong email/password combination!" });
 							}
 							
 						});
@@ -133,19 +112,27 @@ app.use('/offices', offices)
 			res.send({message: "Email and password required."})
 		}
 	});
-	
-// Logout
-app.get('/logout', async(req, res, next) => {
-	try {
-		if(req.session) {
-			req.session.destroy((err) => {
-				if(!err){
-					res.redirect('http://localhost:3000/login')
-					res.clearCookie("connect.sid", {path: "/"})
-				}
-			})
-		}
-	} catch (err){
-		res.status(400).send(err)
+
+
+
+app.get('/logout', (req, res) => {
+	if(req.session){
+		req.session.destroy((error)=>{
+			if(error){
+				res.send(error)
+			}{
+				res.clearCookie("keyin", { domain: "localhost",path: "/" });
+				res.redirect('http://localhost:3000/login')
+			}
+		});
+		
 	}
 })
+
+
+// Route Middlewares
+
+app.use('/users', users)
+app.use('/documents', documents)
+app.use('/offices', offices)
+

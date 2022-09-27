@@ -14,7 +14,7 @@ let conn = config.connection
 
 // Get document types
 
-router.get('/type', async (req, res) => {
+router.get('/type', (req, res) => {
 
     conn.query("SELECT * FROM `doctypes`", 
     (error, result) => {
@@ -83,7 +83,7 @@ router.post('/add-document', (req, res) => {
             res.status(400).send(error)
         }
     })
-
+ 
 })
 
 

@@ -49,25 +49,40 @@ const ProtectedRoutes = () => {
     // }, [])
 
     
-    const {isAuth, setIsAuth} = useContext(UserContext)
+    const {isAuth, role, setIsAuth, setRole} = useContext(UserContext)
     
     
-    const init = ()=> {
-        if(!localStorage.getItem("auth")){
-            setIsAuth(false)
-        } else {
-            const auth = JSON.parse(localStorage.getItem('auth'))
-            if(auth === 'yes'){
-                setIsAuth(true)
-            } else {
-                setIsAuth(false)
-            }
-        }
-    }
+    // const init = ()=> {
+    //     if(!localStorage.getItem("auth")){
+    //         setIsAuth(false)
+    //     } else {
+    //         const auth = JSON.parse(localStorage.getItem('auth'))
+    //         if(auth === 'yes'){
+    //             setIsAuth(true)
+    //         } else {
+    //             setIsAuth(false)
+    //         }
+    //     }
+    // }
 
-    useEffect(init, [])
+    // useEffect(init, [])
 
 
+    // const user = ()=>{
+    //     Axios.get('http://localhost:5000/login')
+    //     .then((response)=>{
+    //         if(response.data.loggedIn === true){
+    //             setIsAuth(response.data.loggedIn)
+    //             console.log(isAuth)
+    //         }
+    //     })
+    //     .catch((error)=>{
+    //         console.log(error)
+    //     })
+            
+    // }   
+
+    // useEffect(user, [])
     return (
         isAuth ? <Outlet /> : <Navigate to="/login" />
     )

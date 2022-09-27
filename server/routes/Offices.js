@@ -5,3 +5,4 @@ const router = express.Router()
 // connection
 let conn = config.connection
 
+module.exports = router;
