@@ -5,6 +5,8 @@ import {CardContainer, CardHeader, CardBody, FormGroup, CardFooter, LogoText} fr
 
 import Axios from 'axios';
 import UserContext from '../../context/UserContext';
+import { is } from '@react-spring/shared';
+import UserDispatchContext from '../../context/UserDispatchContext';
 
 
 const LoginForm = () => {
@@ -15,25 +17,16 @@ const LoginForm = () => {
     const [loginStatus, setLoginStatus] = useState('');
 
 
+
     Axios.defaults.withCredentials = true;
 
     const {isAuth, setIsAuth} = useContext(UserContext)
-
-    // const handleLogin = async () => {
-    //     await Axios.post("http://localhost:5000/login", {
-    //       email: email,
-    //       password: password,
-    //     }).then((response) => {
-    //       if (response.data.loggedIn === true) {
-    //         setIsAuth(response.data.loggedIn)
-    //         navigate('/')
-    //       } else if(response.data.message){
-    //         setLoginStatus(response.data.message);
-    //       }
-    //     });
-    //   };
+    // const {setIsAuth} = useContext(UserDispatchContext)
 
 
+
+
+ 
         const handleLogin = async (e) => {
             e.preventDefault();
             const response = await Axios.post("http://localhost:5000/login", {
@@ -45,14 +38,29 @@ const LoginForm = () => {
                 // localStorage.setItem("auth", '"yes"');
                 // console.log(isAuth)
                 // setIsAuth(true)
-                // localStorage.setItem("user", JSON.stringify(user));
                 navigate('/');
+                // localStorage.setItem("user", JSON.stringify(user));
             }
 
             if(response.data.message){
                 setLoginStatus(response.data.message);
             }
         };
+
+        useEffect(() => {
+            Axios.get('http://localhost:5000/login')
+            .then((response) => {
+                if (response.data.loggedIn === true) {
+                    setIsAuth(true)
+                }
+            })
+        },[])
+
+        useEffect(() => {
+            console.log("updated", isAuth) 
+        }, [isAuth])
+    
+    
 
 
 

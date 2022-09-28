@@ -86,6 +86,22 @@ router.post('/add-document', (req, res) => {
  
 })
 
+// Incoming documents
+router.get('/:id', (req, res) => {
+    const userId = req.params.id
+
+    conn.query("SELECT i.id, u.name, dt.name, d.description, d.datetime, o.office_name, d.remarks, d.action, d.status FROM incoming_documents i LEFT JOIN documents d ON i.doc_id = d.id LEFT JOIN users u ON d.user_id = u.id LEFT JOIN doctypes dt ON d.doctype_id = dt.id LEFT JOIN offices o ON d.current_office = o.id WHERE d.user_id = ?", 
+    userId,
+    (error, result) => {
+        if(result) {
+            res.status(200).send(result)
+        }
+        if(error) {
+            res.send(error)
+        }
+    })
+})
+
 
 
 

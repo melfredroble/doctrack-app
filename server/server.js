@@ -67,9 +67,10 @@ app.listen(process.env.PORT || 5000, () => {
 });
 
 app.get('/login', (req, res)=> {
-	const {user} = req.session;
-	if(user){
-		res.json({loggedIn: true, user: user})
+	if(req.session.user) {
+		res.send({loggedIn: true, user: req.session.user})
+	} else {
+		res.send({loggedIn: false})
 	}
 })
 
@@ -96,7 +97,7 @@ app.get('/login', (req, res)=> {
 			
 							if (response) {
 								req.session.user = result;
-								res.send(result)
+								res.send({result})
 								// res.end()
 							} else {
 								res.send({ message: "Wrong email/password combination!" });

@@ -83,6 +83,8 @@ const ProtectedRoutes = () => {
     // }   
 
     // useEffect(user, [])
+
+
     return (
         isAuth ? <Outlet /> : <Navigate to="/login" />
     )

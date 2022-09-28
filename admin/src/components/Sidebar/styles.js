@@ -65,7 +65,7 @@ export const SidebarLink = styled.div`
         background-color: #272d3f;
     }
 `
-export const LogoText = styled.h1`
+export const LogoText = styled.div`
     display: flex;
     
     & h1 {

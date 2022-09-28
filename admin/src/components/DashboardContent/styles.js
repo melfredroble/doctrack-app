@@ -9,6 +9,7 @@ export const Card = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 0.5fr;
+    margin: 0 30px;
 
 `
 export const CardLeft = styled.div`
