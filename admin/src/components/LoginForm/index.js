@@ -47,18 +47,18 @@ const LoginForm = () => {
             }
         };
 
-        useEffect(() => {
-            Axios.get('http://localhost:5000/login')
-            .then((response) => {
-                if (response.data.loggedIn === true) {
-                    setIsAuth(true)
-                }
-            })
-        },[])
+        // useEffect(() => {
+        //     Axios.get('http://localhost:5000/login')
+        //     .then((response) => {
+        //         if (response.data.loggedIn === true) {
+        //             setIsAuth(true)
+        //         }
+        //     })
+        // },[])
 
-        useEffect(() => {
-            console.log("updated", isAuth) 
-        }, [isAuth])
+        // useEffect(() => {
+        //     console.log("updated", isAuth) 
+        // }, [isAuth])
     
     
 

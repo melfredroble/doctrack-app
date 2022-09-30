@@ -6,14 +6,13 @@ const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
 
-    const [isAuth, setIsAuth] = useState(true);
     const [userId, setUserId] = useState(null);
     const [userinfo, setUserInfo] = useState([]);
     const [userData, setUserData] = useState([]);
     const [message, setMessage] = useState('');
     const [showMessage, setShowMessage] = useState(false)
 
-    Axios.defaults.withCredentials = true;
+    Axios.defaults.withCredentials = true;   
 
     useEffect(() => {
         userList();
@@ -21,25 +20,19 @@ export const UserContextProvider = ({ children }) => {
 
     const userList = () => {
         Axios.get('http://localhost:5000/users')
-            .then((response) => {
-                setUserData(response.data)
-            })
-            .catch(error => console.log(error))
+        .then((response) => {
+            setUserData(response.data)
+        })
+        .catch(error => console.log(error))
     }
-
-
-
-
 
     const state = {
         userId,
-        isAuth,
         userData,
         userinfo,
         userList,
         showMessage,
         message,
-        setIsAuth,
         setUserId,
         setUserData,
         setUserInfo,

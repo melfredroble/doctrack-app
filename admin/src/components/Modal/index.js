@@ -10,7 +10,6 @@ import {
 } from "./styles";
 import Axios from "axios";
 import UserContext from '../../context/UserContext';
-import {useSpring, animated} from 'react-spring';
 
 export const DeleteModal = ({closeModal, openModal}) => {
 
@@ -35,18 +34,26 @@ export const DeleteModal = ({closeModal, openModal}) => {
     return (
         <>
             <ModalBackdrop onClick={()=> closeModal(false)} />
-            {/* <animated.div style={animation}> */}
-                <ModalContainer>
-                {/* <CloseButton onClick={()=> closeModal(false)}>X</CloseButton> */}
-                    <ModalBody>
-                        <Text>Are you sure to delete?</Text>
-                        <ButtonContainer>
-                            <DeleteButton onClick={()=> deleteUser(userId)}>Yes</DeleteButton>
-                            <CloseButton onClick={()=> closeModal(false)}>No</CloseButton>
-                        </ButtonContainer>
-                    </ModalBody>
-                </ModalContainer>
-            {/* </animated.div> */}
+            <ModalContainer>
+            {/* <CloseButton onClick={()=> closeModal(false)}>X</CloseButton> */}
+                <ModalBody>
+                    <Text>Are you sure to delete?</Text>
+                    <ButtonContainer>
+                        <DeleteButton onClick={()=> deleteUser(userId)}>Yes</DeleteButton>
+                        <CloseButton onClick={()=> closeModal(false)}>No</CloseButton>
+                    </ButtonContainer>
+                </ModalBody>
+            </ModalContainer>
         </>
     );
 };
+
+
+export const EditModal = () => {
+
+    return (
+        <>
+
+        </>
+    )
+}
