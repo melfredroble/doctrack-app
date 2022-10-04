@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ModalBackdrop = styled.div`
+export const DeleteModalBackdrop = styled.div`
     /* background: #eeeeee; */
     backdrop-filter: blur(1px);
     height: 100%;
@@ -11,7 +11,7 @@ export const ModalBackdrop = styled.div`
     overflow: hidden !important;
 `
 
-export const ModalContainer = styled.div`
+export const DeleteModalContainer = styled.div`
     background-color: #ffffff;
     height: 200px;
     width: 350px;
@@ -28,7 +28,7 @@ export const ModalContainer = styled.div`
     border-radius: 10px;
 `
 
-export const ModalBody = styled.div`
+export const DeleteModalBody = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,8 +1,7 @@
 import React,{useState, useContext, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {  } from "react-icons/fa";
-import {CardContainer, CardHeader, CardBody, FormGroup, CardFooter, LogoText} from './styles';
-
+import {CardContainer, CardHeader, CardBody, FormGroup, CardFooter, LogoText, ErrorText} from './styles';
 import Axios from 'axios';
 import UserContext from '../../context/UserContext';
 import { is } from '@react-spring/shared';
@@ -16,16 +15,9 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
 
-
-
     Axios.defaults.withCredentials = true;
 
     const {isAuth, setIsAuth} = useContext(UserContext)
-    // const {setIsAuth} = useContext(UserDispatchContext)
-
-
-
-
  
         const handleLogin = async (e) => {
             e.preventDefault();
@@ -33,11 +25,7 @@ const LoginForm = () => {
                 email: email,
                 password: password
             })
-            if(response) {
-                // const user = response.data.user;
-                // localStorage.setItem("auth", '"yes"');
-                // console.log(isAuth)
-                // setIsAuth(true)
+            if(response.data.loggedIn === true) {
                 navigate('/');
                 // localStorage.setItem("user", JSON.stringify(user));
             }
@@ -59,11 +47,6 @@ const LoginForm = () => {
         // useEffect(() => {
         //     console.log("updated", isAuth) 
         // }, [isAuth])
-    
-    
-
-
-
 
     return (
             <CardContainer>
@@ -73,8 +56,7 @@ const LoginForm = () => {
                 </LogoText>
                 <CardHeader>
                     <h2>Admin</h2>
-                    <p>{loginStatus}</p>
-                    {/* {Error} */} 
+                    {loginStatus && <ErrorText>{loginStatus}</ErrorText>}
                 </CardHeader>
                 <form onSubmit={handleLogin}>
                 <CardBody>

@@ -24,6 +24,16 @@ export const LogoText = styled.div`
     justify-content: center;
 `
 
+export const ErrorText = styled.p`
+    color: #000;
+    font-size: 12px;
+    background-color: #ffebe9;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid rgba(255,129,130,0.4);
+`
+
 export const CardBody = styled.div`
     display: flex;
     flex: 1;
