@@ -17,7 +17,7 @@ import {
     FormGroup,
     InputGroup
 } from './styles'
-// import "../../assets/css/table.css";
+import Footer from '../../components/Footer';
 
 const Doctype = () => {
 
@@ -116,6 +116,7 @@ const Doctype = () => {
                     {active && <Modal closeModal={setActive} />}
                 </Container>
             </InnerContainer>
+            <Footer/>
         </MainContainer>
     )
 }

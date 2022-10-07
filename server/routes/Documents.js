@@ -87,11 +87,29 @@ router.post('/add-document', (req, res) => {
 })
 
 // Incoming documents
-router.get('/:id', (req, res) => {
-    const userId = req.params.id
+router.get('/incoming/:id', (req, res) => {
+    const office_id = req.params.id
 
-    conn.query("SELECT i.id, u.name, dt.name, d.description, d.datetime, o.office_name, d.remarks, d.action, d.status FROM incoming_documents i LEFT JOIN documents d ON i.doc_id = d.id LEFT JOIN users u ON d.user_id = u.id LEFT JOIN doctypes dt ON d.doctype_id = dt.id LEFT JOIN offices o ON d.current_office = o.id WHERE d.user_id = ?", 
-    userId,
+    conn.query("SELECT d.user_id, u.name, dt.name doctype, d.description, d.datetime, o.office_name OriginatingOffice, d.remarks, d.action FROM documents d LEFT JOIN users u ON d.user_id = u.id LEFT JOIN offices o ON u.office_id = o.id LEFT JOIN doctypes dt ON d.doctype_id = dt.id WHERE d.destination_office = ?", 
+    office_id,
+    (error, result) => {
+        if(result) {
+            res.status(200).send(result)
+        }
+        if(error) {
+            res.send(error)
+        }
+    })
+
+})
+
+
+// Outgoing documents
+router.get('/outgoing/:id', (req, res) => {
+    const user_id = req.params.id
+
+    conn.query("SELECT d.id, d.user_id, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id WHERE d.user_id = ? ORDER BY d.id DESC", 
+    user_id,
     (error, result) => {
         if(result) {
             res.status(200).send(result)

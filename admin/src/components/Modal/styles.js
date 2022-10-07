@@ -13,7 +13,7 @@ export const DeleteModalBackdrop = styled.div`
 
 export const DeleteModalContainer = styled.div`
     background-color: #ffffff;
-    height: 200px;
+    height: 250px;
     width: 350px;
     position: fixed;
     margin: auto;
@@ -23,9 +23,22 @@ export const DeleteModalContainer = styled.div`
     left: 0;
     box-shadow: 0 0 10px 0px rgba(0,0,0,0.15);
     color: #414a4c;
-    padding: 15px;
     overflow: hidden !important;
     border-radius: 10px;
+`
+export const DeleteModalHeader = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #e74c3c;
+    height: 150px;
+
+    & svg {
+        color: #fff;
+        font-size: 52px;
+        margin-bottom: 10px;
+    }
 `
 
 export const DeleteModalBody = styled.div`
@@ -33,31 +46,42 @@ export const DeleteModalBody = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
 `
 
 export const Text = styled.h1`
     font-size: 18px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: ${props => props.fw};
 `
 
 export const ButtonContainer = styled.div`
     display: flex;
-    justify-content: space-between;
-    width: 30%;
+    justify-content: space-evenly;
+    padding: 30px;
+    width: 100%;
 `
 
 export const CloseButton = styled.button`
-    padding: 5px 10px;
     cursor: pointer;
-    background-color: #07bc0c;
-    border: 1px solid rgba(255,129,130,0.4);
+    /* background-color: #07bc0c; */
+    background: ${props => props.background};
+    background-color: ${props => props.bg};
+    border: none;
     color: #fff;
     border-radius: 5px;
+    padding: ${props => props.padding};
+    font-size: ${props => props.fs};
+`
+
+export const CloseButtonContainer = styled.div`
+    display: flex;
+    justify-content: end;
+    width: 100%;
 `
 
 export const DeleteButton = styled.button`
-    padding: 5px 10px;
+    padding: 5px 30px;
     cursor: pointer;
     background-color: #e74c3c;
     border: 1px solid rgba(255,129,130,0.4);

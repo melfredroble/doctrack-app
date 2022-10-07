@@ -1,19 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {Navigate, Outlet} from 'react-router-dom'
-import Axios from 'axios'
-// import UserContext from '../context/UserContext'
+import {useNavigate, Outlet} from 'react-router-dom'
+import axios from 'axios';
+import AuthContext from '../context/AuthContext'
 
 const ProtectedRoutes = () => {
 
-    const [isAuth, setIsAuth] = useState([]);
+    const navigate = useNavigate('');
+    const {isAuth, setIsAuth} = useContext(AuthContext)
 
     useEffect(()=>{
-        Axios.get('http://localhost:5000/login')
+        axios.get('http://localhost:5000/login')
         .then((response)=>{
             if(response.data.loggedIn === true){
-                setIsAuth(response.data.loggedIn)
+                setIsAuth(true)
             } else {
-                setIsAuth(response.data.loggedIn)
+                setIsAuth(false)
+                navigate('/login')
             }
         })
         .catch((error)=>{
@@ -22,7 +24,7 @@ const ProtectedRoutes = () => {
     },[])
 
     return (
-        isAuth ? <Outlet /> : <Navigate to="/login" />
+        isAuth && <Outlet />
     )
 }
 

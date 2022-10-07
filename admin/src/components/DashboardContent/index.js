@@ -1,10 +1,10 @@
 import React from 'react'
-import { Card, CardRight, CardLeft, CardBottom} from './styles'
-import { FaBuilding, FaUsers } from 'react-icons/fa'
+import { Container, Card, CardRight, CardLeft, CardBottom} from './styles'
+import { FaBuilding, FaUsers, FaUserTie } from 'react-icons/fa'
 
 const DashboardContent = () => {
     return (
-        <>
+        <Container>
             <Card>
                 <CardLeft>
                     <h5>08</h5>
@@ -27,18 +27,18 @@ const DashboardContent = () => {
                     <h5>Users</h5>
                 </CardBottom>
             </Card>
-            {/* <Card>
+            <Card>
                 <CardLeft>
-                    <h5>10</h5>
+                    <h5>1</h5>
                 </CardLeft>
                 <CardRight>
-                    <FaUsers/>
+                    <FaUserTie/>
                 </CardRight>
                 <CardBottom>
                     <h5>Admin</h5>
                 </CardBottom>
-            </Card> */}
-        </>
+            </Card>
+        </Container>
     )
 }
 

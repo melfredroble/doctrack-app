@@ -23,10 +23,9 @@ export const SidebarHeader = styled.div`
 
     height: 100px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 10px 0;
 `
 
 export const SidebarLinks = styled.div`
@@ -65,6 +64,17 @@ export const SidebarLink = styled.div`
         background-color: #272d3f;
     }
 `
+
+export const LogoContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+export const LogoImg = styled.img`
+    height: 50px;
+    width: 60px;
+`
+
 export const LogoText = styled.div`
     display: flex;
     

@@ -3,8 +3,7 @@ import styled from "styled-components";
 export const MainContainer = styled.div`
 
     margin-left: 250px;
-    padding: 0 10px;
-
+    height: 100%;
 `
 
 export const InnerContainer = styled.div`
@@ -38,7 +37,7 @@ export const Container = styled.div`
     flex-direction: column;
     height: 100%;
     width: 100%;
-    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 5px 10px 3px rgba(0,0,0,0.2);
     border-radius: 5px;
     padding: 20px;
     margin-top: 30px;

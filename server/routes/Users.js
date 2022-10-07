@@ -10,9 +10,19 @@ const saltRounds = 10;
 // connection
 let conn = config.connection
 
+// Protecting routes to unauthorized users
 
+// const requireAuth = (req, res, next)=> {
+//   const {user} = req.session;
+//   if(!user){
+//     return res.status(401).json({message: "Unauthorized"})
+//   }
+//   next()
+// }
+
+// Get users list
 router.get('/', (req, res)=> {
-    conn.query("SELECT users.id, users.name, users.email, offices.office_name, users.role FROM users JOIN offices ON users.office_id = offices.id", (err, result)=>{
+    conn.query("SELECT users.id, users.name, users.email, offices.office_name, users.role FROM users JOIN offices ON users.office_id = offices.id ORDER BY users.id ASC", (err, result)=>{
       if(result) {
         res.status(200).json(result)
       }
@@ -23,6 +33,7 @@ router.get('/', (req, res)=> {
     })
 })
 
+// Add user
 router.post('/add-user', (req,res)=> {
   const fullName = req.body.name
   const email = req.body.email
@@ -67,20 +78,9 @@ router.post('/add-user', (req,res)=> {
 
 })
 
-
-router.delete('/delete/:id', (req, res) =>{
+// Edit User
+router.put('/update/:id', (req, res) =>{
   const id = req.params.id
-  conn.query('DELETE FROM `users` WHERE id = ?', id, (error, result) =>{
-    if(error){
-      res.status(400).json(error)
-    } else {
-      res.status(200).json({deleted: true, message: "User successfully deleted!"})
-    }
-  })
-})
-
-router.put('/update', (req, res) =>{
-  const id = req.body.id
   const name = req.body.name
   const password = req.body.password
   const office = req.body.office
@@ -90,6 +90,19 @@ router.put('/update', (req, res) =>{
       console.log(error)
     } else {
       res.send(result)
+    }
+  })
+})
+
+
+// Delete user
+router.delete('/delete/:id', (req, res) =>{
+  const id = req.params.id
+  conn.query('DELETE FROM `users` WHERE id = ?', id, (error, result) =>{
+    if(error){
+      res.status(400).json(error)
+    } else {
+      res.status(200).json({deleted: true, message: "User successfully deleted!"})
     }
   })
 })

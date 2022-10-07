@@ -39,7 +39,7 @@ const Navbar = () => {
                             <form action='http://localhost:5000/logout' method='get'>
                                 <ItemLink>
                                     <FaUserCog/>
-                                    <Link style={{textDecoration: "none"}} to="/app-setting" >Account settings</Link>
+                                    <Link style={{textDecoration: "none"}} to="/account-setting" >Account settings</Link>
                                 </ItemLink>
                                 <Button type='submit' onClick={()=> {
                                     localStorage.clear()

@@ -23,6 +23,7 @@ import Axios from 'axios'
 import { DeleteModal, EditModal } from '../../components/Modal';
 import UserContext from '../../context/UserContext';
 import Message from '../../components/Message';
+import Footer from '../../components/Footer';
 // import {useSpring, animated} from 'react-spring';
 
 const Users = () => {
@@ -72,6 +73,7 @@ const Users = () => {
                     {editModal && <EditModal closeModal={setEditModal}/>}
                 </Container>
             </InnerContainer>
+            <Footer/>
         </MainContainer>
     )
 }

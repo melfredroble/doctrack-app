@@ -1,8 +1,10 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
     DeleteModalBackdrop,
+    DeleteModalHeader,
     DeleteModalBody,
     DeleteModalContainer,
+    CloseButtonContainer,
     Text,
     CloseButton,
     DeleteButton,
@@ -23,7 +25,7 @@ import {
 } from "../../pages/Users/styles";
 import Axios from "axios";
 import UserContext from '../../context/UserContext';
-import { FaRegUser, FaCheck, FaUser } from 'react-icons/fa';
+import { FaExclamationTriangle, FaCheck, FaUser } from 'react-icons/fa';
 
 export const DeleteModal = ({closeModal, openModal}) => {
 
@@ -48,12 +50,18 @@ export const DeleteModal = ({closeModal, openModal}) => {
         <>
             <DeleteModalBackdrop onClick={()=> closeModal(false)} />
             <DeleteModalContainer>
-            {/* <CloseButton onClick={()=> closeModal(false)}>X</CloseButton> */}
+                <DeleteModalHeader>
+                    <CloseButtonContainer>
+                        <CloseButton fs="22px" background="none" padding="5px 10px" onClick={()=> closeModal(false)}>X</CloseButton>
+                    </CloseButtonContainer>
+                    <FaExclamationTriangle/>
+                    <Text>WARNING!</Text>
+                    <Text fw="normal">Are you sure to delete?</Text>
+                </DeleteModalHeader>
                 <DeleteModalBody>
-                    <Text>Are you sure to delete?</Text>
                     <ButtonContainer>
                         <DeleteButton onClick={()=> deleteUser(userId)}>Yes</DeleteButton>
-                        <CloseButton onClick={()=> closeModal(false)}>No</CloseButton>
+                        <CloseButton bg="#e0e0e0" padding="5px 30px" onClick={()=> closeModal(false)}>No</CloseButton>
                     </ButtonContainer>
                 </DeleteModalBody>
             </DeleteModalContainer>
