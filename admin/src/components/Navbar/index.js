@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {FaSignOutAlt, FaUserCircle, FaUserCog} from 'react-icons/fa'
 import {Link, Outlet } from 'react-router-dom'
-import {MainContainer, Container, Button, Text, UserProfile, Item, ItemLink} from './styles'
+import {MainContainer, Container, Button, Text, UserProfile, Item, ItemLink, InnerContainer} from './styles'
 import Axios from 'axios'
 import { useTransition, animated } from 'react-spring'
 import { useContext } from 'react'
@@ -24,13 +24,15 @@ const Navbar = () => {
     return (
         <>
             <MainContainer>
-                <UserProfile onClick={()=> {
-                    setIsVisible(v => !v)
-                }}>
-                    <FaUserCircle/>
-                    {/* <p>{user.name}</p> */}
-                </UserProfile>
-                
+                <InnerContainer>
+                    <h3>Computer Studies Department</h3>
+                    <UserProfile onClick={()=> {
+                        setIsVisible(v => !v)
+                    }}>
+                        <FaUserCircle/>
+                        {/* <p>{user.name}</p> */}
+                    </UserProfile>
+                </InnerContainer>
                 <Container onClick={()=> setIsVisible(false)}>
                     {transition((style, item)=> 
                         item ? 

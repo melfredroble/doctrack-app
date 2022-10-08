@@ -21,6 +21,19 @@ export const Container = styled.div`
     background-color: transparent;
 `
 
+export const InnerContainer = styled.div`
+    width: 100%;
+    margin-left: 250px;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & h3 {
+        color: #414a4c;
+    }
+`
+
 export const Item = styled.div`
     width: 200px;
     height: 100px;

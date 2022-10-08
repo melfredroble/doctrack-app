@@ -18,6 +18,6 @@ connection.connect(function(err){
 });
 
 module.exports ={
-     connection : mysql.createConnection(config) 
+  connection : mysql.createConnection(config) 
 }; 
 
