@@ -1,16 +1,31 @@
-import React, {useContext, useRef} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
-    ModalBackdrop,
-    ModalBody,
-    ModalContainer,
+    DeleteModalBackdrop,
+    DeleteModalHeader,
+    DeleteModalBody,
+    DeleteModalContainer,
+    CloseButtonContainer,
     Text,
     CloseButton,
     DeleteButton,
     ButtonContainer
 } from "./styles";
+import {
+    ModalBackdrop,
+    Button,
+    ModalContainer,
+    ModalHeader,
+    CloseModal,
+    ModalBody,
+    ModalFooter,
+    FormGroup,
+    InputGroup,
+    PinContainer,
+    ErrorText
+} from "../../pages/Users/styles";
 import Axios from "axios";
 import UserContext from '../../context/UserContext';
-import {useSpring, animated} from 'react-spring';
+import { FaExclamationTriangle, FaCheck, FaUser } from 'react-icons/fa';
 
 export const DeleteModal = ({closeModal, openModal}) => {
 
@@ -31,22 +46,156 @@ export const DeleteModal = ({closeModal, openModal}) => {
         })
     }
 
+    return (
+        <>
+            <DeleteModalBackdrop onClick={()=> closeModal(false)} />
+            <DeleteModalContainer>
+                <DeleteModalHeader>
+                    <CloseButtonContainer>
+                        <CloseButton fs="22px" background="none" padding="5px 10px" onClick={()=> closeModal(false)}>X</CloseButton>
+                    </CloseButtonContainer>
+                    <FaExclamationTriangle/>
+                    <Text>WARNING!</Text>
+                    <Text fw="normal">Are you sure to delete?</Text>
+                </DeleteModalHeader>
+                <DeleteModalBody>
+                    <ButtonContainer>
+                        <DeleteButton onClick={()=> deleteUser(userId)}>Yes</DeleteButton>
+                        <CloseButton bg="#e0e0e0" padding="5px 30px" onClick={()=> closeModal(false)}>No</CloseButton>
+                    </ButtonContainer>
+                </DeleteModalBody>
+            </DeleteModalContainer>
+        </>
+    );
+};
+
+
+export const EditModal = ({closeModal, openModal}) => {
+
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [pin, setPin] = useState('')
+    const [office, setOffice] = useState('')
+    const [role, setRole] = useState('')
+    const [error, setError] = useState([])
+
+    const {userId, userList, setShowMessage, setMessage} = useContext(UserContext)
+
+    const editUser = async () => {
+        const response = await Axios.post("http://localhost:5000/users/add-user", {
+            name: name,
+            email: email,
+            pin: pin,
+            office: office,
+            role: role
+        })
+        .catch(error => console.log(error))
+
+        if(response.data.message){
+            setError(response.data.message);
+        }
+
+        if(response.data.status === "success") {
+            closeModal(false);
+            userList();
+            setShowMessage(true)
+            setMessage("User added successfully");
+        }
+    }
+
+    useEffect(()=> {
+
+    })
 
     return (
         <>
             <ModalBackdrop onClick={()=> closeModal(false)} />
-            {/* <animated.div style={animation}> */}
-                <ModalContainer>
-                {/* <CloseButton onClick={()=> closeModal(false)}>X</CloseButton> */}
-                    <ModalBody>
-                        <Text>Are you sure to delete?</Text>
-                        <ButtonContainer>
-                            <DeleteButton onClick={()=> deleteUser(userId)}>Yes</DeleteButton>
-                            <CloseButton onClick={()=> closeModal(false)}>No</CloseButton>
-                        </ButtonContainer>
-                    </ModalBody>
-                </ModalContainer>
-            {/* </animated.div> */}
+            <ModalContainer>
+                <ModalHeader>
+                    <FaUser/><h1>Edit User</h1>
+                </ModalHeader>
+                <ModalBody>
+                        <FormGroup>
+                            {error === "Email already exist!" && <ErrorText>{error}</ErrorText>}
+                            <InputGroup>
+                                <label>FULL NAME</label>
+                                <input 
+                                placeholder={userId} 
+                                value={name} 
+                                name="name"
+                                onChange={(e)=> setName(e.target.value)}
+                                required
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <label>EMAIL ADDRESS</label>
+                                <input 
+                                placeholder='Enter email address'
+                                name='email'
+                                value={email}
+                                onChange={(e)=> setEmail(e.target.value)}
+                                required
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <label>PIN CODE</label>
+                                <PinContainer>
+                                    <button onClick={(e)=> {
+                                        e.preventDefault()
+                                        setPin(Math.floor(1000 + Math.random() * 9000))}
+                                        }>Generate</button>
+                                    <input 
+                                    type="number" 
+                                    name="pin"
+                                    placeholder='4 pin code'
+                                    value={pin} 
+                                    onChange={(e) => setPin(e.target.value)}
+                                    required
+                                    />
+                                </PinContainer>
+                            </InputGroup>
+                            <InputGroup>
+                                <label>OFICE</label>
+                                <select 
+                                name="office" 
+                                id=""
+                                defaultValue={office}
+                                onChange={(e)=> setOffice(e.target.value)}
+                                required
+                                >
+                                    <option value="">Select office</option>
+                                    <option value="1">Registrar</option>
+                                    <option value="2">HRMO</option>
+                                    <option value="1">Campus Director</option>
+                                    <option value="1">Computer Studies Department</option>
+                                </select>
+                            </InputGroup>
+                            <InputGroup>
+                                <label>ROLE</label>
+                                <select 
+                                name="role" 
+                                id=""
+                                defaultValue={role}
+                                onChange={(e)=> setRole(e.target.value)}
+                                required
+                                >
+                                    <option value="">Select role</option>
+                                    <option value="Head">Office Head</option>
+                                    <option value="Employee">Employee</option>
+                                </select>
+                            </InputGroup>
+                        </FormGroup>
+                </ModalBody>
+                <ModalFooter>
+                    <CloseModal onClick={()=> closeModal(false)}>&times; Close</CloseModal>
+                    <Button 
+                    bg="#07bc0c" 
+                    type='submit' 
+                    padding="8px 12px" 
+                    onClick={editUser(userId)}>
+                    <FaCheck style={{fontSize: "10px"}}/> Save</Button>
+                </ModalFooter>
+            </ModalContainer>
         </>
-    );
-};
+    )
+}

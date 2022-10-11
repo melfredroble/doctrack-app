@@ -1,75 +1,30 @@
 import React, { useContext, useEffect } from 'react'
-import {Navigate, Outlet} from 'react-router-dom'
-import Axios from 'axios'
-import UserContext from '../context/UserContext'
+import { useNavigate, Outlet } from 'react-router-dom'
+import axios from 'axios';
+import AuthContext from '../context/AuthContext'
 
 const ProtectedRoutes = () => {
 
-    // const [isAuth, setIsAuth] = useState(false);
+    const navigate = useNavigate('');
+    const { isAuth, setIsAuth } = useContext(AuthContext)
 
-    // useEffect(()=>{
-    //     return isAuth ? <Outlet /> : <Navigate to="/login" />
-    // }, [isAuth]);
-
-    // Axios.get("http://localhost:5000/login")
-    // .then((response)=>{
-    //     setIsAuth(response.data.loggedIn);
-    // })
-    // .catch((error) => {
-    //     console.log(error);
-    // });
-
-
-
-    // useEffect(()=>{
-    //     const fetchAuth = async () => {
-    //         await Axios.get("http://localhost:5000/login").then((response)=>{
-    //             if(response.data.loggedIn){
-    //                 setIsAuth(response.data.loggedIn)
-    //                 console.log(isAuth)
-    //             } 
-    //         })
-    //     }
-    // }, [])
-
-    // useEffect(()=>{
-    //     const fetchAuth = async () => {
-    //         setIsAuth(false);
-    //         try {
-    //             const {data: response} = await Axios.get("http://localhost:5000/login");
-    //             setIsAuth(response.loggedIn)
-    //             console.log(isAuth)
-    //         } catch (error) {
-    //             console.error(error.message)
-    //         }
-    //         setIsAuth(true)
-    //     }
-
-    //     fetchAuth();
-    // }, [])
-
-    
-    const {isAuth, setIsAuth} = useContext(UserContext)
-    
-    
-    const init = ()=> {
-        if(!localStorage.getItem("auth")){
-            setIsAuth(false)
-        } else {
-            const auth = JSON.parse(localStorage.getItem('auth'))
-            if(auth === 'yes'){
-                setIsAuth(true)
-            } else {
-                setIsAuth(false)
-            }
-        }
-    }
-
-    useEffect(init, [])
-
+    useEffect(() => {
+        axios.get('http://localhost:5000/login')
+            .then((response) => {
+                if (response.data.loggedIn === true) {
+                    setIsAuth(true)
+                } else {
+                    setIsAuth(false)
+                    navigate('/login')
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [setIsAuth])
 
     return (
-        isAuth ? <Outlet /> : <Navigate to="/login" />
+        isAuth && <Outlet />
     )
 }
 

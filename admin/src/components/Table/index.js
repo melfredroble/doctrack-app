@@ -6,12 +6,10 @@ import '../../assets/css/pagination.css';
 import UserContext from '../../context/UserContext';
 
 
-
-const Table = ({thead, data, id, OpenModal}) => {
+const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [pageNumber, setPageNumber] = useState(0);
-
     const {setUserId, userData} = useContext(UserContext)
     
 
@@ -24,7 +22,6 @@ const Table = ({thead, data, id, OpenModal}) => {
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
-//
 
     return (
         <>
@@ -69,14 +66,19 @@ const Table = ({thead, data, id, OpenModal}) => {
                                     <Button 
                                     bg="#50A8EA" 
                                     padding="5px" 
-                                    style={{marginRight: "10px"}}>
+                                    style={{marginRight: "10px"}}
+                                    onClick={()=> {
+                                        openEditModal(true)
+                                        setUserId(id)
+                                    }}
+                                    >
                                         <FaPenAlt/>
                                     </Button>
                                     <Button 
                                     bg="red" 
                                     padding="5px" 
                                     onClick={()=> {
-                                        OpenModal(true)
+                                        openDeleteModal(true)
                                         setUserId(id)
                                     }}>
                                         <FaTrashAlt/>

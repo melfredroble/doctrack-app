@@ -1,7 +1,8 @@
 import React from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import {MainContainer, SidebarLinks, SidebarLink, SidebarHeader, LogoText, Container, HeaderText} from './styles'
+import {MainContainer, LogoImg, SidebarLinks, SidebarLink, SidebarHeader, LogoText, Container, HeaderText} from './styles'
 import { FaRegBuilding, FaRegUser, FaCog, FaTachometerAlt, FaUsersCog, FaRegFileAlt} from 'react-icons/fa'
+import logo from '../../assets/img/logo.png'
 
 const Sidebar = () => {
 
@@ -12,6 +13,7 @@ const Sidebar = () => {
         <>
             <MainContainer>
                 <SidebarHeader>
+                    <LogoImg src={logo} />
                     <LogoText>
                         <h1 style={{textAlign: 'center', color: '#ffffff'}}>Doc</h1>
                         <h1 style={{textAlign: 'center', color: '#50A8EA'}}>Track</h1>

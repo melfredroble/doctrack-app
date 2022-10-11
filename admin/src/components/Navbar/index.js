@@ -17,7 +17,7 @@ const Navbar = () => {
 
     })
     
-    const {user, userInfo} = useContext(UserContext)
+    const {user, setIsAuth} = useContext(UserContext)
 
 
 
@@ -38,12 +38,14 @@ const Navbar = () => {
                         item ? 
                         <animated.div style={style}>
                             <Item>
-                            <form action='http://localhost:5000/logout' method='GET'>
+                            <form action='http://localhost:5000/logout' method='get'>
                                 <ItemLink>
                                     <FaUserCog/>
-                                    <Link style={{textDecoration: "none"}} to="/app-setting" >Account settings</Link>
+                                    <Link style={{textDecoration: "none"}} to="/account-setting" >Account settings</Link>
                                 </ItemLink>
-                                <Button type='submit' onClick={()=> localStorage.clear()}>
+                                <Button type='submit' onClick={()=> {
+                                    localStorage.clear()
+                                    }}>
                                     <FaSignOutAlt/>
                                     <Text>Sign out</Text>
                                 </Button>

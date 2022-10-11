@@ -14,7 +14,7 @@ let conn = config.connection
 
 // Get document types
 
-router.get('/type', async (req, res) => {
+router.get('/type', (req, res) => {
 
     conn.query("SELECT * FROM `doctypes`", 
     (error, result) => {
@@ -83,7 +83,41 @@ router.post('/add-document', (req, res) => {
             res.status(400).send(error)
         }
     })
+ 
+})
 
+// Incoming documents
+router.get('/incoming/:id', (req, res) => {
+    const office_id = req.params.id
+
+    conn.query("SELECT d.user_id, u.name, dt.name doctype, d.description, d.datetime, o.office_name OriginatingOffice, d.remarks, d.action FROM documents d LEFT JOIN users u ON d.user_id = u.id LEFT JOIN offices o ON u.office_id = o.id LEFT JOIN doctypes dt ON d.doctype_id = dt.id WHERE d.destination_office = ?", 
+    office_id,
+    (error, result) => {
+        if(result) {
+            res.status(200).send(result)
+        }
+        if(error) {
+            res.send(error)
+        }
+    })
+
+})
+
+
+// Outgoing documents
+router.get('/outgoing/:id', (req, res) => {
+    const user_id = req.params.id
+
+    conn.query("SELECT d.id, d.user_id, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id WHERE d.user_id = ? ORDER BY d.id DESC", 
+    user_id,
+    (error, result) => {
+        if(result) {
+            res.status(200).send(result)
+        }
+        if(error) {
+            res.send(error)
+        }
+    })
 })
 
 

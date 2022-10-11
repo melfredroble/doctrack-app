@@ -17,6 +17,7 @@ import {
     InputGroup
 } from './styles'
 import Table from '../../components/Table';
+import Footer from '../../components/Footer';
 
 const Office = () => {
 
@@ -73,7 +74,8 @@ const Office = () => {
                     <Table thead={thead} data={data} id={pageName}/>
                         {active && <Modal closeModal={setActive} />}
                 </Container>  
-            </InnerContainer>      
+            </InnerContainer>    
+            <Footer />  
         </MainContainer>
 
     )

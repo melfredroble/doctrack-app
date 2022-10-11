@@ -1,49 +1,61 @@
 import { createContext, useState, useEffect } from "react";
 import Axios from 'axios';
-
+// import UserDispatchContext from "./UserDispatchContext";
 const UserContext = createContext();
 
-export const UserContextProvider= ({children}) => {
 
-    const [isAuth, setIsAuth] = useState(true);
+export const UserContextProvider = ({ children }) => {
+
     const [userId, setUserId] = useState(null);
+    const [userinfo, setUserInfo] = useState([]);
     const [userData, setUserData] = useState([]);
     const [message, setMessage] = useState('');
     const [showMessage, setShowMessage] = useState(false)
 
+    Axios.defaults.withCredentials = true;   
 
-    useEffect(()=>{
+    useEffect(() => {
         userList();
-    },[])
+    }, [])
 
-    const userList = async ()=> {
-        await Axios.get('http://localhost:5000/users')
-        .then((response)=> {
+    const userList = () => {
+        Axios.get('http://localhost:5000/users')
+        .then((response) => {
             setUserData(response.data)
         })
         .catch(error => console.log(error))
     }
 
-
-
-    const value = {
+    const state = {
         userId,
-        isAuth,
-        setIsAuth,
-        setUserId, 
-        userData, 
-        setUserData,
+        userData,
+        userinfo,
         userList,
         showMessage,
-        setShowMessage,
         message,
+        setUserId,
+        setUserData,
+        setUserInfo,
+        setShowMessage,
         setMessage
     }
 
-    return(
-        <UserContext.Provider value={value}>
-            {children}
-        </UserContext.Provider>
+    // const dispatch = {
+    //     setIsAuth,
+    //     setUserId,
+    //     setUserData,
+    //     setUserInfo,
+    //     setShowMessage,
+    //     setMessage
+    // }
+    
+
+    return (
+            // <UserDispatchContext.Provider value={dispatch}>
+                <UserContext.Provider value={state}>
+                    {children}
+                </UserContext.Provider>
+            // </UserDispatchContext.Provider>
     )
 }
 

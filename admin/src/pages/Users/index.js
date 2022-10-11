@@ -20,16 +20,17 @@ import {
 } from './styles';
 import { FaRegUser, FaCheck, FaUser } from 'react-icons/fa';
 import Axios from 'axios'
-import { DeleteModal } from '../../components/Modal';
+import { DeleteModal, EditModal } from '../../components/Modal';
 import UserContext from '../../context/UserContext';
 import Message from '../../components/Message';
+import Footer from '../../components/Footer';
 // import {useSpring, animated} from 'react-spring';
 
 const Users = () => {
 
     const [active, setActive] = useState(false);
-    // const [userDatas, setUserDatas] = useState([]);
     const [deleteModal, setDeleteModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
 
     const thead = [
         {
@@ -50,15 +51,10 @@ const Users = () => {
     ]
 
     const {showMessage} = useContext(UserContext)
-
-
     const pageName = {
         name: "usersPage"
     };
 
-    
-
-    
     return (
         <MainContainer>
             <InnerContainer>
@@ -71,11 +67,13 @@ const Users = () => {
                         <HeaderText>Records</HeaderText>
                         <Button bg="#50A8EA" padding="10px" onClick={()=> setActive(true)}>Add User</Button>
                     </HeaderContainer>
-                    <Table thead={thead}  OpenModal={setDeleteModal} id={pageName}/>
+                    <Table thead={thead}  openDeleteModal={setDeleteModal} openEditModal={setEditModal} id={pageName}/>
                     {active && <Modal closeModal={setActive} />}
-                    {deleteModal && <DeleteModal closeModal={setDeleteModal} OpenModal={deleteModal}/>}
+                    {deleteModal && <DeleteModal closeModal={setDeleteModal}/>}
+                    {editModal && <EditModal closeModal={setEditModal}/>}
                 </Container>
             </InnerContainer>
+            <Footer/>
         </MainContainer>
     )
 }

@@ -11,7 +11,6 @@ const saltRounds = 10;
 let conn = config.connection
 
 
-
 // Get all document
 router.get('/', async (req, res) => {
     // const docName = req.body.name
@@ -31,4 +30,11 @@ router.get('/', async (req, res) => {
 })
 
 
+
+
+
+
+
+
 module.exports = router
+
