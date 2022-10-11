@@ -14,6 +14,7 @@ import AccountSetting from './pages/AccountSetting';
 import Doctype from './pages/Doctype';
 import ResetPassword from './pages/ResetPassword';
 import { UserContextProvider } from './context/UserContext';
+import SecuritySetting from './pages/SecuritySetting';
 // import Document from './pages/Documents';
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
                                 <Route path="/offices" element={<Office/>} />
                                 <Route path="/app-setting" element={<AppSetting/>} />
                                 <Route path="/account-setting" element={<AccountSetting/>} />
+                                <Route path="/security-setting" element={<SecuritySetting/>} />
                                 <Route path="/type" element={<Doctype/>} />
                             </Route>
                         </Route>

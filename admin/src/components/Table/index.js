@@ -10,14 +10,14 @@ const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [pageNumber, setPageNumber] = useState(0);
-    const {setUserId, userData} = useContext(UserContext)
+    const {setUserId, usersData} = useContext(UserContext)
     
 
 // Pagination
     const dataPerPage = 10;
     const pagesVisited = pageNumber * dataPerPage;
 
-    const pageCount = Math.ceil(userData.length / dataPerPage);
+    const pageCount = Math.ceil(usersData.length / dataPerPage);
 
     const changePage = ({ selected }) => {
         setPageNumber(selected);
@@ -50,7 +50,7 @@ const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
 
                 {id.name === "usersPage" && <Tbody>
                         {
-                        userData.slice(pagesVisited, pagesVisited + dataPerPage).filter((val)=> {
+                        usersData.slice(pagesVisited, pagesVisited + dataPerPage).filter((val)=> {
                             if(searchTerm === "") {
                                 return val
                             } else if (val.name.toLowerCase().includes(searchTerm.toLowerCase())){
@@ -70,8 +70,7 @@ const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
                                     onClick={()=> {
                                         openEditModal(true)
                                         setUserId(id)
-                                    }}
-                                    >
+                                    }}>
                                         <FaPenAlt/>
                                     </Button>
                                     <Button 

@@ -35,8 +35,8 @@ export const DeleteModalHeader = styled.div`
     height: 150px;
 
     & svg {
-        color: #fff;
-        font-size: 52px;
+        color: yellow;
+        font-size: 48px;
         margin-bottom: 10px;
     }
 `
@@ -68,7 +68,7 @@ export const CloseButton = styled.button`
     background: ${props => props.background};
     background-color: ${props => props.bg};
     border: none;
-    color: #fff;
+    color: #000000;
     border-radius: 5px;
     padding: ${props => props.padding};
     font-size: ${props => props.fs};
