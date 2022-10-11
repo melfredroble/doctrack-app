@@ -43,6 +43,9 @@ const Sidebar = () => {
                         <SidebarLink>
                             <Link to="/account-setting" style={{backgroundColor: url.pathname === '/account-setting' && '#272d3f', color: url.pathname === '/account-setting' && '#ffffff'}}> <FaUsersCog style={{fontSize: "32px"}}/> Account settings</Link>
                         </SidebarLink>
+                        <SidebarLink>
+                            <Link to="/security-setting" style={{backgroundColor: url.pathname === '/security-setting' && '#272d3f', color: url.pathname === '/security-setting' && '#ffffff'}}> <FaUsersCog style={{fontSize: "32px"}}/> Security settings</Link>
+                        </SidebarLink>
                     </Container>
                 </SidebarLinks>
             </MainContainer>

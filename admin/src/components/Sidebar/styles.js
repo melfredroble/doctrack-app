@@ -25,7 +25,7 @@ export const SidebarHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 0;
+    padding: 10px 10px 0 0;
 `
 
 export const SidebarLinks = styled.div`
@@ -71,15 +71,15 @@ export const LogoContainer = styled.div`
     align-items: center;
 `
 export const LogoImg = styled.img`
-    height: 50px;
-    width: 60px;
+    height: 45px;
+    width: 50px;
 `
 
 export const LogoText = styled.div`
     display: flex;
     
     & h1 {
-        font-size: 22px;
+        font-size: 18px;
     }
 `
 

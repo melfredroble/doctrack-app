@@ -31,6 +31,7 @@ export const InnerContainer = styled.div`
 
     & h3 {
         color: #414a4c;
+        font-size: 16px;
     }
 `
 
@@ -78,10 +79,16 @@ font-weight: bold;
 display: flex;
 align-items: center;
 margin-top: 5px;
-& svg {
-    font-size: 24px;
-    color: #6c757d;
+
+& img {
+    height: 30px;
+    width: 32px;
     margin-right: 10px;
+}
+
+& p {
+    font-weight: 700;
+    font-size: 14px;
 }
 `
 

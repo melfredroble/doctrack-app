@@ -6,6 +6,7 @@ import Axios from 'axios'
 import { useTransition, animated } from 'react-spring'
 import { useContext } from 'react'
 import UserContext from '../../context/UserContext'
+import userIcon from '../../assets/img/profile1.png'
 
 const Navbar = () => {
 
@@ -14,23 +15,24 @@ const Navbar = () => {
         from: {x: 0, y: 10, opacity: 0},
         enter: {x: 0, y: 0, opacity: 1},
         leave: {x: 0, y: 10, opacity: 0}
-
     })
+    // const [user, setUser] = useState()
     
-    const {user, setIsAuth} = useContext(UserContext)
-
+    const {userinfo} = useContext(UserContext)
 
 
     return (
         <>
             <MainContainer>
                 <InnerContainer>
-                    <h3>Computer Studies Department</h3>
+                        <h3>
+                            {userinfo.office_name}
+                        </h3>
                     <UserProfile onClick={()=> {
                         setIsVisible(v => !v)
                     }}>
-                        <FaUserCircle/>
-                        {/* <p>{user.name}</p> */}
+                        <img alt='userImg' src={userIcon}/>
+                        <p>{userinfo.name}</p>
                     </UserProfile>
                 </InnerContainer>
                 <Container onClick={()=> setIsVisible(false)}>
