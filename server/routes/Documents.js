@@ -112,14 +112,27 @@ router.get('/outgoing/:id', (req, res) => {
     user_id,
     (error, result) => {
         if(result) {
-            res.status(200).send(result)
-        }
-        if(error) {
-            res.send(error)
+            res.status(201).json(result)
+        }else {
+            res.status(401).json(error.message)
         }
     })
 })
 
+
+// Fetch received doc
+router.get('/received_doc/:id', (req,res) => {
+    const office_id = req.params.id
+    conn.query("SELECT r.id, dt.name doctype, u.name sender, d.description, o.office_name OriginatingOffice, r.received_at, d.remarks latestRemarks, d.action latestAction, d.status FROM received_doc r LEFT JOIN documents d ON r.document_id = d.id LEFT JOIN users u ON d.user_id = u.id LEFT JOIN offices o ON r.received_by = o.id LEFT JOIN doctypes dt ON d.doctype_id = dt.id WHERE received_by = ? ORDER BY r.id DESC",
+    office_id,
+    (error, result)=>{
+        if(result){
+            res.status(201).json(result)
+        } else {
+            res.status(401).json(error.message)
+        }
+    })
+})
 
 
 

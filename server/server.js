@@ -9,25 +9,24 @@ const offices = require('./routes/Offices')
 const config = require('./config/db');
 const MySQLStore = require('express-mysql-session')(session);
 
-
-
 const app = express();
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
 
+// CORS 
 app.use(cors({
 	origin: ["http://localhost:3000"],
 	methods: ["GET", "POST", "DELETE", "PUT"],
 	credentials: true
 }))
 
-// connection
+// DB CONNECTION
 let conn = config.connection
 //
 
+// SET SESSION STORE
 var sessionStore = new MySQLStore({
 	expiration: 1000 * 60 * 60 * 24,
 	createDatabaseTable: true,
@@ -39,16 +38,18 @@ var sessionStore = new MySQLStore({
 			data: 'data'
 		}
 	}
-},conn)
+}, conn)
 
 
 // app.set('trust proxy', 1)
+
+// SET SESSION
 app.use(session({
 	key: "keyin",
-    secret: process.env.SESSION_SECRET,
+	secret: process.env.SESSION_SECRET,
 	store: sessionStore,
-    resave: false, //true
-    saveUninitialized: false, //true
+	resave: false, //true
+	saveUninitialized: false, //true
 	cookie: {
 		httpOnly: false, // true
 		secure: false,
@@ -63,77 +64,79 @@ app.use(session({
 // 	next()
 // })
 
-app.listen(5000, () => {
-    console.log('Server is listening on port 5000');
+// PORT LISTEN
+app.listen(process.env.PORT || 5000, () => {
+	console.log('Server is listening on port ' + process.env.PORT);
 });
 
+// var os = require('os')
+// var network = os.networkInterfaces();
+// console.log(network)
 
-app.get('/login', (req, res)=> {
-	if(req.session.user) {
-		res.json({loggedIn: true, user: req.session.user})
+// CHECK IF USER SESSION EXIST
+app.get('/login', (req, res) => {
+	if (req.session.user) {
+		res.json({ loggedIn: true })
 	} else {
-		res.json({loggedIn: false})
+		res.json({ loggedIn: false })
 	}
 })
 
-	
+// ADMIN LOGIN
 app.post("/login", (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
-	
-	if(email || password) {
+
+	if (email || password) {
 		conn.query(
 			"SELECT * FROM users WHERE email = ?;",
 			email,
 			(err, result) => {
-			if (err) {
-				res.send({ err: err });
-			}
-			const role = result.role;
-	
-			if(result.role !== role) {
-				res.send({message: "User doesn't exist"})
-			} else {
-				if (result.length > 0) {
-				bcrypt.compare(password, result[0].password, (error, response) => {
-	
-					if (response) {
-						req.session.user = result;
-						res.send({loggedIn: true})
-						// res.end()
-					} else {
-						res.send({ loggedIn: false, message: "Wrong email/password combination!" });
-					}
-						
-					});
-				} else {
-					res.send({ loggedIn: false, message: "User doesn't exist" });
+				if (err) {
+					res.send({ err: err });
 				}
-			}
-		});
+
+				if (result.length > 0) {
+					const role = "admin"
+					if (result[0].role !== role ) {
+						res.json({ message: "Invalid email or password" })
+					} else { 
+						bcrypt.compare(password, result[0].password, (error, response) => {
+
+							if (response) {
+								req.session.user = result[0];
+								res.json({ loggedIn: true})
+								console.log(req.session.user)
+							} else {
+								res.json({ loggedIn: false, message: "Invalid email or password" });
+							}
+						});
+					}
+				} else {
+					res.json({ loggedIn: false, message: "Invalid email or password" });
+				}
+			});
 	} else {
-		res.send({loggedIn: false, message: "Email and password required."})
+		res.json({ loggedIn: false, message: "Invalid email or password" })
 	}
 });
 
 
-
+// LOGOUT
 app.get('/logout', (req, res) => {
-	if(req.session){
-		req.session.destroy((error)=>{
-			if(error){
+	if (req.session) {
+		req.session.destroy((error) => {
+			if (error) {
 				res.send(error)
-			}{
-				res.clearCookie("keyin", { domain: "localhost",path: "/" });
+			} {
+				res.clearCookie("keyin", { domain: "localhost", path: "/" });
 				res.redirect('http://localhost:3000/login')
 			}
 		});
-		
 	}
 })
 
 // Route Middlewares
-
 app.use('/users', users)
 app.use('/documents', documents)
 app.use('/offices', offices)
