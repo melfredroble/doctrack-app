@@ -18,7 +18,18 @@ const Navbar = () => {
     })
     // const [user, setUser] = useState()
     
-    const {userinfo} = useContext(UserContext)
+    const {userinfo, setUserInfo} = useContext(UserContext)
+
+    useEffect(() => {
+        Axios.get('http://localhost:5000/users')
+        .then((response) => {
+            setUserInfo(response.data[0])
+        })
+        .catch(error => console.log(error))
+    }, [setUserInfo])
+
+
+
 
 
     return (

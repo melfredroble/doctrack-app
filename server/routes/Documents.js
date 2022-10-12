@@ -14,15 +14,32 @@ let conn = config.connection
 
 // Get document types
 
-router.get('/type', (req, res) => {
+router.get('/types', (req, res) => {
 
     conn.query("SELECT * FROM `doctypes`", 
     (error, result) => {
         if(result) {
-            res.status(200).json(result)
+            res.json(result)
         }
         if(error) {
-            res.send(error)
+            res.json(error.message)
+        }
+    })
+})
+
+// Add document type
+router.post('/addDocType', (req,res)=>{
+
+    const doctype = req.body.doctype
+
+    conn.query("INSERT INTO `doctypes`(`name`) VALUES (?)",
+    doctype,
+    (error, result)=>{
+        if (result) {
+            res.send({ message: "Added succesfully!", status: "success" })
+        }
+        if(error) {
+            res.status(401).json(error.message)
         }
     })
 })
@@ -33,7 +50,7 @@ router.get('/', (req, res) => {
     conn.query("SELECT d.id, u.name userFullName, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id ORDER BY d.id", 
     (error, result) => {
         if(result) {
-            res.status(200).send(result)
+            res.status(201).json(result)
         }
         if(error) {
             res.send(error)
@@ -49,7 +66,7 @@ router.get('/:id', (req, res) => {
     userId,
     (error, result) => {
         if(result) {
-            res.status(200).send(result)
+            res.status(201).json(result)
         }
         if(error) {
             res.send(error)
@@ -76,14 +93,14 @@ router.post('/add-document', (req, res) => {
     [userId, docType, description, currentOffice, destOffice, remark],
     (error, result) => {
         if(result) {
-            res.status(200).send({message: "Added Document"})
+            res.status(201).json({message: "Added Document"})
         }
 
         if(error) {
-            res.status(400).send(error)
+            res.status(401).send(error)
         }
     })
- 
+
 })
 
 // Incoming documents
@@ -94,7 +111,7 @@ router.get('/incoming/:id', (req, res) => {
     office_id,
     (error, result) => {
         if(result) {
-            res.status(200).send(result)
+            res.status(201).json(result)
         }
         if(error) {
             res.send(error)
