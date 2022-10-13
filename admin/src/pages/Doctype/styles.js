@@ -15,11 +15,8 @@ export const HeaderContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: ${props  => props.justifyContent};
+    margin-bottom: 15px;
 
-    & svg {
-        font-size: 18px;
-        margin-right: 10px;
-    }
 `
 
 export const HeaderText = styled.h1`
@@ -53,6 +50,9 @@ export const Button = styled.button`
     color: #ffffff;
     border-radius: 5px;
     cursor: pointer;
+    & svg {
+        font-size: 18px;
+    }
 `
 
 export const Table = styled.table`
@@ -133,4 +133,13 @@ export const InputGroup = styled.div`
         border: 1px solid #cccccc;
         outline: none;
     }
+`
+
+export const ErrorText = styled.p`
+    color: #000;
+    font-size: 12px;
+    background-color: #ffebe9;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid rgba(255,129,130,0.4);
 `

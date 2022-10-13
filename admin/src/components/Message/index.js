@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from 'react'
-import UserContext from '../../context/UserContext';
+import UserContext from '../../context/MainContext';
 import {Container, MainContainer} from './styles'
 import { useTransition, animated } from 'react-spring'
     
-const Message = () => {
+const Message = ({setMessage, showMessage, message}) => {
 
     // const [show, setShow] = useState(true)
 
-    const {setShowMessage, showMessage, message} = useContext(UserContext)
+    // const {setMessage, showMessage, message} = useContext(UserContext)
       // Transition
       const transition = useTransition(showMessage, {
         from: {x: 0, y: 100, opacity: 0},
@@ -20,13 +20,13 @@ const Message = () => {
   useEffect(() => {
     const timeId = setTimeout(() => {
       // After 3 seconds set the show value to false
-      setShowMessage(false)
+      setMessage(false)
     }, 3000)
 
     return () => {
       clearTimeout(timeId)
     }
-  }, []);
+  }, [setMessage]);
 
   // If show is false the component will return null and stop here
   if (!showMessage) {
@@ -44,7 +44,7 @@ const Message = () => {
             <animated.div style={style}>
                 <Container >
                     <h1>{message}</h1>
-                    <button onClick={()=> setShowMessage(false)}>x</button>
+                    <button onClick={()=> setMessage(false)}>x</button>
                 </Container>
             </animated.div>
             : ''

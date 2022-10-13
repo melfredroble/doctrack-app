@@ -1,26 +1,27 @@
 import React, {useState, useContext} from 'react'
-import { TableContainer, Tbody, Thead, Button, SearchContent, InputGroup, PaginationContent} from './styles';
-import { FaPenAlt, FaTrashAlt, FaSearch} from 'react-icons/fa';
-import ReactPaginate from 'react-paginate';
-import '../../assets/css/pagination.css';
-import UserContext from '../../context/UserContext';
+import { TableContainer, Tbody, Thead, Button, SearchContent, InputGroup, PaginationContent} from './styles'
+import { FaPenAlt, FaTrashAlt, FaSearch} from 'react-icons/fa'
+import ReactPaginate from 'react-paginate'
+import '../../assets/css/pagination.css'
+import UserContext from '../../context/MainContext'
 
 
 const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
 
-    const [searchTerm, setSearchTerm] = useState('');
-    const [pageNumber, setPageNumber] = useState(0);
-    const {setUserId, usersData} = useContext(UserContext)
+    const [searchTerm, setSearchTerm] = useState('')
+    const [pageNumber, setPageNumber] = useState(0)
+    const {setUserId, officeList, usersData} = useContext(UserContext)
     
-
 // Pagination
-    const dataPerPage = 10;
-    const pagesVisited = pageNumber * dataPerPage;
+    const dataPerPage = 10
+    const pagesVisited = pageNumber * dataPerPage
 
-    const pageCount = Math.ceil(usersData.length / dataPerPage);
+    const officePage = Math.ceil(officeList.length / dataPerPage)
+    const usersPage = Math.ceil(usersData.length / dataPerPage)
+    // const docTypePage = Math.ceil(docTypeList.length / dataPerPage)
 
     const changePage = ({ selected }) => {
-        setPageNumber(selected);
+        setPageNumber(selected)
     };
 
     return (
@@ -90,6 +91,7 @@ const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
                 </Tbody>
                 }
 
+{/* DocTypes Table */}
                 {id.name === "docTypePage" && <Tbody>
                     {
                         data.slice(pagesVisited, pagesVisited + dataPerPage).filter((val)=> {
@@ -98,9 +100,29 @@ const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
                             } else if (val.name.toLowerCase().includes(searchTerm.toLowerCase())){
                                 return val
                             }
-                        }).map(({name}, index) => (
+                        }).map(({office_name}, index) => (
                             <tr key={index}>
-                                <td>{name}</td>
+                                <td>{office_name}</td>
+                                <td style={{width: "50%"}}><Button bg="#50A8EA" padding="5px" style={{marginRight: "10px"}}><FaPenAlt/></Button><Button bg="red" padding="5px"><FaTrashAlt/></Button></td>
+                            </tr>
+                        ))
+                        
+                    }
+                </Tbody>
+                }
+
+{/* Offices Table */}
+                {id.name === "offices" && <Tbody>
+                    {
+                        officeList.slice(pagesVisited, pagesVisited + dataPerPage).filter((val)=> {
+                            if(searchTerm === "") {
+                                return val
+                            } else if (val.name.toLowerCase().includes(searchTerm.toLowerCase())){
+                                return val
+                            }
+                        }).map(({office_name}, index) => (
+                            <tr key={index}>
+                                <td>{office_name}</td>
                                 <td style={{width: "50%"}}><Button bg="#50A8EA" padding="5px" style={{marginRight: "10px"}}><FaPenAlt/></Button><Button bg="red" padding="5px"><FaTrashAlt/></Button></td>
                             </tr>
                         ))
@@ -110,17 +132,56 @@ const Table = ({thead, data, id, openDeleteModal, openEditModal}) => {
                 }
             </TableContainer>
             <PaginationContent>
-                <ReactPaginate
-                    previousLabel="Previous"
-                    nextLabel="Next"
-                    pageCount={pageCount}
-                    onPageChange={changePage}
-                    containerClassName={"paginationBttns"}
-                    previousLinkClassName={"previousBttn"}
-                    nextLinkClassName={"nextBttn"}
-                    disabledClassName={"paginationDisabled"}
-                    activeClassName={"paginationActive"}
-                />
+                {
+                id.name === "offices" &&
+                    <ReactPaginate
+                        previousLabel="Previous"
+                        nextLabel="Next"
+                        pageCount={ 
+                            officePage
+                        }
+                        onPageChange={changePage}
+                        containerClassName={"paginationBttns"}
+                        previousLinkClassName={"previousBttn"}
+                        nextLinkClassName={"nextBttn"}
+                        disabledClassName={"paginationDisabled"}
+                        activeClassName={"paginationActive"}
+                    />
+                }
+
+                {
+                id.name === "usersPage" &&
+                    <ReactPaginate
+                        previousLabel="Previous"
+                        nextLabel="Next"
+                        pageCount={ 
+                            usersPage
+                        }
+                        onPageChange={changePage}
+                        containerClassName={"paginationBttns"}
+                        previousLinkClassName={"previousBttn"}
+                        nextLinkClassName={"nextBttn"}
+                        disabledClassName={"paginationDisabled"}
+                        activeClassName={"paginationActive"}
+                    />
+                }
+
+                {/* {
+                id.name === "docTypePage" &&
+                    <ReactPaginate
+                        previousLabel="Previous"
+                        nextLabel="Next"
+                        pageCount={ 
+                            docTypePage
+                        }
+                        onPageChange={changePage}
+                        containerClassName={"paginationBttns"}
+                        previousLinkClassName={"previousBttn"}
+                        nextLinkClassName={"nextBttn"}
+                        disabledClassName={"paginationDisabled"}
+                        activeClassName={"paginationActive"}
+                    />
+                } */}
             </PaginationContent>
         </>
     )

@@ -24,12 +24,13 @@ import {
     ErrorText
 } from "../../pages/Users/styles";
 import Axios from "axios";
-import UserContext from '../../context/UserContext';
-import { FaExclamationTriangle, FaCheck, FaUser } from 'react-icons/fa';
+import { FaRegFileAlt, FaExclamationTriangle, FaCheck, FaUser } from 'react-icons/fa';
+import MainContext from "../../context/MainContext";
+import useFetch from "../../hooks/useFetch";
 
-export const DeleteModal = ({ closeModal, openModal }) => {
+export const DeleteModal = ({ closeModal }) => {
 
-    const { userId, usersData, setUsersData, setShowMessage, setMessage } = useContext(UserContext)
+    const { userId, usersData, setUsersData, setShowMessage, setMessage } = useContext(MainContext)
 
 
     const deleteUser = (id) => {
@@ -69,6 +70,45 @@ export const DeleteModal = ({ closeModal, openModal }) => {
     );
 };
 
+export const DeleteDoctype = ({ closeModal })=>{
+    const { id, data, setData } = useContext(MainContext)
+
+
+    const deleteUser = (id) => {
+        Axios.delete(`http://localhost:5000/documents/delete/${id}`)
+            .then((response) => {
+                if (response.data.deleted === true) {
+                    closeModal(false)
+                }
+                setData(data.filter((val) => {
+                    return val.id !== id
+                }))
+            })
+    }
+
+    return (
+        <>
+            <DeleteModalBackdrop onClick={() => closeModal(false)} />
+            <DeleteModalContainer>
+                <DeleteModalHeader>
+                    <CloseButtonContainer>
+                        <CloseButton fs="22px" background="none" padding="5px 10px" onClick={() => closeModal(false)}>X</CloseButton>
+                    </CloseButtonContainer>
+                    <FaExclamationTriangle />
+                    <Text>WARNING!</Text>
+                    <Text fw="normal">Are you sure to delete this data ?</Text>
+                </DeleteModalHeader>
+                <DeleteModalBody>
+                    <ButtonContainer>
+                        <CloseButton bg="#e0e0e0" padding="5px 30px" onClick={() => closeModal(false)}>Cancel</CloseButton>
+                        <DeleteButton onClick={() => deleteUser(id)}>Delete</DeleteButton>
+                    </ButtonContainer>
+                </DeleteModalBody>
+            </DeleteModalContainer>
+        </>
+    );
+}
+
 
 export const EditModal = ({ closeModal, openModal }) => {
 
@@ -80,7 +120,7 @@ export const EditModal = ({ closeModal, openModal }) => {
     const [newRole, setNewRole] = useState('')
     const [error, setError] = useState([])
 
-    const { userId, userList, setShowMessage, setMessage } = useContext(UserContext)
+    const { userId, userList } = useContext(MainContext)
 
     const editUser = () => {
         Axios.put(`http://localhost:5000/users/update`,
@@ -88,11 +128,8 @@ export const EditModal = ({ closeModal, openModal }) => {
             .then((response) => {
                 if (response.data.updated === true) {
                     closeModal(false)
-                    setShowMessage(true)
-                    setMessage("User updated")
                 }
                 userList()
-                
             })
     }
 
@@ -202,6 +239,58 @@ export const EditModal = ({ closeModal, openModal }) => {
                         }}>
                         <FaCheck style={{ fontSize: "10px" }} /> Save</Button>
                 </ModalFooter>
+            </ModalContainer>
+        </>
+    )
+}
+
+export const EditDoctypeModal = ({ closeModal })=>{
+    
+    
+    const [docType, setDocType] = useState('')
+    const [error, setError] = useState([])
+    const {fetchData} = useFetch('/documents/types')
+
+    const addDoctype = (e)=> {
+        e.preventDefault()
+        Axios.post('http://localhost:5000/documents/addDocType', {withCredentials: true, doctype: docType})
+        .then((response)=>{
+            if (response.data.message) {
+                setError(response.data.message);
+            }
+            if (response.data.status === "success") {
+                closeModal(false);
+                fetchData()
+            }
+        })
+    }
+    
+    return (
+        <>
+            <ModalBackdrop onClick={() => closeModal(false)} />
+            <ModalContainer>
+                <ModalHeader>
+                    <FaRegFileAlt/><h1>  Add Document Type</h1>
+                </ModalHeader>
+                {error === "Email already exist!" && <ErrorText>{error}</ErrorText>}
+                <form onSubmit={addDoctype}>
+                    <ModalBody>
+                            <FormGroup>
+                                <InputGroup>
+                                    <label>TITLE</label>
+                                    <input 
+                                    placeholder='Title' 
+                                    value={docType}
+                                    onChange={(e)=> setDocType(e.target.value)}
+                                    />
+                                </InputGroup>
+                            </FormGroup>
+                    </ModalBody>
+                    <ModalFooter>
+                        <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
+                        <Button type='submit' bg="green" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
+                    </ModalFooter>
+                </form>
             </ModalContainer>
         </>
     )

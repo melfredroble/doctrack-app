@@ -5,7 +5,7 @@ import {MainContainer, Container, Button, Text, UserProfile, Item, ItemLink, Inn
 import Axios from 'axios'
 import { useTransition, animated } from 'react-spring'
 import { useContext } from 'react'
-import UserContext from '../../context/UserContext'
+import MainContext from '../../context/MainContext'
 import userIcon from '../../assets/img/profile1.png'
 
 const Navbar = () => {
@@ -18,7 +18,7 @@ const Navbar = () => {
     })
     // const [user, setUser] = useState()
     
-    const {userinfo, setUserInfo} = useContext(UserContext)
+    const {userinfo, setUserInfo} = useContext(MainContext)
 
     useEffect(() => {
         Axios.get('http://localhost:5000/users')

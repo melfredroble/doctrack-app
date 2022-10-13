@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect} from "react"
 import axios from "../api/axios"
-import UserContext from "../context/UserContext"
+import UserContext from "../context/MainContext"
 
 export default function useFetch(url){
 

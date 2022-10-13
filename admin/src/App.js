@@ -13,14 +13,15 @@ import AppSetting from './pages/AppSetting';
 import AccountSetting from './pages/AccountSetting';
 import Doctype from './pages/Doctype';
 import ResetPassword from './pages/ResetPassword';
-import { UserContextProvider } from './context/UserContext';
+import { MainContextProvider } from './context/MainContext';
 import SecuritySetting from './pages/SecuritySetting';
+import UsersTable from './components/UsersTable';
 // import Document from './pages/Documents';
 
 const App = () => {
 
     return (
-        <UserContextProvider>
+        <MainContextProvider>
             <Router>
                 <GlobalStyles />
                 <Routes>
@@ -30,7 +31,7 @@ const App = () => {
                                 <Route path="/" element={<Dashboard/>} />
                                 <Route path="/users" element={<Users/>} />
                                 <Route path="/offices" element={<Office/>} />
-                                <Route path="/app-setting" element={<AppSetting/>} />
+                                {/* <Route path="/app-setting" element={<AppSetting/>} /> */}
                                 <Route path="/account-setting" element={<AccountSetting/>} />
                                 <Route path="/security-setting" element={<SecuritySetting/>} />
                                 <Route path="/type" element={<Doctype/>} />
@@ -38,12 +39,13 @@ const App = () => {
                         </Route>
                     </Route>
                     {/* <Route path="/documents" element={<Document/>} /> */}
+                    <Route path="/usertable" element={<UsersTable/>} />
                     <Route path="/login" element={<Login/>} />
                     <Route path="/reset-password" element={<ResetPassword/>} />
                     <Route path="*" element={<ErrorPage/>} />
                 </Routes>
             </Router>
-        </UserContextProvider>
+        </MainContextProvider>
     )
 }
 

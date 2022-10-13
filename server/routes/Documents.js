@@ -44,6 +44,18 @@ router.post('/addDocType', (req,res)=>{
     })
 })
 
+// Delete document type
+router.delete('/delete/:id', (req, res) => {
+    const id = req.params.id
+    conn.query('DELETE FROM `doctypes` WHERE id = ?', id, (error, result) => {
+    if (error) {
+        res.status(401).json(error)
+    } else {
+        res.status(201).json({ deleted: true, message: "User successfully deleted!" })
+    }
+    })
+})
+    
 // Get all document
 router.get('/', (req, res) => {
 

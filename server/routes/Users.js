@@ -11,8 +11,7 @@ const saltRounds = 10;
 // connection
 let conn = config.connection
 
-// Protecting routes to unauthorized users
-
+// Protecting routes from unauthorized users
 const requireAuth = (req, res, next) => {
   const { user } = req.session;
   if (!user) {
@@ -90,7 +89,6 @@ router.post('/add-user', requireAuth, (req, res) => {
               }
 
               if (result) {
-                res.status(200)
                 res.send({ message: "User added succesfully!", status: "success" })
               }
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Table from '../../components/Table';
 import {
     MainContainer,
@@ -21,7 +21,7 @@ import {
 import { FaRegUser, FaCheck, FaUser } from 'react-icons/fa';
 import Axios from 'axios'
 import { DeleteModal, EditModal } from '../../components/Modal';
-import UserContext from '../../context/UserContext';
+import UserContext from '../../context/MainContext';
 import Message from '../../components/Message';
 import Footer from '../../components/Footer';
 // import {useSpring, animated} from 'react-spring';
@@ -50,11 +50,15 @@ const Users = () => {
         }
     ]
 
-    const { showMessage } = useContext(UserContext)
+    const { showMessage, userList } = useContext(UserContext)
     const pageName = {
         name: "usersPage"
     };
 
+    useEffect(()=>{
+        userList()
+    },[])
+    
     return (
         <MainContainer>
             <InnerContainer>
@@ -79,7 +83,7 @@ const Users = () => {
 }
 
 
-const Modal = ({ closeModal, active }) => {
+const Modal = ({ closeModal }) => {
 
 
     const [name, setName] = useState('')
@@ -93,36 +97,30 @@ const Modal = ({ closeModal, active }) => {
 
     const handleUserModal = async (e) => {
         e.preventDefault();
-        const response = await Axios.post("http://localhost:5000/users/add-user", {
-            name: name,
-            email: email,
-            pin: pin,
-            office: office,
-            role: role
-        })
-            .catch(error => console.log(error))
-
-        if (response.data.message) {
-            setError(response.data.message);
-        }
-
-        if (response.data.status === "success") {
-            closeModal(false);
-            userList();
-            setShowMessage(true)
-            setMessage("User added successfully");
+        try {
+            const response = await Axios.post("http://localhost:5000/users/add-user", {
+                name: name,
+                email: email,
+                pin: pin,
+                office: office,
+                role: role
+            })
+    
+            if (response.data.message) {
+                setError(response.data.message);
+            }
+    
+            if (response.data.status === "success") {
+                closeModal(false);
+                userList();
+                setShowMessage(true)
+                setMessage("User added successfully");
+            }
+        } catch(error){
+            console.log(error)
         }
     }
 
-    // const modalRef = useRef()
-
-    // const animation = useSpring({
-    //     config: {
-    //         duration: 250
-    //     },
-    //     opacity: active ? 1 : 0,
-    //     transform: active ? `translateY(0%)` : `translateY(-100%)`
-    // })
 
     return (
         <>

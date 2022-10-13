@@ -37,9 +37,9 @@ const Sidebar = () => {
                     </Container>
                     <Container>
                         <HeaderText>Settings</HeaderText>
-                        <SidebarLink>
+                        {/* <SidebarLink>
                             <Link to="/app-setting" style={{backgroundColor: url.pathname === '/app-setting' && '#272d3f', color: url.pathname === '/app-setting' && '#ffffff'}}> <FaCog/> App settings</Link>
-                        </SidebarLink>
+                        </SidebarLink> */}
                         <SidebarLink>
                             <Link to="/account-setting" style={{backgroundColor: url.pathname === '/account-setting' && '#272d3f', color: url.pathname === '/account-setting' && '#ffffff'}}> <FaUsersCog style={{fontSize: "32px"}}/> Account settings</Link>
                         </SidebarLink>

@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { Container, CardContainer, CardHeader, LogoContainer, LogoImg, CardBody, FormGroup, CardFooter, LogoText, ErrorText } from './styles';
+import { Container, CardContainer, CardHeader, LogoContainer, LogoImg, CardBody, FormGroup, CardFooter, ErrorText } from './styles';
 import axios from '../../api/axios';
-import UserContext from '../../context/UserContext';
 import AuthContext from '../../context/AuthContext';
 import logo from '../../assets/img/profile1.png'
 import ClipLoader from "react-spinners/ClipLoader";
@@ -19,7 +18,6 @@ const Login = () => {
     axios.defaults.withCredentials = true;
 
     const { isAuth, setIsAuth } = useContext(AuthContext)
-    const { userList } = useContext(UserContext)
 
     const handleLogin = async (e) => {
         setIsLoading(true)
@@ -32,7 +30,6 @@ const Login = () => {
             if (response.data.loggedIn === true) {
                 setIsAuth(true)
                 setIsLoading(false)
-                userList()
                 navigate('/')
             } else {
                 setIsAuth(false)

@@ -106,7 +106,6 @@ app.post("/login", (req, res) => {
 							if (response) {
 								req.session.user = result[0];
 								res.json({ loggedIn: true})
-								console.log(req.session.user)
 							} else {
 								res.json({ loggedIn: false, message: "Invalid email or password" });
 							}

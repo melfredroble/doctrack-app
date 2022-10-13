@@ -22,7 +22,7 @@ const MainContainer = styled.div`
 `
 
 const InnerContainer = styled.div`
-    padding: 0 30px;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     width: 100%;
