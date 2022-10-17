@@ -29,6 +29,13 @@ export const InnerContainer = styled.div`
     justify-content: space-between;
     align-items: center;
 
+`
+
+export const HeaderText = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     & h3 {
         color: #414a4c;
         font-size: 16px;

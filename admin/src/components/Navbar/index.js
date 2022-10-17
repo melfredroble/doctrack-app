@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import {FaSignOutAlt, FaUserCircle, FaUserCog} from 'react-icons/fa'
+import React, { useEffect, useState } from 'react'
+import {FaSignOutAlt, FaQuestionCircle} from 'react-icons/fa'
 import {Link, Outlet } from 'react-router-dom'
-import {MainContainer, Container, Button, Text, UserProfile, Item, ItemLink, InnerContainer} from './styles'
-import Axios from 'axios'
+import {MainContainer, Container, HeaderText, Button, Text, UserProfile, Item, ItemLink, InnerContainer} from './styles'
 import { useTransition, animated } from 'react-spring'
 import { useContext } from 'react'
 import MainContext from '../../context/MainContext'
 import userIcon from '../../assets/img/profile1.png'
+// import useFetch from '../../hooks/useFetch'
 
 const Navbar = () => {
 
@@ -18,32 +18,23 @@ const Navbar = () => {
     })
     // const [user, setUser] = useState()
     
-    const {userinfo, setUserInfo} = useContext(MainContext)
-
-    useEffect(() => {
-        Axios.get('http://localhost:5000/users')
-        .then((response) => {
-            setUserInfo(response.data[0])
-        })
-        .catch(error => console.log(error))
-    }, [setUserInfo])
-
-
-
+    // const {userName} = useContext(MainContext)
 
 
     return (
         <>
             <MainContainer>
                 <InnerContainer>
+                    <HeaderText>
                         <h3>
-                            {userinfo.office_name}
+                            
                         </h3>
+                    </HeaderText>
                     <UserProfile onClick={()=> {
                         setIsVisible(v => !v)
                     }}>
                         <img alt='userImg' src={userIcon}/>
-                        <p>{userinfo.name}</p>
+                        <p>Administering Office</p>
                     </UserProfile>
                 </InnerContainer>
                 <Container onClick={()=> setIsVisible(false)}>
@@ -53,8 +44,8 @@ const Navbar = () => {
                             <Item>
                             <form action='http://localhost:5000/logout' method='get'>
                                 <ItemLink>
-                                    <FaUserCog/>
-                                    <Link style={{textDecoration: "none"}} to="/account-setting" >Account settings</Link>
+                                    <FaQuestionCircle/>
+                                    <Link style={{textDecoration: "none"}} to="/account-setting" >Change password</Link>
                                 </ItemLink>
                                 <Button type='submit' onClick={()=> {
                                     localStorage.clear()
