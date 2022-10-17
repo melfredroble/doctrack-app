@@ -9,12 +9,31 @@ const saltRounds = 10;
 
 // connection
 let conn = config.connection
-//
+
+// Protecting routes from unauthorized users
+const requireAuth = (req, res, next) => {
+    const userSession = req.session.user
+    const sessionId = req.session.id
+    if(!userSession){
+        res.send("Unauthorized")
+    } else {
+        conn.query("SELECT * FROM `sessiontbl` WHERE session_id = ?", 
+        sessionId,
+        (err, result)=>{
+            if(result.length > 0){
+                next()
+            }
+            if(err){
+                res.send(err)
+            }
+        })
+    }
+}
 
 
 // Get document types
 
-router.get('/types', (req, res) => {
+router.get('/types', requireAuth, (req, res) => {
 
     conn.query("SELECT * FROM `doctypes`", 
     (error, result) => {
@@ -27,8 +46,24 @@ router.get('/types', (req, res) => {
     })
 })
 
+// Get document types
+
+router.get('/type/:id', requireAuth, (req, res) => {
+    const id = req.params.id
+    conn.query("SELECT * FROM `doctypes` WHERE id = ?",
+    id , 
+    (error, result) => {
+        if(result) {
+            res.json(result)
+        }
+        if(error) {
+            res.json(error.message)
+        }
+    })
+})
+
 // Add document type
-router.post('/addDocType', (req,res)=>{
+router.post('/addDocType', requireAuth, (req,res)=>{
 
     const doctype = req.body.doctype
 
@@ -45,7 +80,7 @@ router.post('/addDocType', (req,res)=>{
 })
 
 // Delete document type
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', requireAuth, (req, res) => {
     const id = req.params.id
     conn.query('DELETE FROM `doctypes` WHERE id = ?', id, (error, result) => {
     if (error) {
@@ -55,9 +90,25 @@ router.delete('/delete/:id', (req, res) => {
     }
     })
 })
+
+// Update Document Type
+router.put('/type/update', requireAuth, (req, res) => {
+    const id = req.body.id
+    const doctype = req.body.doctype
+    conn.query('UPDATE `doctypes` SET `name` = ? WHERE id = ?', [doctype, id], (error, result) => {
+        if (error) {
+            res.json(error)
+        } 
+        if(result){
+            res.json({updated: true, message: "User updated"})
+        }
+    })
+})
+
+
     
 // Get all document
-router.get('/', (req, res) => {
+router.get('/', requireAuth, (req, res) => {
 
     conn.query("SELECT d.id, u.name userFullName, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id ORDER BY d.id", 
     (error, result) => {
@@ -71,7 +122,7 @@ router.get('/', (req, res) => {
 })
 
 // Get documents of a certain user
-router.get('/:id', (req, res) => {
+router.get('/:id', requireAuth, (req, res) => {
     const userId = req.params.id
 
     conn.query("SELECT d.id, u.name userFullName, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id WHERE user_id = ? ORDER BY d.id", 

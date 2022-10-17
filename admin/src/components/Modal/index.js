@@ -24,13 +24,13 @@ import {
     ErrorText
 } from "../../pages/Users/styles";
 import Axios from "axios";
-import { FaRegFileAlt, FaExclamationTriangle, FaCheck, FaUser } from 'react-icons/fa';
+import { FaRegFileAlt, FaExclamationTriangle, FaCheck, FaUser, FaRegBuilding } from 'react-icons/fa';
 import MainContext from "../../context/MainContext";
 import useFetch from "../../hooks/useFetch";
 
 export const DeleteModal = ({ closeModal }) => {
 
-    const { userId, usersData, setUsersData, setShowMessage, setMessage } = useContext(MainContext)
+    const { id, data, setData } = useContext(MainContext)
 
 
     const deleteUser = (id) => {
@@ -38,10 +38,8 @@ export const DeleteModal = ({ closeModal }) => {
             .then((response) => {
                 if (response.data.deleted === true) {
                     closeModal(false)
-                    setShowMessage(true)
-                    setMessage("Succcessfully deleted")
                 }
-                setUsersData(usersData.filter((val) => {
+                setData(data.filter((val) => {
                     return val.id !== id
                 }))
             })
@@ -62,7 +60,7 @@ export const DeleteModal = ({ closeModal }) => {
                 <DeleteModalBody>
                     <ButtonContainer>
                         <CloseButton bg="#e0e0e0" padding="5px 30px" onClick={() => closeModal(false)}>Cancel</CloseButton>
-                        <DeleteButton onClick={() => deleteUser(userId)}>Delete</DeleteButton>
+                        <DeleteButton onClick={() => deleteUser(id)}>Delete</DeleteButton>
                     </ButtonContainer>
                 </DeleteModalBody>
             </DeleteModalContainer>
@@ -118,23 +116,26 @@ export const EditModal = ({ closeModal, openModal }) => {
     const [newPin, setNewPin] = useState('')
     const [newOffice, setNewOffice] = useState('')
     const [newRole, setNewRole] = useState('')
-    const [error, setError] = useState([])
+    const {fetchData, error} = useFetch('/users')
+    const { id, offices, fetchAdmin } = useContext(MainContext)
 
-    const { userId, userList } = useContext(MainContext)
+    useEffect(()=>{
+        fetchAdmin()
+    },[])
 
     const editUser = () => {
         Axios.put(`http://localhost:5000/users/update`,
-        {name: newName, email: newEmail, pin: newPin, office: newOffice, role: newRole, id: userId})
+        {name: newName, email: newEmail, pin: newPin, office: newOffice, role: newRole, id: id})
             .then((response) => {
                 if (response.data.updated === true) {
                     closeModal(false)
+                    fetchData()
                 }
-                userList()
             })
     }
 
     useEffect(()=> {
-        Axios.get(`http://localhost:5000/users/${userId}`)
+        Axios.get(`http://localhost:5000/users/${id}`)
         .then((response)=> {
             if(response){
                 setNewName(response.data[0].name)
@@ -166,7 +167,6 @@ export const EditModal = ({ closeModal, openModal }) => {
                                         onChange={(e) => setNewName(e.target.value)}
                                         required
                                     />
-                                    <input value={userId} type="hidden" name="id"/>
                                 </InputGroup>
                                 <InputGroup>
                                     <label>EMAIL ADDRESS</label>
@@ -201,15 +201,17 @@ export const EditModal = ({ closeModal, openModal }) => {
                                     <select
                                         name="office"
                                         id=""
-                                        defaultValue={newOffice}
+                                        value={newOffice}
                                         onChange={(e) => setNewOffice(e.target.value)}
                                         required
                                     >
-                                        <option value="">Select office</option>
-                                        <option value="1">Registrar</option>
-                                        <option value="2">HRMO</option>
-                                        <option value="1">Campus Director</option>
-                                        <option value="1">Computer Studies Department</option>
+                                        {
+                                            offices.map(({id, office_name}, key)=>{
+                                                return (
+                                                        <option key={key} value={id}>{office_name}</option>
+                                                )
+                                            })
+                                        }
                                     </select>
                                 </InputGroup>
                                 <InputGroup>
@@ -217,11 +219,10 @@ export const EditModal = ({ closeModal, openModal }) => {
                                     <select
                                         name="role"
                                         id=""
-                                        defaultValue={newRole}
+                                        value={newRole}
                                         onChange={(e) => setNewRole(e.target.value)}
                                         required
                                     >
-                                        <option value="">Select role</option>
                                         <option value="Head">Office Head</option>
                                         <option value="Employee">Employee</option>
                                     </select>
@@ -246,42 +247,48 @@ export const EditModal = ({ closeModal, openModal }) => {
 
 export const EditDoctypeModal = ({ closeModal })=>{
     
-    
-    const [docType, setDocType] = useState('')
-    const [error, setError] = useState([])
+    const { id } = useContext(MainContext)
+    const [newDoctype, setNewDoctype] = useState('')
     const {fetchData} = useFetch('/documents/types')
 
-    const addDoctype = (e)=> {
+    const updateDoctype = (e)=> {
         e.preventDefault()
-        Axios.post('http://localhost:5000/documents/addDocType', {withCredentials: true, doctype: docType})
+        Axios.put('http://localhost:5000/documents/type/update', {id: id, doctype: newDoctype})
         .then((response)=>{
-            if (response.data.message) {
-                setError(response.data.message);
-            }
-            if (response.data.status === "success") {
+            if (response.data.updated === true) {
                 closeModal(false);
                 fetchData()
             }
         })
+        .catch(error=> console.log(error))
     }
+
+    useEffect(()=> {
+        Axios.get(`http://localhost:5000/documents/type/${id}`)
+        .then((response)=> {
+            if(response){
+                setNewDoctype(response.data[0].name)
+            }
+        })
+        .catch(error => console.log(error))
+    },[])
     
     return (
         <>
             <ModalBackdrop onClick={() => closeModal(false)} />
             <ModalContainer>
                 <ModalHeader>
-                    <FaRegFileAlt/><h1>  Add Document Type</h1>
+                    <FaRegFileAlt/><h1> Edit Document Type</h1>
                 </ModalHeader>
-                {error === "Email already exist!" && <ErrorText>{error}</ErrorText>}
-                <form onSubmit={addDoctype}>
+                <form onSubmit={updateDoctype}>
                     <ModalBody>
                             <FormGroup>
                                 <InputGroup>
                                     <label>TITLE</label>
                                     <input 
-                                    placeholder='Title' 
-                                    value={docType}
-                                    onChange={(e)=> setDocType(e.target.value)}
+                                    placeholder='Title'
+                                    value={newDoctype}
+                                    onChange={(e)=> setNewDoctype(e.target.value)}
                                     />
                                 </InputGroup>
                             </FormGroup>
@@ -294,4 +301,103 @@ export const EditDoctypeModal = ({ closeModal })=>{
             </ModalContainer>
         </>
     )
+}
+
+
+export const EditOfficeModal = ({ closeModal })=>{
+    
+    const { id } = useContext(MainContext)
+    const [newOffice, setNewOffice] = useState('')
+    const {fetchData} = useFetch('/offices')
+
+    const updateDoctype = (e)=> {
+        e.preventDefault()
+        Axios.put('http://localhost:5000/offices', {id: id, office: newOffice})
+        .then((response)=>{
+            if (response.data.updated === true) {
+                closeModal(false);
+                fetchData()
+            }
+        })
+        .catch(error=> console.log(error))
+    }
+
+    useEffect(()=> {
+        Axios.get(`http://localhost:5000/offices/${id}`)
+        .then((response)=> {
+            if(response){
+                setNewOffice(response.data[0].office_name)
+            }
+        })
+        .catch(error => console.log(error))
+    },[])
+    
+    return (
+        <>
+            <ModalBackdrop onClick={() => closeModal(false)} />
+            <ModalContainer>
+                <ModalHeader>
+                    <FaRegBuilding/><h1> Edit Office</h1>
+                </ModalHeader>
+                <form onSubmit={updateDoctype}>
+                    <ModalBody>
+                            <FormGroup>
+                                <InputGroup>
+                                    <label>NAME</label>
+                                    <input 
+                                    placeholder='Office name'
+                                    value={newOffice}
+                                    onChange={(e)=> setNewOffice(e.target.value)}
+                                    />
+                                </InputGroup>
+                            </FormGroup>
+                    </ModalBody>
+                    <ModalFooter>
+                        <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
+                        <Button type='submit' bg="green" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
+                    </ModalFooter>
+                </form>
+            </ModalContainer>
+        </>
+    )
+}
+
+
+export const DeleteOfficeModal = ({ closeModal })=>{
+    const { id, data, setData } = useContext(MainContext)
+
+
+    const deleteUser = (id) => {
+        Axios.delete(`http://localhost:5000/offices/delete/${id}`)
+            .then((response) => {
+                if (response.data.deleted === true) {
+                    closeModal(false)
+                }
+                setData(data.filter((val) => {
+                    return val.id !== id
+                }))
+            })
+    }
+
+    return (
+        <>
+            <DeleteModalBackdrop onClick={() => closeModal(false)} />
+            <DeleteModalContainer>
+                <DeleteModalHeader>
+                    <CloseButtonContainer>
+                        <CloseButton fs="22px" background="none" padding="5px 10px" onClick={() => closeModal(false)}>X</CloseButton>
+                    </CloseButtonContainer>
+                    <FaExclamationTriangle />
+                    <Text>WARNING!</Text>
+                    <Text fw="normal">Are you sure to delete this data ?</Text>
+                </DeleteModalHeader>
+                <DeleteModalBody>
+                    <ButtonContainer>
+                        <CloseButton bg="#e0e0e0" padding="5px 30px" onClick={() => closeModal(false)}>Cancel</CloseButton>
+                        <DeleteButton onClick={() => deleteUser(id)}>Delete</DeleteButton>
+                    </ButtonContainer>
+                </DeleteModalBody>
+            </DeleteModalContainer>
+        </>
+    );
 }

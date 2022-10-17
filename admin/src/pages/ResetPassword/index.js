@@ -1,16 +1,30 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {  } from "react-icons/fa";
 import {Container, CardContainer, CardHeader, CardBody, FormGroup, CardFooter} from './styles';
+import axios from '../../api/axios';
+import Login from '../../components/Login';
 
 const ResetPassword = () => {
 
-    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isValidate, setIsValidate] = useState(false)
 
-
+    useEffect(()=>{
+        axios.get('/security')
+        .then((response)=>{
+            if(response.data.isValidate === true){
+                setIsValidate(true)
+            } else {
+                setIsValidate(false)
+            }
+        })
+        .catch((error)=> console.log(error))
+    })
 
     return (
-        <Container>
+        isValidate ? <Container>
             <form >
                 <CardContainer>
                     {/* <h1 style={{textAlign: 'center', color: '#50A8EA'}}>Doctrack</h1> */}
@@ -22,20 +36,29 @@ const ResetPassword = () => {
                     <CardBody>
                         <FormGroup>
                             <input 
+                            type="password" 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder='Password' 
+                            id="email" />
+                        </FormGroup>
+                        <FormGroup>
+                            <input 
                             type="email" 
                             name="email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder='Enter email address' 
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder='Confirm password' 
                             id="email" />
                         </FormGroup>
                     </CardBody>
                     <CardFooter>
-                        <button type="button">Submit</button>
+                        <button type="button">Reset</button>
                     </CardFooter>
                 </CardContainer>
             </form>
         </Container>
+        : <Login/>
     )
 }
 

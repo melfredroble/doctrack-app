@@ -9,13 +9,14 @@ import { GlobalStyles } from './GlobalStyles';
 import Navbar from './components/Navbar';
 import Users from './pages/Users';
 import Office from './pages/Office'
-import AppSetting from './pages/AppSetting';
+// import AppSetting from './pages/AppSetting';
 import AccountSetting from './pages/AccountSetting';
 import Doctype from './pages/Doctype';
 import ResetPassword from './pages/ResetPassword';
 import { MainContextProvider } from './context/MainContext';
 import SecuritySetting from './pages/SecuritySetting';
 import UsersTable from './components/UsersTable';
+import SecurityQuestions from './pages/SecurityQuestions';
 // import Document from './pages/Documents';
 
 const App = () => {
@@ -41,6 +42,7 @@ const App = () => {
                     {/* <Route path="/documents" element={<Document/>} /> */}
                     <Route path="/usertable" element={<UsersTable/>} />
                     <Route path="/login" element={<Login/>} />
+                    <Route path="/security-questions" element={<SecurityQuestions/>}/>
                     <Route path="/reset-password" element={<ResetPassword/>} />
                     <Route path="*" element={<ErrorPage/>} />
                 </Routes>

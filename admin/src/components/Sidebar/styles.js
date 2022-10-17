@@ -21,11 +21,12 @@ export const MainContainer = styled.div`
 
 export const SidebarHeader = styled.div`
 
-    height: 100px;
+    height: 82px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px 10px 0 0;
+    border-bottom: 1px solid #1c2440;
 `
 
 export const SidebarLinks = styled.div`
@@ -72,7 +73,7 @@ export const LogoContainer = styled.div`
 `
 export const LogoImg = styled.img`
     height: 45px;
-    width: 50px;
+    width: 55px;
 `
 
 export const LogoText = styled.div`

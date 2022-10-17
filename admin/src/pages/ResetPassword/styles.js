@@ -20,7 +20,7 @@ export const CardContainer = styled.div`
 
 export const CardHeader = styled.div`
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     color: #2c3246;
 
     & h2 {
@@ -43,6 +43,7 @@ export const FormGroup = styled.div`
         padding: 10px;
         outline: none;
         width: 100%;
+        border-radius: 5px;
     }
 `
 

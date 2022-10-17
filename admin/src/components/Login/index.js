@@ -1,39 +1,40 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Container, CardContainer, CardHeader, LogoContainer, LogoImg, CardBody, FormGroup, CardFooter, ErrorText } from './styles';
-import axios from '../../api/axios';
-import AuthContext from '../../context/AuthContext';
-import logo from '../../assets/img/profile1.png'
+import logo from '../../assets/img/profile1.png';
 import ClipLoader from "react-spinners/ClipLoader";
+import {useAuth} from '../../hooks/useAuth';
+import axios from '../../api/axios';
 
 
 const Login = () => {
 
-    let navigate = useNavigate('');
+    const navigate = useNavigate('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    axios.defaults.withCredentials = true;
+    // const auth = useAuth();
 
-    const { isAuth, setIsAuth } = useContext(AuthContext)
+    // const handleLogin = async(e)=>{
+    //     e.preventDefault()
+    //     await auth.login(email, password)
+    //     navigate('/')
+    // }
 
     const handleLogin = async (e) => {
+        e.preventDefault()
         setIsLoading(true)
         try {
-            e.preventDefault();
             const response = await axios.post("/login", {
                 email: email,
                 password: password
             })
             if (response.data.loggedIn === true) {
-                setIsAuth(true)
                 setIsLoading(false)
                 navigate('/')
-            } else {
-                setIsAuth(false)
-            }
+            } 
 
             if (response.data.message) {
                 setLoginStatus(response.data.message);
@@ -47,8 +48,8 @@ const Login = () => {
         }
     };
 
+
     return (
-        !isAuth &&
         <Container>
             <CardContainer>
                 <LogoContainer>
@@ -92,7 +93,7 @@ const Login = () => {
                             !isLoading ? "Login" : <ClipLoader size={16} color="#ffffff" />
                             }
                         </button>
-                        <Link to="/reset-password">
+                        <Link to="/security-questions">
                             Forgot password?
                         </Link>
                     </CardFooter>

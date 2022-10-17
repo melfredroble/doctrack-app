@@ -13,11 +13,22 @@ let conn = config.connection
 
 // Protecting routes from unauthorized users
 const requireAuth = (req, res, next) => {
-  const { user } = req.session;
-  if (!user) {
-    return res.status(401).send("Unathorized")
+  const userSession = req.session.user
+  const sessionId = req.session.id
+  if(!userSession){
+      res.send("Unauthorized")
+  } else {
+      conn.query("SELECT * FROM `sessiontbl` WHERE session_id = ?", 
+      sessionId,
+      (err, result)=>{
+          if(result.length > 0){
+              next()
+          }
+          if(err){
+              res.send(err)
+          }
+      })
   }
-  next()
 }
 
 // Get users list
@@ -31,6 +42,22 @@ router.get('/', requireAuth, (req, res) => {
       res.status(400)
     }
   })
+})
+
+
+router.get('/admin', requireAuth, (req,res)=>{
+  const { user } = req.session;
+  const id = user.id
+  conn.query("SELECT * FROM `users` WHERE id = ?", 
+  id,
+  (err,result)=>{
+        if(err){
+          res.json(err)
+        }
+        if(result){
+          res.status(201).json(result)
+        }
+    })
 })
 
 // Get user by ID
@@ -52,7 +79,18 @@ router.get('/:id', requireAuth, (req, res) => {
 // Get LoggedIn User data
 router.get('/info',(req, res) => {
   const { user } = req.session
-  res.status(201).json(user)
+  if(user){
+    conn.query("SELECT * FROM `users` WHERE id = ?", 
+    user.id,
+    (err,result)=>{
+      if(err){
+        res.json(err)
+      }
+      if(result){
+        res.status(201).json([result])
+      }
+    })
+  }
 })
 
 
@@ -150,6 +188,40 @@ router.delete('/delete/:id', requireAuth, (req, res) => {
       res.status(201).json({ deleted: true, message: "User successfully deleted!" })
     }
   })
+})
+
+
+// Update Admin
+router.put('/update/admin', requireAuth, (req, res) => {
+  const fullName = req.body.name
+  const email = req.body.email
+  const office = req.body.office
+
+
+  if(office === ''){
+    conn.query('UPDATE `users` SET `name`= ?,`email`= ? WHERE email = ?', 
+    [fullName, email, email], 
+    (error, result) => {
+      if (error) {
+        console.log(error)
+      } 
+      if(result) {
+        res.json(result)
+      }
+    })
+  } else {
+    conn.query('UPDATE `users` SET `name`= ?,`email`= ?,`office_id`= ? WHERE email = ?', 
+    [fullName, email, office, email], 
+    (error, result) => {
+      if (error) {
+        console.log(error)
+      } 
+      if(result) {
+        res.json({result})
+      }
+    })
+  }
+
 })
 
 

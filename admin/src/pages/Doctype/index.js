@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState} from 'react'
 import { FaRegFileAlt, FaCheck, FaPlus } from 'react-icons/fa';
 import { 
     MainContainer, 
@@ -32,12 +32,13 @@ const Doctype = () => {
         <MainContainer>
             <InnerContainer>
                 <HeaderContainer>
-                    <FaRegFileAlt/> <HeaderText> Document Type</HeaderText>
+                    <FaRegFileAlt/> 
+                    <HeaderText> Document Type</HeaderText>
                 </HeaderContainer>
                 <Container>
                     <HeaderContainer justifyContent="space-between">
                         <HeaderText>Records</HeaderText>
-                        <Button bg="#50A8EA" padding="8px 10px" onClick={()=> setActive(true)}>
+                        <Button display="flex" content="end" align="center" bg="#50A8EA" br="100%" padding="8px 10px" onClick={()=> setActive(true)}>
                             <FaPlus/>
                         </Button>
                     </HeaderContainer>
@@ -93,7 +94,7 @@ const Modal = ({closeModal}) => {
                     </ModalBody>
                     <ModalFooter>
                         <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
-                        <Button type='submit' bg="green" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
+                        <Button type='submit' bg="green" br="5px" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
                     </ModalFooter>
                 </form>
             </ModalContainer>
@@ -101,57 +102,5 @@ const Modal = ({closeModal}) => {
     )
 }
 
-
-const EditDoctypeModal = ({ closeModal })=>{
-    
-    
-    const [docType, setDocType] = useState('')
-    const [error, setError] = useState([])
-    const {fetchData} = useFetch('/documents/types')
-
-    const addDoctype = (e)=> {
-        e.preventDefault()
-        axios.post('http://localhost:5000/documents/addDocType', {withCredentials: true, doctype: docType})
-        .then((response)=>{
-            if (response.data.message) {
-                setError(response.data.message);
-            }
-            if (response.data.status === "success") {
-                closeModal(false);
-                fetchData()
-            }
-        })
-    }
-    
-    return (
-        <>
-            <ModalBackdrop onClick={() => closeModal(false)} />
-            <ModalContainer>
-                <ModalHeader>
-                    <FaRegFileAlt/><h1>  Add Document Type</h1>
-                </ModalHeader>
-                {error === "Email already exist!" && <ErrorText>{error}</ErrorText>}
-                <form onSubmit={addDoctype}>
-                    <ModalBody>
-                            <FormGroup>
-                                <InputGroup>
-                                    <label>TITLE</label>
-                                    <input 
-                                    placeholder='Title' 
-                                    value={docType}
-                                    onChange={(e)=> setDocType(e.target.value)}
-                                    />
-                                </InputGroup>
-                            </FormGroup>
-                    </ModalBody>
-                    <ModalFooter>
-                        <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
-                        <Button type='submit' bg="green" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
-                    </ModalFooter>
-                </form>
-            </ModalContainer>
-        </>
-    )
-}
 
 export default Doctype

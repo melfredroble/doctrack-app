@@ -10,13 +10,24 @@ const saltRounds = 10;
 // connection
 let conn = config.connection
 
-// Protecting routes to unauthorized users
+// Protecting routes from unauthorized users
 const requireAuth = (req, res, next) => {
-    const { user } = req.session;
-    if (!user) {
-        return res.status(401).send("Unathorized")
+    const userSession = req.session.user
+    const sessionId = req.session.id
+    if(!userSession){
+        res.send("Unauthorized")
+    } else {
+        conn.query("SELECT * FROM `sessiontbl` WHERE session_id = ?", 
+        sessionId,
+        (err, result)=>{
+            if(result.length > 0){
+                next()
+            }
+            if(err){
+                res.send(err)
+            }
+        })
     }
-    next()
 }
 
 
@@ -31,6 +42,22 @@ router.get('/', requireAuth, (req, res) => {
         }
     })
 })
+
+// Get Office
+router.get('/:id', requireAuth,(req, res) => {
+    const id = req.params.id
+    conn.query("SELECT * FROM `offices` WHERE id = ?",
+    id , 
+    (error, result) => {
+        if(result) {
+            res.json(result)
+        }
+        if(error) {
+            res.json(error.message)
+        }
+    })
+})
+
 
 router.post('/add', requireAuth, (req, res) => {
         const office = req.body.office
@@ -56,6 +83,34 @@ router.post('/add', requireAuth, (req, res) => {
                 })
             }
         })
+})
+
+// Update office
+
+router.put('/', requireAuth, (req, res) => {
+    const id = req.body.id
+    const office = req.body.office
+    conn.query('UPDATE `offices` SET `office_name` = ? WHERE id = ?', [office, id], (error, result) => {
+        if (error) {
+            res.json(error)
+        } 
+        if(result){
+            res.json({updated: true, message: "User updated"})
+        }
+    })
+})
+
+// Delete document type
+router.delete('/delete/:id', requireAuth, (req, res) => {
+    const id = req.params.id
+    conn.query('DELETE FROM `offices` WHERE id = ?', id, (error, result) => {
+    if (error) {
+        res.status(401).json(error)
+    } 
+    if(result) {
+        res.status(201).json({ deleted: true })
+    }
+    })
 })
 
 

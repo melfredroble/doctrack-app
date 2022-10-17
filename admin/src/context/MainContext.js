@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react"
+import { createContext, useState, useCallback } from "react"
 import Axios from 'axios'
 // import UserDispatchContext from "./UserDispatchContext";
 const MainContext = createContext()
@@ -8,55 +8,64 @@ export const MainContextProvider = ({ children }) => {
 
     const [userId, setUserId] = useState(null)
     const [id, setId] = useState(null)
-    const [userinfo, setUserInfo] = useState([])
+    const [userName, setUserName] = useState([])
+    const [userEmail, setUserEmail] = useState([])
+    const [userOffice, setUserOffice] = useState([])
     const [usersData, setUsersData] = useState([])
-    const [message, setMessage] = useState('')
-    const [showMessage, setShowMessage] = useState(false)
-    const [officeList, setOfficeList] = useState([])
     const [data,setData] = useState([])
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(false)
+    const [offices, setOffices] = useState([])
+    const [isAuth, setIsAuth] = useState(false)
 
     Axios.defaults.withCredentials = true;
 
-    useEffect(() => {
-        userList();
-    }, [setUsersData])
+// Fetch Users
+    // useEffect(() => {
+    //     userList();
+    // }, [])
 
-    const userList = () => {
+    const userList = useCallback(()=>{
         Axios.get('http://localhost:5000/users')
         .then((response) => {
             setUsersData(response.data)
         })
         .catch(error => console.log(error))
-    }
+    },[]);
 
-    useEffect(()=>{
-        offices()
-    },[setOfficeList])
+// Fetch User Admin
 
-    const offices = ()=>{
-        Axios.get('http://localhost:5000/offices')
-        .then((response)=>{
-            setOfficeList(response.data)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
-    }
-
+    const fetchAdmin = useCallback(()=>{
+        const requestOne = Axios.get('http://localhost:5000/users/admin')
+        const requestTwo = Axios.get('http://localhost:5000/offices')
+        
+        Axios.all([requestOne, requestTwo])
+        .then(Axios.spread((...responses)=>{
+            setUserName(responses[0].data[0].name)
+            setUserEmail(responses[0].data[0].email)
+            setUserOffice(responses[0].data[0].office_id)
+            setOffices(responses[1].data)
+        }))
+        .catch((error)=> console.log(error))
+    },[]);
 
 
     const state = {
         id,
         userId,
         usersData,
-        userinfo,
+        userName,
+        userEmail,
         userList,
-        offices,
-        officeList,
         data,
         error,
+        userOffice,
+        offices,
+        isAuth,
+        setIsAuth,
+        setOffices,
+        setUserName,
+        setUserEmail,
         setError,
         loading,
         setId,
@@ -64,8 +73,8 @@ export const MainContextProvider = ({ children }) => {
         setData,
         setUserId,
         setUsersData,
-        setUserInfo,
-        setOfficeList
+        setUserOffice,
+        fetchAdmin
     }
 
     // const dispatch = {

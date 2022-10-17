@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react'
+import React, {useContext, useState} from 'react'
 import { FaRegBuilding, FaCheck } from 'react-icons/fa';
 import {
     MainContainer, 
@@ -16,38 +16,16 @@ import {
     FormGroup,
     InputGroup
 } from './styles'
-import Table from '../../components/Table';
 import Footer from '../../components/Footer';
-import Axios from 'axios'
-import MainContext from '../../context/MainContext';
+import axios from '../../api/axios';
 import { ErrorText } from '../Users/styles';
-import Message from '../../components/Message';
+import OfficeTable from '../../components/OfficeTable';
+import useFetch from '../../hooks/useFetch';
+import MainContext from '../../context/MainContext';
 
 const Office = () => {
     
     const [active, setActive] = useState(false);
-    const { offices, showMessage } = useContext(MainContext)
-
-    const thead = [
-        {
-            id: "1",
-            category: "Offices"
-        },
-        {
-            id: "2",
-            category: "Actions"
-        }
-    ]
-
-
-    const pageName = {
-        name: "offices"
-    };
-
-    useEffect(()=>{
-        offices()
-    },[])
-    
 
     return (
         <MainContainer>
@@ -56,13 +34,12 @@ const Office = () => {
                     <FaRegBuilding/> <HeaderText>Offices</HeaderText>
                 </HeaderContainer>
                 <Container>
-                    {showMessage === true && <Message />}
                     <HeaderContainer justifyContent="space-between">
                         <HeaderText>Records</HeaderText>
                         <Button bg="#50A8EA" padding="10px" onClick={()=> setActive(true)}>Add Office</Button>
                     </HeaderContainer>
-                    <Table thead={thead}  id={pageName}/>
-                        {active && <Modal closeModal={setActive} />}
+                    <OfficeTable />
+                    {active && <Modal closeModal={setActive} />}
                 </Container>  
             </InnerContainer>    
             <Footer />  
@@ -76,11 +53,11 @@ const Modal = ({closeModal}) => {
 
     const [office, setOffice] = useState("")
     const [error, setError] = useState([])
-    const { setShowMessage, setMessage, offices } = useContext(MainContext)
+    const {fetchData} = useFetch('/offices')
 
     const addOffice = (e)=>{
         e.preventDefault()
-        Axios.post('http://localhost:5000/offices/add',{office: office})
+        axios.post('/offices/add',{office: office})
         .then((response)=>{
             if (response.data.message) {
                 setError(response.data.message);
@@ -88,16 +65,14 @@ const Modal = ({closeModal}) => {
     
             if (response.data.status === "success") {
                 closeModal(false)
-                setShowMessage(true)
-                setMessage("User added successfully")
-                offices()
+                fetchData()
             }
         })
     }
 
     return (
         <>
-            <ModalBackdrop/>
+            <ModalBackdrop onClick={()=> {closeModal(false)}}/>
             <ModalContainer>
                 <ModalHeader>
                     <FaRegBuilding/><h1>Add Office</h1>
@@ -107,12 +82,12 @@ const Modal = ({closeModal}) => {
                         <FormGroup>
                             {error === "Office already exist!" && <ErrorText>{error}</ErrorText>}
                             <InputGroup>
-                                <label>TITLE</label>
+                                <label>Office</label>
                                 <input 
                                 type='text'
                                 value={office}
                                 name='office'
-                                placeholder='Title'
+                                placeholder='Office'
                                 onChange={(e)=> {setOffice(e.target.value)}}
                                 />
                             </InputGroup>

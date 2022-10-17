@@ -6,6 +6,7 @@ const dotenv = require("dotenv").config();
 const users = require('./routes/Users')
 const documents = require('./routes/Documents')
 const offices = require('./routes/Offices')
+const security = require('./routes/Security')
 const config = require('./config/db');
 const MySQLStore = require('express-mysql-session')(session);
 
@@ -58,25 +59,23 @@ app.use(session({
 	}
 }));
 
-
-// app.use((req, res, next)=>{
-// 	console.log(req.header);
-// 	next()
-// })
+// Persist Session
+app.use((req, res, next)=>{
+	const session = req.session
+	if(session){
+		next()
+	}
+})
 
 // PORT LISTEN
 app.listen(process.env.PORT || 5000, () => {
 	console.log('Server is listening on port ' + process.env.PORT);
 });
 
-// var os = require('os')
-// var network = os.networkInterfaces();
-// console.log(network)
-
 // CHECK IF USER SESSION EXIST
 app.get('/login', (req, res) => {
 	if (req.session.user) {
-		res.json({ loggedIn: true })
+		res.json({ loggedIn: true})
 	} else {
 		res.json({ loggedIn: false })
 	}
@@ -105,7 +104,8 @@ app.post("/login", (req, res) => {
 
 							if (response) {
 								req.session.user = result[0];
-								res.json({ loggedIn: true})
+								req.session.email = result[0]
+								res.json({ loggedIn: true, email: req.session.email})
 							} else {
 								res.json({ loggedIn: false, message: "Invalid email or password" });
 							}
@@ -119,7 +119,6 @@ app.post("/login", (req, res) => {
 		res.json({ loggedIn: false, message: "Invalid email or password" })
 	}
 });
-
 
 // LOGOUT
 app.get('/logout', (req, res) => {
@@ -139,4 +138,5 @@ app.get('/logout', (req, res) => {
 app.use('/users', users)
 app.use('/documents', documents)
 app.use('/offices', offices)
+app.use('/security', security)
 

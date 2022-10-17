@@ -1,29 +1,25 @@
-import React, {useState, useMemo, useEffect, useContext} from 'react'
+import React, {useState, useMemo, useContext, useEffect} from 'react'
 import DataTable from 'react-data-table-component'
 import { Button, SearchContainer, ClearButton, Input } from './styles';
 import useFetch from '../../hooks/useFetch';
-import { DeleteDoctype, EditDoctypeModal } from '../../components/Modal';
-import UserContext from '../../context/MainContext';
+import { DeleteOfficeModal, EditOfficeModal } from '../../components/Modal';
+import MainContext from '../../context/MainContext';
 
-const DocTypeTable = () => {
+const OfficeTable = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
-    const {setId} = useContext(UserContext)
+    const {setId} = useContext(MainContext)
 
-    const {data,loading,error,fetchData} = useFetch('/documents/types')
+    const {data, loading, fetchData} = useFetch('/offices')
 
     useEffect(() => {
         fetchData()
     }, [])
 
-    if(error){
-        console.log(error)
-    }
-
     const columns = useMemo(()=> [
         {
             name: "Name",
-            selector: (row) => row.name,
+            selector: (row) => row.office_name,
             sortable: true
         },
         {
@@ -42,13 +38,13 @@ const DocTypeTable = () => {
             ,
             allowOverflow: true,
             button: true
-        },
+        }
     ],[])
 
     const [filterText, setFilterText] = React.useState('');
 	const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 	const filteredItems = data.filter(
-		item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()),
+		item => item.office_name && item.office_name.toLowerCase().includes(filterText.toLowerCase()),
 	);
 
 	const subHeaderComponentMemo = React.useMemo(() => {
@@ -77,8 +73,8 @@ const DocTypeTable = () => {
                 paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
                 persistTableHead
             />
-            {deleteModal && <DeleteDoctype closeModal={setDeleteModal} />}
-            {editModal && <EditDoctypeModal closeModal={setEditModal} />}
+            {deleteModal && <DeleteOfficeModal closeModal={setDeleteModal} />}
+            {editModal && <EditOfficeModal closeModal={setEditModal} />}
         </>
     )
 }
@@ -98,4 +94,4 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 
 
 
-export default DocTypeTable
+export default OfficeTable

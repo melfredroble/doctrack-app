@@ -16,7 +16,8 @@ export const HeaderContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: ${props  => props.justifyContent};
-
+    margin-bottom: 15px;
+    
     & svg {
         font-size: 18px;
         margin-right: 10px;

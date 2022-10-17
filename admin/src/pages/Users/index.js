@@ -19,45 +19,16 @@ import {
     ErrorText
 } from './styles';
 import { FaRegUser, FaCheck, FaUser } from 'react-icons/fa';
-import Axios from 'axios'
-import { DeleteModal, EditModal } from '../../components/Modal';
-import UserContext from '../../context/MainContext';
-import Message from '../../components/Message';
+import axios from 'axios'
 import Footer from '../../components/Footer';
+import UsersTable from '../../components/UsersTable';
+import useFetch from '../../hooks/useFetch';
+import MainContext from '../../context/MainContext';
 // import {useSpring, animated} from 'react-spring';
 
 const Users = () => {
 
     const [active, setActive] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
-
-    const thead = [
-        {
-            category: "Name"
-        },
-        {
-            category: "Email"
-        },
-        {
-            category: "Office"
-        },
-        {
-            category: "Role"
-        },
-        {
-            category: "Actions"
-        }
-    ]
-
-    const { showMessage, userList } = useContext(UserContext)
-    const pageName = {
-        name: "usersPage"
-    };
-
-    useEffect(()=>{
-        userList()
-    },[])
     
     return (
         <MainContainer>
@@ -66,15 +37,12 @@ const Users = () => {
                     <FaRegUser /> <HeaderText> Users</HeaderText>
                 </HeaderContainer>
                 <Container>
-                    {showMessage === true && <Message />}
                     <HeaderContainer justifyContent="space-between">
                         <HeaderText>Records</HeaderText>
                         <Button bg="#50A8EA" padding="10px" onClick={() => setActive(true)}>Add User</Button>
                     </HeaderContainer>
-                    <Table thead={thead} openDeleteModal={setDeleteModal} openEditModal={setEditModal} id={pageName} />
+                    <UsersTable/>
                     {active && <Modal closeModal={setActive} />}
-                    {deleteModal && <DeleteModal closeModal={setDeleteModal} />}
-                    {editModal && <EditModal closeModal={setEditModal} />}
                 </Container>
             </InnerContainer>
             <Footer />
@@ -93,32 +61,32 @@ const Modal = ({ closeModal }) => {
     const [role, setRole] = useState('')
     const [error, setError] = useState([])
 
-    const { userList, setShowMessage, setMessage } = useContext(UserContext)
+    const {fetchData} = useFetch('/users')
+    const { offices, fetchAdmin } = useContext(MainContext)
 
-    const handleUserModal = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await Axios.post("http://localhost:5000/users/add-user", {
+    useEffect(()=>{
+        fetchAdmin()
+    },[])
+
+    const handleUserModal = (e) => {
+    
+        e.preventDefault()
+        axios.post("http://localhost:5000/users/add-user", {
                 name: name,
                 email: email,
                 pin: pin,
                 office: office,
                 role: role
-            })
-    
+        })
+        .then((response)=>{
             if (response.data.message) {
                 setError(response.data.message);
             }
-    
             if (response.data.status === "success") {
                 closeModal(false);
-                userList();
-                setShowMessage(true)
-                setMessage("User added successfully");
+                fetchData()
             }
-        } catch(error){
-            console.log(error)
-        }
+        })
     }
 
 
@@ -182,10 +150,13 @@ const Modal = ({ closeModal }) => {
                                     required
                                 >
                                     <option value="">Select office</option>
-                                    <option value="1">Registrar</option>
-                                    <option value="2">HRMO</option>
-                                    <option value="1">Campus Director</option>
-                                    <option value="1">Computer Studies Department</option>
+                                    {
+                                            offices.map(({id, office_name}, key)=>{
+                                                return (
+                                                        <option key={key} value={id}>{office_name}</option>
+                                                )
+                                            })
+                                        }
                                 </select>
                             </InputGroup>
                             <InputGroup>

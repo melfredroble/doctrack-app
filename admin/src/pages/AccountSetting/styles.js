@@ -43,12 +43,13 @@ export const CardBody = styled.div`
 `
 
 export const CardFooter = styled.div`
-    padding: 32px;
+    padding: 0 32px 32px 32px;
 `
 
 export const FormGroup = styled.div`
     display: flex;
     flex-direction: column;
+    margin: 10px 0;
 
     & input {
         width: 100%;
@@ -58,10 +59,20 @@ export const FormGroup = styled.div`
         border-radius: 5px;
         margin: 10px 0;
     }
-
-    & input[type="file"] {
-        cursor: pointer;
+    
+    & label {
+        font-size: 14px;
     }
+
+    & select {
+        width: 100%;
+        padding: 8px;
+        outline: none;
+        border: 1px solid #cecece;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+
 `
 export const Button = styled.button`
     padding: 10px;

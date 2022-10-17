@@ -1,14 +1,13 @@
-import { useContext, useEffect} from "react"
+import { useContext, useEffect, useState} from "react"
 import axios from "../api/axios"
-import UserContext from "../context/MainContext"
+import MainContext from "../context/MainContext"
 
 export default function useFetch(url){
 
-    const {data, setData,  error, setError, loading, setLoading} = useContext(UserContext)
-
-    useEffect(() => {
-        fetchData()
-    }, [])
+    // const [data, setData] = useState([])
+    // const [error, setError] = useState('')
+    // const [loading, setLoading] = useState(false)
+    const {data, setData,  error, setError, loading, setLoading} = useContext(MainContext)
 
     const fetchData = () =>{
         setLoading(true)
@@ -22,7 +21,8 @@ export default function useFetch(url){
             setLoading(false)
         })
     }
+    
 
-    return { data, error, loading, fetchData, setData }
+    return { data, error, loading, setData, fetchData }
 
 }
