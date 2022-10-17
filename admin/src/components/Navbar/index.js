@@ -27,14 +27,14 @@ const Navbar = () => {
                 <InnerContainer>
                     <HeaderText>
                         <h3>
-                            
+                            Administering Office
                         </h3>
                     </HeaderText>
                     <UserProfile onClick={()=> {
                         setIsVisible(v => !v)
                     }}>
                         <img alt='userImg' src={userIcon}/>
-                        <p>Administering Office</p>
+                        <p>Melfred Roble</p>
                     </UserProfile>
                 </InnerContainer>
                 <Container onClick={()=> setIsVisible(false)}>
