@@ -27,7 +27,7 @@ const Navbar = () => {
                 <InnerContainer>
                     <HeaderText>
                         <h3>
-                            Administering Office
+                            {/* Administering Office */}
                         </h3>
                     </HeaderText>
                     <UserProfile onClick={()=> {

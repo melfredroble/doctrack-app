@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Footer from '../components/Footer';
-import { FaBuilding, FaUsers, FaUserTie } from 'react-icons/fa'
+import { FaBuilding, FaUsers, FaUserTie , FaRegUser} from 'react-icons/fa'
 import axios from 'axios'
 const Dashboard = () => {
 
@@ -29,35 +29,41 @@ const Dashboard = () => {
                 <Container>
                     <Card>
                         <CardLeft>
+                            <h5>Total offices</h5>
+                        </CardLeft>
+                        <CardRight>
                             <h5>{offices}</h5>
-                        </CardLeft>
-                        <CardRight>
-                            <FaBuilding/>
                         </CardRight>
                         <CardBottom>
-                            <h5>Offices</h5>
+                            <span>
+                                <FaBuilding/>
+                            </span>
                         </CardBottom>
                     </Card>
                     <Card>
                         <CardLeft>
+                            <h5>Total users</h5>
+                        </CardLeft>
+                        <CardRight>
                             <h5>{users}</h5>
-                        </CardLeft>
-                        <CardRight>
-                            <FaUsers style={{fontSize: "4rem"}} />
                         </CardRight>
                         <CardBottom>
-                            <h5>Users</h5>
+                            <span>
+                            <FaUsers  />
+                            </span>
                         </CardBottom>
                     </Card>
                     <Card>
                         <CardLeft>
-                            <h5>1</h5>
+                            <h5>Total admin</h5>
                         </CardLeft>
                         <CardRight>
-                            <FaUserTie/>
+                            <h5>1</h5>
                         </CardRight>
                         <CardBottom>
-                            <h5>Admin</h5>
+                            <span>
+                            <FaUserTie/>
+                            </span>
                         </CardBottom>
                     </Card>
                 </Container>
@@ -83,6 +89,7 @@ const InnerContainer = styled.div`
 const DashboardText = styled.h1`
     color: #414a4c;
     font-size: 16px;
+    margin-left: 10px;
     margin-bottom: 20px;
     text-transform: uppercase;
 `
@@ -96,44 +103,62 @@ const Container = styled.div`
 const Card = styled.div`
     
     box-shadow: 0px 5px 10px 3px rgba(0,0,0,0.2);
-    height: 150px;
-    width: 300px;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 0.5fr;
+    border-radius: 5px;
+    height: 120px;
+    width: 260px;
     margin-right: 50px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    
+    & >* {
+        flex: 1 1 50px;
+    }
 
 `
-const CardLeft = styled.div`
+const CardRight = styled.div`
     /* background-color: aliceblue; */
-    padding-top: 30px;
     display: flex;
     justify-content: center;
 
     & h5 {
-        font-size: 45px;
-    }
-`
-
-const CardRight = styled.div`
-    /* background-color: antiquewhite; */
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: 100%;
-
-    & svg {
-        font-size: 55px;
-        color: #cecece;
+        font-size: 28px;
     }
 `
 
 const CardBottom = styled.div`
+    /* background-color: antiquewhite; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    & span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #cecece;
+        border-radius: 100%;
+        height: 70px;
+        width: 75px;
+    }
+
+    & svg {
+        font-size: 40px;
+        color: #ffffff;
+    }
+`
+
+const CardLeft = styled.div`
     /* background-color: aquamarine; */
     display: flex;
     align-items: center;
     justify-content: center;
+
+    & h5 {
+        font-size: 16px;
+        font-weight: 500;
+    }
 `
 
 export default Dashboard
