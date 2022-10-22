@@ -1,37 +1,58 @@
-import React,{useEffect, useState} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {  } from "react-icons/fa";
 import {Container, CardContainer, CardHeader, CardBody, FormGroup, CardFooter} from './styles';
 import axios from '../../api/axios';
-import Login from '../../components/Login';
+import SecurityQuestions from '../SecurityQuestions';
+import MainContext from '../../context/MainContext';
 
 const ResetPassword = () => {
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [isValidate, setIsValidate] = useState(false)
+    const {validate} = useContext(MainContext);
+    const [error, setError] = useState('')
+    const navigate = useNavigate()
 
-    useEffect(()=>{
-        axios.get('/security')
-        .then((response)=>{
-            if(response.data.isValidate === true){
-                setIsValidate(true)
-            } else {
-                setIsValidate(false)
-            }
-        })
-        .catch((error)=> console.log(error))
-    })
+    // useEffect(()=>{
+    //     const storedToken = JSON.parse(localStorage.getItem("Token_key"));
+    //     if(storedToken){
+    //         console.log("meron")
+    //     }
+    // })
+
+    const resetPassword = (e)=>{
+        e.preventDefault();
+        if(password !== confirmPassword) {
+            setError("Password unmatched");
+        } else {
+            axios.post('/security/reset', {pwd: password})
+            .then((response)=>{
+                if(response.status === 200){
+                    alert("Success");
+                    navigate('/login');
+                }
+            })
+            .catch((error)=>{
+                if(error){
+                    setError(error.message)
+                }
+            })
+        }
+    }
+
+
+
 
     return (
-        isValidate ? <Container>
-            <form >
+        validate ? <Container>
+            <form onSubmit={resetPassword}>
                 <CardContainer>
                     {/* <h1 style={{textAlign: 'center', color: '#50A8EA'}}>Doctrack</h1> */}
-                    
+                
                     <CardHeader>
                         <h2>Reset Password</h2>
-                        {/* {Error} */} 
+                        {error} 
                     </CardHeader>
                     <CardBody>
                         <FormGroup>
@@ -40,25 +61,25 @@ const ResetPassword = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder='Password' 
-                            id="email" />
+                            required/>
                         </FormGroup>
                         <FormGroup>
                             <input 
-                            type="email" 
-                            name="email" 
+                            type="password" 
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder='Confirm password' 
-                            id="email" />
+                            required/>
+                            
                         </FormGroup>
                     </CardBody>
                     <CardFooter>
-                        <button type="button">Reset</button>
+                        <button type="submit">Reset</button>
                     </CardFooter>
                 </CardContainer>
             </form>
         </Container>
-        : <Login/>
+        : <SecurityQuestions/>
     )
 }
 

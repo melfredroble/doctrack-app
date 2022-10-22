@@ -8,6 +8,7 @@ import {
     Text,
     CloseButton,
     DeleteButton,
+    InputGroup,
     ButtonContainer
 } from "./styles";
 import {
@@ -19,7 +20,6 @@ import {
     ModalBody,
     ModalFooter,
     FormGroup,
-    InputGroup,
     PinContainer,
     ErrorText
 } from "../../pages/Users/styles";
@@ -55,7 +55,7 @@ export const DeleteModal = ({ closeModal }) => {
                     </CloseButtonContainer>
                     <FaExclamationTriangle />
                     <Text>WARNING!</Text>
-                    <Text fw="normal">Are you sure to delete this user?</Text>
+                    <Text fw="bold">Are you sure to delete this user?</Text>
                 </DeleteModalHeader>
                 <DeleteModalBody>
                     <ButtonContainer>
@@ -94,7 +94,7 @@ export const DeleteDoctype = ({ closeModal })=>{
                     </CloseButtonContainer>
                     <FaExclamationTriangle />
                     <Text>WARNING!</Text>
-                    <Text fw="normal">Are you sure to delete this data ?</Text>
+                    <Text fw="bold">Are you sure to delete this data ?</Text>
                 </DeleteModalHeader>
                 <DeleteModalBody>
                     <ButtonContainer>
@@ -233,6 +233,7 @@ export const EditModal = ({ closeModal, openModal }) => {
                     <CloseModal onClick={() => {closeModal(false)}}>&times; Close</CloseModal>
                     <Button
                         bg="#07bc0c"
+                        br="5px"
                         type='submit'
                         padding="8px 12px"
                         onClick={()=> {
@@ -295,7 +296,7 @@ export const EditDoctypeModal = ({ closeModal })=>{
                     </ModalBody>
                     <ModalFooter>
                         <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
-                        <Button type='submit' bg="green" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
+                        <Button type='submit' br="5px" bg="#07bc0c" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
                     </ModalFooter>
                 </form>
             </ModalContainer>
@@ -331,7 +332,7 @@ export const EditOfficeModal = ({ closeModal })=>{
         })
         .catch(error => console.log(error))
     },[])
-    
+
     return (
         <>
             <ModalBackdrop onClick={() => closeModal(false)} />
@@ -354,7 +355,7 @@ export const EditOfficeModal = ({ closeModal })=>{
                     </ModalBody>
                     <ModalFooter>
                         <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
-                        <Button type='submit' bg="green" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
+                        <Button type='submit' br="5px" bg="#07bc0c" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
                     </ModalFooter>
                 </form>
             </ModalContainer>
@@ -389,7 +390,7 @@ export const DeleteOfficeModal = ({ closeModal })=>{
                     </CloseButtonContainer>
                     <FaExclamationTriangle />
                     <Text>WARNING!</Text>
-                    <Text fw="normal">Are you sure to delete this data ?</Text>
+                    <Text fw="bold">Are you sure to delete this data ?</Text>
                 </DeleteModalHeader>
                 <DeleteModalBody>
                     <ButtonContainer>

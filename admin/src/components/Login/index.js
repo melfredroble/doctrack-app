@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Container, CardContainer, CardHeader, LogoContainer, LogoImg, CardBody, FormGroup, CardFooter, ErrorText } from './styles';
@@ -15,13 +15,23 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
     const [isLoading, setIsLoading] = useState(false)
+    const [isAuth, setIsAuth] = useState(false)
     // const auth = useAuth();
 
-    // const handleLogin = async(e)=>{
-    //     e.preventDefault()
-    //     await auth.login(email, password)
-    //     navigate('/')
-    // }
+    useEffect(() => {
+        axios.get('http://localhost:5000/login')
+            .then((response) => {
+                if (response.data.loggedIn === true) {
+                    setIsAuth(true)
+                    navigate('/')
+                } else {
+                    setIsAuth(false)
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
 
     const handleLogin = async (e) => {
         e.preventDefault()

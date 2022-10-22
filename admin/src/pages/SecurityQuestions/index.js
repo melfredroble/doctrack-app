@@ -1,22 +1,34 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from '../../api/axios';
+import MainContext from '../../context/MainContext';
 import {Container, CardContainer, CardHeader, CardBody, FormGroup, CardFooter} from './styles';
 
 const SecurityQuestions = () => {
 
-    const [ansOne, setAnsOne] = useState('')
-    const [ansTwo, setAnsTwo] = useState('')
-    const [ansThree, setAnsThree] = useState('')
-    const [ansFour, setAnsFour] = useState('')
-    const [ansFive, setAnsFive] = useState('')
+    const navigate = useNavigate();
+
+    const [ansOne, setAnsOne] = useState('');
+    const [ansTwo, setAnsTwo] = useState('');
+    const [ansThree, setAnsThree] = useState('');
+    const [ansFour, setAnsFour] = useState('');
+    const [ansFive, setAnsFive] = useState('');
+    const [error, setError] = useState('');
+    const {setValidate} = useContext(MainContext);
 
     const handleAnswers = (e)=>{
-        e.preventDefault()
-
+        e.preventDefault();
         axios.post('/security/answer', {ansOne, ansTwo, ansThree, ansFour, ansFive})
         .then((response)=>{
-            if(response){
-                console.log(response)
+            if(response.status === 200){
+                // localStorage.setItem("Token_key", JSON.stringify(response.data.token));
+                navigate('/reset-password');
+                setValidate(true)
+            } 
+        })
+        .catch((error)=> {
+            if(error){
+                setError("Invalid answers");
             }
         })
     }
@@ -29,7 +41,7 @@ const SecurityQuestions = () => {
                 
                 <CardHeader>
                     <h5>Security questions</h5>
-                    {/* {Error} */} 
+                    {error} 
                 </CardHeader>
                 <CardBody>
                     {/* <FormGroup>
@@ -40,7 +52,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What is the name of your favorite pet?</label>
                         <input 
-                        type="text"
+                        type="password"
                         value={ansOne}
                         onChange={(e)=> setAnsOne(e.target.value)}
                         required
@@ -49,7 +61,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What is your mother's maiden name?</label>
                         <input 
-                        type="text"
+                        type="password"
                         value={ansTwo}
                         onChange={(e)=> setAnsTwo(e.target.value)}
                         required
@@ -58,7 +70,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What was your favorite subject in high school?</label>
                         <input 
-                        type="text"  
+                        type="password"  
                         value={ansThree}
                         onChange={(e)=> setAnsThree(e.target.value)}
                         required
@@ -67,7 +79,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What was your dream job as a child?</label>
                         <input 
-                        type="text"  
+                        type="password"  
                         value={ansFour}
                         onChange={(e)=> setAnsFour(e.target.value)}
                         required
@@ -76,7 +88,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What is your favorite movie?</label>
                         <input 
-                        type="text"  
+                        type="password"  
                         value={ansFive}
                         onChange={(e)=> setAnsFive(e.target.value)}
                         required
@@ -84,7 +96,7 @@ const SecurityQuestions = () => {
                     </FormGroup>
                 </CardBody>
                 <CardFooter>
-                    <button type="submit">Submit</button>
+                    <button type="submit">Validate</button>
                 </CardFooter>
             </CardContainer>
         </form>

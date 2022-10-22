@@ -31,7 +31,7 @@ export const DeleteModalHeader = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #e74c3c;
+    /* background-color: #e74c3c; */
     height: 150px;
 
     & svg {
@@ -50,8 +50,8 @@ export const DeleteModalBody = styled.div`
 
 export const Text = styled.h1`
     font-size: 18px;
-    margin-bottom: 10px;
-    color: #fff;
+    margin-top: 10px;
+    color: #e74c3c;
     font-weight: ${props => props.fw};
 `
 
@@ -88,6 +88,34 @@ export const DeleteButton = styled.button`
     color: #fff;
     border-radius: 5px;
     
+`
+
+export const InputGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    font-weight: 500 !important;
+
+    & label {
+        font-size: 10px;
+    }
+
+    & input {
+        margin-top: 8px;
+        padding: 8px;
+        width: 100%;
+        border: 1px solid #cccccc;
+        outline: none;
+        border-radius: 5px;
+    }
+
+    & select {
+        margin-top: 8px;
+        padding: 8px;
+        width: 100%;
+        border: 1px solid #cccccc;
+        outline: none;
+    }
 `
 
 // export const ModalOverlay = styled.a`

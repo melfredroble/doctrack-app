@@ -17,11 +17,6 @@ export const HeaderContainer = styled.div`
     align-items: center;
     justify-content: ${props  => props.justifyContent};
     margin-bottom: 15px;
-    
-    & svg {
-        font-size: 18px;
-        margin-right: 10px;
-    }
 `
 
 export const HeaderText = styled.h1`
@@ -29,6 +24,7 @@ export const HeaderText = styled.h1`
     font-weight: bold;
     color: #414a4c;
     text-transform: uppercase;
+    margin-left: 5px;
 `
 
 export const Container = styled.div`
@@ -48,14 +44,20 @@ export const TableContainer = styled.div`
 `
 
 export const Button = styled.button`
+    display: ${props => props.display};
+    justify-content: ${props => props.content};
+    align-items: ${props => props.align};
     padding: ${props => props.padding};
     background-color: ${props => props.bg};
     border: none;
     outline: none;
     color: #ffffff;
-    border-radius: 5px;
+    border-radius: ${props => props.br};
     cursor: pointer;
-    font-size: 12px;
+
+    & svg {
+        font-size: 18px;
+    }
 `
 
 export const Table = styled.table`
@@ -130,11 +132,18 @@ export const FormGroup = styled.div`
 export const InputGroup = styled.div`
     font-weight: 500 !important;
 
+    & label {
+        font-size: 12px;
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+
     & input {
         margin-top: 8px;
         padding: 10px;
         width: 100%;
         border: 1px solid #cccccc;
         outline: none;
+        border-radius: 5px;
     }
 `

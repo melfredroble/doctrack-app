@@ -8,10 +8,11 @@ const bcrypt = require("bcrypt");
 const { raw } = require('body-parser');
 const saltRounds = 10;
 
-// connection
+//* connection
 let conn = config.connection
 
-// Protecting routes from unauthorized users
+//* Protecting routes from unauthorized users
+
 const requireAuth = (req, res, next) => {
   const userSession = req.session.user
   const sessionId = req.session.id
@@ -33,7 +34,7 @@ const requireAuth = (req, res, next) => {
 
 // Get users list
 router.get('/', requireAuth, (req, res) => {
-  conn.query("SELECT users.id, users.name, users.email, offices.office_name, users.role FROM users JOIN offices ON users.office_id = offices.id ORDER BY users.id ASC", (err, result) => {
+  conn.query('SELECT users.id, users.name, users.email, offices.office_name, users.role FROM users JOIN offices ON users.office_id = offices.id WHERE users.role = "employee" OR users.role = "head" ORDER BY users.id ASC', (err, result) => {
     if (result) {
       res.status(200).json(result)
     }

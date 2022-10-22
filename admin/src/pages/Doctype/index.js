@@ -19,8 +19,8 @@ import {
 } from './styles'
 import Footer from '../../components/Footer';
 import DocTypeTable from '../../components/DocTypeTable';
-import axios from 'axios';
 import useFetch from '../../hooks/useFetch';
+import axios from '../../api/axios';
 import MainContext from '../../context/MainContext';
 
 const Doctype = () => {
@@ -59,16 +59,18 @@ const Modal = ({closeModal}) => {
     
     const addDoctype = (e)=> {
         e.preventDefault()
-        axios.post('http://localhost:5000/documents/addDocType', {withCredentials: true, doctype: docType})
-        .then((response)=>{
-            if (response.data.message) {
-                setError(response.data.message);
-            }
-            if (response.data.status === "success") {
-                closeModal(false);
-                fetchData()
-            }
-        })
+        if(docType !== ''){
+            axios.post('/documents/addDocType', {withCredentials: true, doctype: docType})
+            .then((response)=>{
+                if (response.data.message) {
+                    setError(response.data.message);
+                }
+                if (response.data.status === "success") {
+                    closeModal(false);
+                    fetchData()
+                }
+            })
+        }
     }
 
     return (
@@ -94,7 +96,7 @@ const Modal = ({closeModal}) => {
                     </ModalBody>
                     <ModalFooter>
                         <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
-                        <Button type='submit' bg="green" br="5px" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
+                        <Button type='submit' bg="#07bc0c" br="5px" padding="8px 12px" ><FaCheck style={{fontSize: "10px"}}/> Save</Button>
                     </ModalFooter>
                 </form>
             </ModalContainer>

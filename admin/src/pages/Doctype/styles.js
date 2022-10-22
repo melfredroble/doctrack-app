@@ -130,12 +130,18 @@ export const FormGroup = styled.div`
 export const InputGroup = styled.div`
     font-weight: 500 !important;
 
+    & label {
+        font-size: 12px;
+        font-weight: 400;
+    }
+
     & input {
         margin-top: 8px;
         padding: 10px;
         width: 100%;
         border: 1px solid #cccccc;
         outline: none;
+        border-radius: 5px;
     }
 `
 
