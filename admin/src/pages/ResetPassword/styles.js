@@ -70,3 +70,50 @@ export const CardFooter = styled.div`
     }
 
 `
+
+export const ModalBackDrop = styled.div`
+    background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden !important;
+`
+
+export const ModalContainer = styled.div`
+    background-color: #ffffff;
+    height: 150px;
+    width: 320px;
+    position: fixed;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    box-shadow: 0 0 10px 0px rgba(0,0,0,0.15);
+    color: #414a4c;
+    overflow: hidden !important;
+    border-radius: 10px;
+    border: 1px solid #07bc0c;
+`
+
+export const InnerContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+
+    & svg {
+        font-size: 62px;
+        color: #07bc0c;
+        margin: 10px;
+    }
+    
+    & h5 {
+        color: #07bc0c;
+        font-size: 26px;
+    }
+
+`

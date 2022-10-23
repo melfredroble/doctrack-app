@@ -13,8 +13,9 @@ export const CardContainer = styled.div`
     background-color: #ffffff;
     padding: 40px 50px;
     /* border: 1px solid #cecece; */
-    box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 0 10px 0px rgba(0,0,0,0.15);
     border-radius: 5px;
+    border: 1px solid #e0e0e0;
     width: 500px;
 `
 
@@ -25,6 +26,13 @@ export const CardHeader = styled.div`
 
     & h5 {
         font-size: 16px;
+    }
+
+    & p {
+        font-size: 14px;
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
     }
 `
 

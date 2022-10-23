@@ -1,13 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Card, CardRight, CardLeft, CardBottom} from './styles'
 import { FaBuilding, FaUsers, FaUserTie } from 'react-icons/fa'
+import axios from 'axios'
 
 const DashboardContent = () => {
+
+    let fetchUsers = 'http://localhost:5000/users'
+    let fetchOffices = 'http://localhost:5000/offices'
+
+    const [users, setUsers] = useState(null)
+    const [offices, setOffices] = useState(null)
+
+    const requestOne = axios.get(fetchUsers)
+    const requestTwo = axios.get(fetchOffices)
+
+    useEffect(()=>{
+        axios.all([requestOne, requestTwo])
+        .then(axios.spread((...responses)=>{
+            setUsers(responses[0].data.length)
+            setOffices(responses[1].data.length)
+        }))
+    },[])
+
     return (
         <Container>
             <Card>
                 <CardLeft>
-                    <h5>08</h5>
+                    <h5>{offices}</h5>
                 </CardLeft>
                 <CardRight>
                     <FaBuilding/>
@@ -18,7 +37,7 @@ const DashboardContent = () => {
             </Card>
             <Card>
                 <CardLeft>
-                    <h5>15</h5>
+                    <h5>{users}</h5>
                 </CardLeft>
                 <CardRight>
                     <FaUsers style={{fontSize: "4rem"}} />

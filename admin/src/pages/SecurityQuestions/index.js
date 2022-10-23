@@ -1,23 +1,48 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from '../../api/axios';
-import {Container, CardContainer, CardHeader, CardBody, FormGroup, CardFooter} from './styles';
+import MainContext from '../../context/MainContext';
+import {
+    Container,
+    CardContainer, 
+    CardHeader, 
+    CardBody, 
+    FormGroup, 
+    CardFooter
+} from './styles';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const SecurityQuestions = () => {
 
-    const [ansOne, setAnsOne] = useState('')
-    const [ansTwo, setAnsTwo] = useState('')
-    const [ansThree, setAnsThree] = useState('')
-    const [ansFour, setAnsFour] = useState('')
-    const [ansFive, setAnsFive] = useState('')
+    const [ansOne, setAnsOne] = useState('');
+    const [ansTwo, setAnsTwo] = useState('');
+    const [ansThree, setAnsThree] = useState('');
+    const [ansFour, setAnsFour] = useState('');
+    const [ansFive, setAnsFive] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState('')
+    const {setIsValidated} = useContext(MainContext);
+
+    const navigate = useNavigate();
 
     const handleAnswers = (e)=>{
         e.preventDefault()
+        setIsLoading(true)
 
-        axios.post('/security/answer', {ansOne, ansTwo, ansThree, ansFour, ansFive})
+        axios.post('/security/answer', 
+        {ansOne, ansTwo, ansThree, ansFour, ansFive})
         .then((response)=>{
-            if(response){
-                console.log(response)
+            if(response.data.validated === true){
+                setIsValidated(true);
+                navigate('/reset-password');
             }
+        })
+        .catch((error)=>{
+            console.log(error);
+            setMessage("Invalid answer/s")
+        })
+        .finally(()=>{
+            setIsLoading(false)
         })
     }
 
@@ -29,14 +54,9 @@ const SecurityQuestions = () => {
                 
                 <CardHeader>
                     <h5>Security questions</h5>
-                    {/* {Error} */} 
+                    <p>{message}</p>
                 </CardHeader>
                 <CardBody>
-                    {/* <FormGroup>
-                        <label htmlFor="qtnOne">What was your childhood nickname?</label>
-                        <input 
-                        type="text"  />
-                    </FormGroup> */}
                     <FormGroup>
                         <label htmlFor="qtnOne">What is the name of your favorite pet?</label>
                         <input 
@@ -84,12 +104,18 @@ const SecurityQuestions = () => {
                     </FormGroup>
                 </CardBody>
                 <CardFooter>
-                    <button type="submit">Submit</button>
+                    <button type="submit">
+                        {
+                        !isLoading ? "Validate" : <ClipLoader size={16} color="#ffffff" />
+                        }
+                    </button>
                 </CardFooter>
             </CardContainer>
         </form>
     </Container>
     )
 }
+
+
 
 export default SecurityQuestions

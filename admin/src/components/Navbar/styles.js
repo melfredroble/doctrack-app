@@ -63,7 +63,6 @@ export const Button = styled.button`
     display: flex;
     align-items: center;
     width: 100%;
-    margin-top: 5px;
     & svg {
         font-size: 20px;
         margin-right: 10px;
@@ -114,3 +113,52 @@ export const ItemLink = styled.div`
         font-size: 14px;
     }
 `
+
+
+export const ModalBackDrop = styled.div`
+    backdrop-filter: blur(1px);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden !important;
+    z-index: 10;
+`
+
+export const ModalContainer = styled.div`
+    background: none;
+    width: 500px;
+    position: fixed;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    color: #414a4c;
+    overflow: hidden !important;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+// export const ModalInnerContainer = styled.div`
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: column;
+//     height: 100%;
+
+//     & svg {
+//         font-size: 62px;
+//         color: #07bc0c;
+//         margin: 10px;
+//     }
+    
+//     & h5 {
+//         color: #07bc0c;
+//         font-size: 26px;
+//     }
+
+// `

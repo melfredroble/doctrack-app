@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Container, CardContainer, CardHeader, LogoContainer, LogoImg, CardBody, FormGroup, CardFooter, ErrorText } from './styles';
 import logo from '../../assets/img/profile1.png';
 import ClipLoader from "react-spinners/ClipLoader";
-import {useAuth} from '../../hooks/useAuth';
 import axios from '../../api/axios';
 
 
@@ -14,14 +13,21 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
-    const [isLoading, setIsLoading] = useState(false)
-    // const auth = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
 
-    // const handleLogin = async(e)=>{
-    //     e.preventDefault()
-    //     await auth.login(email, password)
-    //     navigate('/')
-    // }
+    useEffect(() => {
+        axios.get('http://localhost:5000/login')
+            .then((response) => {
+                if (response.data.loggedIn === true) {
+                    navigate('/')
+                } else {
+                    navigate('/login')
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
 
     const handleLogin = async (e) => {
         e.preventDefault()

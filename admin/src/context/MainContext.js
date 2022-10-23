@@ -17,6 +17,7 @@ export const MainContextProvider = ({ children }) => {
     const [loading,setLoading] = useState(false)
     const [offices, setOffices] = useState([])
     const [isAuth, setIsAuth] = useState(false)
+    const [isValidated, setIsValidated] = useState(false)
 
     Axios.defaults.withCredentials = true;
 
@@ -62,6 +63,8 @@ export const MainContextProvider = ({ children }) => {
         userOffice,
         offices,
         isAuth,
+        isValidated, 
+        setIsValidated,
         setIsAuth,
         setOffices,
         setUserName,
