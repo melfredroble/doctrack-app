@@ -27,7 +27,6 @@ const Doctype = () => {
 
     const [active, setActive] = useState(false);
 
-
     return (
         <MainContainer>
             <InnerContainer>

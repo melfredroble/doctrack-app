@@ -63,7 +63,6 @@ export const Table = styled.table`
     
 
 `
-
 // Modal
 export const ModalBackdrop = styled.div`
     /* background: #eeeeee; */

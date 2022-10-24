@@ -5,7 +5,6 @@ export const MainContainer = styled.div`
     margin-left: 250px;
     height: 100%;
 `
-
 export const InnerContainer = styled.div`
     margin: 30px;
     height: 100%;

@@ -12,6 +12,7 @@ const SecuritySetting = () => {
     const [qtnFour, setQtnFour] = useState('');
     const [qtnFive, setQtnFive] = useState('');
 
+    
     const handleSecurity = (e)=>{
         e.preventDefault()
         axios.put('/security/update', {qtnOne, qtnTwo, qtnThree, qtnFour, qtnFive})
