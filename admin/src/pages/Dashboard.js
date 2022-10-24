@@ -102,6 +102,7 @@ const Container = styled.div`
 
 const Card = styled.div`
     
+    background-color: #ffffff ;
     box-shadow: 0px 5px 10px 3px rgba(0,0,0,0.2);
     border-radius: 5px;
     height: 120px;

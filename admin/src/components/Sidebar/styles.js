@@ -8,7 +8,7 @@ export const MainContainer = styled.div`
     position: fixed;
     top: 0;
     z-index: 2;
-
+    
     & h3 {
         color: #000;
     }

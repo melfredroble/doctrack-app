@@ -5,7 +5,6 @@ export const MainContainer = styled.div`
     margin-left: 250px;
     height: 100%;
 `
-
 export const InnerContainer = styled.div`
     margin: 30px;
     height: 100%;
@@ -17,19 +16,15 @@ export const HeaderContainer = styled.div`
     align-items: center;
     justify-content: ${props  => props.justifyContent};
     margin-bottom: 15px;
-    
-    & svg {
-        font-size: 22px;
-        margin-right: 10px;
-    }
-`
 
+`
 
 export const HeaderText = styled.h1`
     font-size: 12px;
     font-weight: bold;
     color: #414a4c;
     text-transform: uppercase;
+    margin-left: 5px;
 `
 
 export const Container = styled.div`
@@ -49,13 +44,19 @@ export const TableContainer = styled.div`
 `
 
 export const Button = styled.button`
+    display: ${props => props.display};
+    justify-content: ${props => props.content};
+    align-items: ${props => props.align};
     padding: ${props => props.padding};
     background-color: ${props => props.bg};
     border: none;
     outline: none;
     color: #ffffff;
-    border-radius: 5px;
+    border-radius: ${props => props.br};
     cursor: pointer;
+    & svg {
+        font-size: 18px;
+    }
 `
 
 export const Table = styled.table`

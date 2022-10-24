@@ -60,7 +60,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What is the name of your favorite pet?</label>
                         <input 
-                        type="text"
+                        type="password"
                         value={ansOne}
                         onChange={(e)=> setAnsOne(e.target.value)}
                         required
@@ -69,7 +69,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What is your mother's maiden name?</label>
                         <input 
-                        type="text"
+                        type="password"
                         value={ansTwo}
                         onChange={(e)=> setAnsTwo(e.target.value)}
                         required
@@ -78,7 +78,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What was your favorite subject in high school?</label>
                         <input 
-                        type="text"  
+                        type="password"  
                         value={ansThree}
                         onChange={(e)=> setAnsThree(e.target.value)}
                         required
@@ -87,7 +87,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What was your dream job as a child?</label>
                         <input 
-                        type="text"  
+                        type="password"  
                         value={ansFour}
                         onChange={(e)=> setAnsFour(e.target.value)}
                         required
@@ -96,7 +96,7 @@ const SecurityQuestions = () => {
                     <FormGroup>
                         <label htmlFor="qtnOne">What is your favorite movie?</label>
                         <input 
-                        type="text"  
+                        type="password"  
                         value={ansFive}
                         onChange={(e)=> setAnsFive(e.target.value)}
                         required

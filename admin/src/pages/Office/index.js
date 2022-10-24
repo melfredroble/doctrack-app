@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react'
-import { FaRegBuilding, FaCheck } from 'react-icons/fa';
+import { FaRegBuilding, FaCheck, FaPlus } from 'react-icons/fa';
 import {
     MainContainer, 
     InnerContainer,
@@ -26,7 +26,7 @@ import MainContext from '../../context/MainContext';
 const Office = () => {
     
     const [active, setActive] = useState(false);
-
+    
     return (
         <MainContainer>
             <InnerContainer>
@@ -36,7 +36,9 @@ const Office = () => {
                 <Container>
                     <HeaderContainer justifyContent="space-between">
                         <HeaderText>Records</HeaderText>
-                        <Button bg="#50A8EA" padding="10px" onClick={()=> setActive(true)}>Add Office</Button>
+                        <Button display="flex" content="end" align="center" bg="#50A8EA" br="100%" padding="8px 10px" onClick={()=> setActive(true)}>
+                            <FaPlus/>
+                        </Button>
                     </HeaderContainer>
                     <OfficeTable />
                     {active && <Modal closeModal={setActive} />}
@@ -57,17 +59,19 @@ const Modal = ({closeModal}) => {
 
     const addOffice = (e)=>{
         e.preventDefault()
-        axios.post('/offices/add',{office: office})
-        .then((response)=>{
-            if (response.data.message) {
-                setError(response.data.message);
-            }
-    
-            if (response.data.status === "success") {
-                closeModal(false)
-                fetchData()
-            }
-        })
+        if(office !== ''){
+            axios.post('/offices/add',{office: office})
+            .then((response)=>{
+                if (response.data.message) {
+                    setError(response.data.message);
+                }
+        
+                if (response.data.status === "success") {
+                    closeModal(false)
+                    fetchData()
+                }
+            })
+        }
     }
 
     return (
@@ -82,12 +86,13 @@ const Modal = ({closeModal}) => {
                         <FormGroup>
                             {error === "Office already exist!" && <ErrorText>{error}</ErrorText>}
                             <InputGroup>
-                                <label>Office</label>
+                                <label>Office name</label>
                                 <input 
                                 type='text'
                                 value={office}
                                 name='office'
                                 placeholder='Office'
+                                required
                                 onChange={(e)=> {setOffice(e.target.value)}}
                                 />
                             </InputGroup>
@@ -97,7 +102,8 @@ const Modal = ({closeModal}) => {
                 <ModalFooter>
                     <CloseModal onClick={()=> {closeModal(false)}}>&times; Close</CloseModal>
                     <Button 
-                    bg="green" 
+                    bg="#07bc0c" 
+                    br="5px"
                     padding="8px 12px"
                     onClick={addOffice}>
                         <FaCheck style={{fontSize: "10px"}}/> Save

@@ -13,15 +13,18 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+    const [isAuth, setIsAuth] = useState(false)
+    // const auth = useAuth();
 
     useEffect(() => {
         axios.get('http://localhost:5000/login')
             .then((response) => {
                 if (response.data.loggedIn === true) {
+                    setIsAuth(true)
                     navigate('/')
                 } else {
-                    navigate('/login')
+                    setIsAuth(false)
                 }
             })
             .catch((error) => {

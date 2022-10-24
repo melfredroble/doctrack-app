@@ -59,6 +59,8 @@ router.get('/:id', requireAuth,(req, res) => {
 })
 
 
+// Add office
+
 router.post('/add', requireAuth, (req, res) => {
         const office = req.body.office
 

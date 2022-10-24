@@ -55,7 +55,7 @@ const ResetPassword = () => {
             <form onSubmit={resetPassword}>
                 <CardContainer>
                     {/* <h1 style={{textAlign: 'center', color: '#50A8EA'}}>Doctrack</h1> */}
-                    
+                
                     <CardHeader>
                         <h2>Reset Password</h2>
                         <p style={{marginTop: "10px", color: "red", fontWeight: "bold"}}>{message}</p>

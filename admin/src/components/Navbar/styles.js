@@ -39,6 +39,7 @@ export const HeaderText = styled.div`
     & h3 {
         color: #414a4c;
         font-size: 16px;
+        margin-left: 10px;
     }
 `
 

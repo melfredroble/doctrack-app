@@ -18,7 +18,7 @@ import {
     PinContainer,
     ErrorText
 } from './styles';
-import { FaRegUser, FaCheck, FaUser } from 'react-icons/fa';
+import { FaRegUser, FaCheck, FaUser, FaPlus } from 'react-icons/fa';
 import axios from 'axios'
 import Footer from '../../components/Footer';
 import UsersTable from '../../components/UsersTable';
@@ -39,7 +39,9 @@ const Users = () => {
                 <Container>
                     <HeaderContainer justifyContent="space-between">
                         <HeaderText>Records</HeaderText>
-                        <Button bg="#50A8EA" padding="10px" onClick={() => setActive(true)}>Add User</Button>
+                        <Button display="flex" content="end" align="center" bg="#50A8EA" br="100%" padding="8px 10px" onClick={()=> setActive(true)}>
+                            <FaPlus/>
+                        </Button>
                     </HeaderContainer>
                     <UsersTable/>
                     {active && <Modal closeModal={setActive} />}
@@ -177,7 +179,7 @@ const Modal = ({ closeModal }) => {
                     </ModalBody>
                     <ModalFooter>
                         <CloseModal onClick={() => closeModal(false)}>&times; Close</CloseModal>
-                        <Button bg="#07bc0c" type='submit' padding="8px 12px" ><FaCheck style={{ fontSize: "10px" }} /> Save</Button>
+                        <Button bg="#07bc0c" br="5px" type='submit' padding="8px 12px" ><FaCheck style={{ fontSize: "10px" }} /> Save</Button>
                     </ModalFooter>
                 </form>
             </ModalContainer>

@@ -89,12 +89,12 @@ const reqFive = (req, res, next)=>{
 //* Answer security questions
 router.post('/answer', reqOne, reqTwo, reqThree, reqFour, reqFive, (req, res)=>{
     
-    res.status(200).json({validated: true});
+    res.status(200).send();
 
 })
 
 //* Reset password
-router.put('/reset',(req,res)=>{
+router.post('/reset',(req,res)=>{
     const pwd = req.body.pwd;
 
     bcrypt.hash(pwd, saltRounds, (error,hash)=>{
