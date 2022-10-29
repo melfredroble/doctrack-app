@@ -104,8 +104,13 @@ app.post("/login", (req, res) => {
 
 							if (response) {
 								req.session.user = result[0];
-								req.session.email = result[0]
-								res.json({ loggedIn: true, email: req.session.email})
+								// const name = result[0].name;
+								// const userEmail = result[0].email;
+								// const userOffice = result[0].office_id;
+								// const userData = {name, userEmail, userOffice};
+								// req.session.user = userData;
+
+								res.json({ loggedIn: true, user: req.session.user})
 							} else {
 								res.json({ loggedIn: false, message: "Invalid email or password" });
 							}

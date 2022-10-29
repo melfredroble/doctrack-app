@@ -18,6 +18,12 @@ export const CardContainer = styled.div`
     box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.2);
     border-radius: 5px;
     width: 400px;
+
+    @media screen and (max-width: 767px){
+        width: 330px;
+        padding: 40px 30px;
+        overflow: hidden;
+    }
 `
 
 export const CardHeader = styled.div`

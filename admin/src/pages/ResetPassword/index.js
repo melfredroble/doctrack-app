@@ -103,7 +103,7 @@ const Modal = ({showModal})=>{
     setTimeout(()=>{
         setIsValidated(false)
         showModal(false)
-    },2000)
+    },1000)
 
     return (
         <>

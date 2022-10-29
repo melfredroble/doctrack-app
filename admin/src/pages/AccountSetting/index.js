@@ -2,7 +2,7 @@ import React, {  useState, useContext, useEffect } from 'react'
 import { MainContainer, CardContainer, CardHeader, CardBody, CardFooter, FormGroup, Text, Button } from './styles'
 import { FaUserCog } from 'react-icons/fa';
 import Footer from '../../components/Footer';
-import axios from 'axios';
+import axios from '../../api/axios';
 import ClipLoader from "react-spinners/ClipLoader";
 import MainContext from '../../context/MainContext';
 
@@ -10,12 +10,33 @@ const AccountSetting = () => {
 
     axios.defaults.withCredentials = true;
 
-    const [isLoading, setIsLoading] = useState(false)
-    const {fetchAdmin,userName, setUserName, userEmail, setUserEmail, userOffice, setUserOffice, offices} = useContext(MainContext)
+    const [isLoading, setIsLoading] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [id, setId] = useState();
+    // const [office, setOffice] = useState('');
+    // const {offices} = useContext(MainContext);
+    const [message, setMessage] = useState('');
 
-    // useEffect(()=>{
-    //     fetchAdmin()
-    // },[])
+    const {adminData} = useContext(MainContext);
+
+    useEffect(()=>{
+        axios.get("/users/admin")
+        .then((response)=>{
+            if(response.status === 200){
+                setName(response.data[0].name);
+                setEmail(response.data[0].email);
+                setId(response.data[0].id);
+                // setOffice(response.data[0].office_id);
+            }
+        })
+        .catch((error)=>{
+            setMessage(error.message);
+        })
+    },[])
+
+
+
 
 
     // const nameRef = useRef(null)
@@ -26,19 +47,18 @@ const AccountSetting = () => {
         e.preventDefault()
         setIsLoading(true)
         axios.put(`http://localhost:5000/users/update/admin`,
-        {name: userName, email: userEmail, office: userOffice})
+        {name, email, id})
         .then((response)=>{
             if(response){
-                setIsLoading(false)
-                console.log(response.data)
+                adminData();
+                setMessage("Heyy");
             }
         })
-        .catch(error => {
-            console.log(error.message)
-            setIsLoading(false)
+        .catch((error)=>{
+            setMessage(error.message);
         })
         .finally(()=> {
-            setIsLoading(false)
+            setIsLoading(false);
         })
     }
     
@@ -50,12 +70,13 @@ const AccountSetting = () => {
                     <FaUserCog/><Text>Account Settings</Text>
                 </CardHeader>
                         <CardBody >
+                            <p>{message}</p>
                             <FormGroup>
                                 <label htmlFor="">Full name</label>
                                 <input 
                                 type="text" 
-                                value={userName} 
-                                onChange={(e)=> setUserName(e.target.value)}
+                                value={name} 
+                                onChange={(e)=> setName(e.target.value)}
                                 name="" 
                                 id="" 
                                 />
@@ -64,18 +85,18 @@ const AccountSetting = () => {
                                 <label htmlFor="">Email</label>
                                 <input 
                                 type="email" 
-                                value={userEmail} 
-                                onChange={(e)=> setUserEmail(e.target.value)}
+                                value={email} 
+                                onChange={(e)=> setEmail(e.target.value)}
                                 name="" 
                                 id="" />
                             </FormGroup>
-                            <FormGroup>
+                            {/* <FormGroup>
                                 <label>Office</label>
                                 <select
                                     name="office"
                                     id=""
-                                    defaultValue={userOffice}
-                                    onChange={(e)=> setUserOffice(e.target.value)}
+                                    defaultValue={office}
+                                    onChange={(e)=> setOffice(e.target.value)}
                                     required
                                     >
                                         {
@@ -86,7 +107,7 @@ const AccountSetting = () => {
                                             })
                                         }
                                 </select>
-                            </FormGroup>
+                            </FormGroup> */}
                         </CardBody>
                 <CardFooter>
                     <Button onClick={updateAdmin}>

@@ -117,7 +117,7 @@ export const ItemLink = styled.div`
 
 
 export const ModalBackDrop = styled.div`
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(1.5px);
     height: 100%;
     width: 100%;
     position: fixed;
@@ -125,11 +125,12 @@ export const ModalBackDrop = styled.div`
     left: 0;
     overflow: hidden !important;
     z-index: 10;
+    cursor: pointer;
 `
 
 export const ModalContainer = styled.div`
     background: none;
-    width: 500px;
+    width: ${props => props.width};
     position: fixed;
     margin: auto;
     top: 0;
@@ -144,22 +145,104 @@ export const ModalContainer = styled.div`
     align-items: center;
 `
 
-// export const ModalInnerContainer = styled.div`
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     flex-direction: column;
-//     height: 100%;
+export const CardContainer = styled.div`
+    background-color: #ffffff;
+    padding: ${props => props.p};
+    margin: 20px;
+    /* border: 1px solid #cecece; */
+    box-shadow: 0 0 10px 0px rgba(0,0,0,0.15);
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    width: 500px;
+`
 
-//     & svg {
-//         font-size: 62px;
-//         color: #07bc0c;
-//         margin: 10px;
-//     }
+export const CardHeader = styled.div`
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3246;
+
+    & h5 {
+        font-size: 16px;
+    }
+
+    & p {
+        font-size: 14px;
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+`
+
+export const CardBody = styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+`
+
+export const FormGroup = styled.div`
+
+    margin: 0 20px;
+    margin-bottom: 10px;
+    & label {
+        font-size: 14px;
+        margin-bottom: 100px;
+    }
+
+    & input {
+        margin-top: 10px;
+        border: 1px solid #cecece;
+        padding: 8px;
+        outline: none;
+        width: 100%;
+        border-radius: 5px;
+    }
+`
+
+export const CardFooter = styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin: 0 20px;
+
+    & button {
+        cursor: pointer;
+        padding: 10px 0;
+        border: none;
+        border-radius: 5px;
+        background-color: #2c3246;
+        color: #fff;
+        text-transform: uppercase;
+        margin-top: 5px;
+    }
+
+    & a {
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 20px;
+        color: gray;
+    }
+
+`
+
+export const ModalMessageBody = styled.div`
+
+    background-color: ${props => props.bg};
+    width: 300px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+
+    & svg {
+        color: #ffffff;
+        font-size: 38px;
+        margin-right: 10px;
+    }
     
-//     & h5 {
-//         color: #07bc0c;
-//         font-size: 26px;
-//     }
+    & h3 {
+        color: #ffffff;
+        font-weight: normal;
+    }
 
-// `
+`

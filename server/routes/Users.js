@@ -56,7 +56,7 @@ router.get('/admin', requireAuth, (req,res)=>{
           res.json(err)
         }
         if(result){
-          res.status(201).json(result)
+          res.status(200).json(result)
         }
     })
 })
@@ -194,14 +194,12 @@ router.delete('/delete/:id', requireAuth, (req, res) => {
 
 // Update Admin
 router.put('/update/admin', requireAuth, (req, res) => {
-  const fullName = req.body.name
-  const email = req.body.email
-  const office = req.body.office
+  const fullName = req.body.name;
+  const email = req.body.email;
+  const id = req.body.id;
 
-
-  if(office === ''){
-    conn.query('UPDATE `users` SET `name`= ?,`email`= ? WHERE email = ?', 
-    [fullName, email, email], 
+    conn.query('UPDATE `users` SET `name`= ?,`email`= ? WHERE id = ?', 
+    [fullName, email, id], 
     (error, result) => {
       if (error) {
         console.log(error)
@@ -210,18 +208,6 @@ router.put('/update/admin', requireAuth, (req, res) => {
         res.json(result)
       }
     })
-  } else {
-    conn.query('UPDATE `users` SET `name`= ?,`email`= ?,`office_id`= ? WHERE email = ?', 
-    [fullName, email, office, email], 
-    (error, result) => {
-      if (error) {
-        console.log(error)
-      } 
-      if(result) {
-        res.json({result})
-      }
-    })
-  }
 
 })
 

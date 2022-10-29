@@ -3,6 +3,7 @@ import DataTable from 'react-data-table-component'
 import useFetch from '../../hooks/useFetch';
 import UserContext from '../../context/MainContext';
 import { Button, SearchContainer, ClearButton, Input } from './styles';
+import {FaPen, FaTrashAlt} from 'react-icons/fa';
 import { EditModal, DeleteModal } from '../../components/Modal';
 
 const UsersTable = () => {
@@ -48,11 +49,11 @@ const UsersTable = () => {
                 <Button bg="#50A8EA" padding="5px" style={{marginRight: "10px"}} onClick={()=> {
                     setId(row.id)
                     setEditModal(true)
-                }}>Edit</Button>
+                }}><FaPen/></Button>
                 <Button bg="red" padding="5px" onClick={()=> {
                     setId(row.id)
                     setDeleteModal(true)
-                }}>Delete</Button>
+                }}><FaTrashAlt/></Button>
             </>
             ,
             allowOverflow: true,

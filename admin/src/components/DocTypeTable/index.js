@@ -4,6 +4,7 @@ import { Button, SearchContainer, ClearButton, Input } from './styles';
 import useFetch from '../../hooks/useFetch';
 import { DeleteDoctype, EditDoctypeModal } from '../../components/Modal';
 import UserContext from '../../context/MainContext';
+import {FaPen, FaTrashAlt} from 'react-icons/fa';
 
 const DocTypeTable = () => {
     const [deleteModal, setDeleteModal] = useState(false);
@@ -33,11 +34,11 @@ const DocTypeTable = () => {
                 <Button bg="#50A8EA" padding="5px" style={{marginRight: "10px"}} onClick={()=> {
                     setId(row.id)
                     setEditModal(true)
-                }}>Edit</Button>
+                }}><FaPen/></Button>
                 <Button bg="red" padding="5px" onClick={()=> {
                     setId(row.id)
                     setDeleteModal(true)
-                }}>Delete</Button>
+                }}><FaTrashAlt/></Button>
             </>
             ,
             allowOverflow: true,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Footer from '../components/Footer';
-import { FaBuilding, FaUsers, FaUserTie , FaRegUser} from 'react-icons/fa'
+import { FaBuilding, FaUsers, FaUserTie } from 'react-icons/fa'
 import axios from 'axios'
 const Dashboard = () => {
 
@@ -102,7 +102,7 @@ const Container = styled.div`
 
 const Card = styled.div`
     
-    background-color: #ffffff ;
+    background-color: #ffffff;
     box-shadow: 0px 5px 10px 3px rgba(0,0,0,0.2);
     border-radius: 5px;
     height: 120px;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import {MainContainer, LogoImg, SidebarLinks, SidebarLink, SidebarHeader, LogoText, Container, HeaderText} from './styles'
-import { FaRegBuilding, FaRegUser, FaUserShield, FaTachometerAlt, FaUsersCog, FaRegFileAlt} from 'react-icons/fa'
+import { FaRegBuilding, FaRegUser, FaUserShield, FaTachometerAlt, FaUserCog, FaRegFileAlt} from 'react-icons/fa'
 import logo from '../../assets/img/logo.png'
 
 const Sidebar = () => {
@@ -41,7 +41,7 @@ const Sidebar = () => {
                             <Link to="/app-setting" style={{backgroundColor: url.pathname === '/app-setting' && '#272d3f', color: url.pathname === '/app-setting' && '#ffffff'}}> <FaCog/> App settings</Link>
                         </SidebarLink> */}
                         <SidebarLink>
-                            <Link to="/account-setting" style={{backgroundColor: url.pathname === '/account-setting' && '#272d3f', color: url.pathname === '/account-setting' && '#ffffff'}}> <FaUsersCog style={{fontSize: "32px"}}/> Account settings</Link>
+                            <Link to="/account-setting" style={{backgroundColor: url.pathname === '/account-setting' && '#272d3f', color: url.pathname === '/account-setting' && '#ffffff'}}> <FaUserCog style={{fontSize: "32px"}}/> Account settings</Link>
                         </SidebarLink>
                         <SidebarLink>
                             <Link to="/security-setting" style={{backgroundColor: url.pathname === '/security-setting' && '#272d3f', color: url.pathname === '/security-setting' && '#ffffff'}}> <FaUserShield style={{fontSize: "32px"}}/> Security settings</Link>

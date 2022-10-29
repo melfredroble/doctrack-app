@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback } from "react"
+import { createContext, useState, useCallback, useEffect } from "react"
 import Axios from 'axios'
 // import UserDispatchContext from "./UserDispatchContext";
 const MainContext = createContext()
@@ -17,7 +17,8 @@ export const MainContextProvider = ({ children }) => {
     const [loading,setLoading] = useState(false)
     const [offices, setOffices] = useState([])
     const [isAuth, setIsAuth] = useState(false)
-    const [validate, setValidate] = useState(false)
+    const [isValidated, setIsValidated] = useState(false)
+    const [adminName, setAdminName] = useState('');
 
     Axios.defaults.withCredentials = true;
 
@@ -51,6 +52,21 @@ export const MainContextProvider = ({ children }) => {
     },[]);
 
 
+
+        useEffect(()=>{
+            adminData();
+        },[])
+
+        const adminData = ()=>{
+            Axios.get("http://localhost:5000/users/admin")
+            .then((response)=>{
+                if(response.status === 200){
+                    setAdminName(response.data[0].name);
+                }
+            })
+        }
+
+
     const state = {
         id,
         userId,
@@ -63,8 +79,8 @@ export const MainContextProvider = ({ children }) => {
         userOffice,
         offices,
         isAuth,
-        validate, 
-        setValidate,
+        isValidated, 
+        setIsValidated,
         setIsAuth,
         setOffices,
         setUserName,
@@ -77,7 +93,10 @@ export const MainContextProvider = ({ children }) => {
         setUserId,
         setUsersData,
         setUserOffice,
-        fetchAdmin
+        fetchAdmin,
+        adminData,
+        adminName,
+        setAdminName
     }
 
     // const dispatch = {

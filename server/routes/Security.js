@@ -94,7 +94,7 @@ router.post('/answer', reqOne, reqTwo, reqThree, reqFour, reqFive, (req, res)=>{
 })
 
 //* Reset password
-router.post('/reset',(req,res)=>{
+router.put('/reset',(req,res)=>{
     const pwd = req.body.pwd;
 
     bcrypt.hash(pwd, saltRounds, (error,hash)=>{

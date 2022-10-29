@@ -6,6 +6,6 @@ export const FooterContainer = styled.footer`
     box-shadow:  0 0 5px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: end;
-    padding: 20px 60px;
+    padding: 20px 15px;
     width: 100%;
 `

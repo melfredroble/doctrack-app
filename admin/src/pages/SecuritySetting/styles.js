@@ -45,7 +45,7 @@ export const CardBody = styled.div`
 `
 
 export const CardFooter = styled.div`
-    padding: 32px;
+    padding: 0 32px 26px 32px;
 `
 
 export const FormGroup = styled.div`

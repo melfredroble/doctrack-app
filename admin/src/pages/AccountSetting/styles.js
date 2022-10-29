@@ -40,6 +40,11 @@ export const CardHeader = styled.div`
 export const CardBody = styled.div`
     padding: 32px;
     color: #000;
+
+    & p {
+        text-align: center;
+        color: red;
+    }
 `
 
 export const CardFooter = styled.div`

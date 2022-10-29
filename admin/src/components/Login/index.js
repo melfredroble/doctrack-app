@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Container, CardContainer, CardHeader, LogoContainer, LogoImg, CardBody, FormGroup, CardFooter, ErrorText } from './styles';
 import logo from '../../assets/img/profile1.png';
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from '../../api/axios';
+import MainContext from '../../context/MainContext';
 
 
 const Login = () => {
@@ -13,47 +14,52 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
-    const [isLoading, setIsLoading] = useState(false)
-    const [isAuth, setIsAuth] = useState(false)
-    // const auth = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isAuth, setIsAuth] = useState(false);
+
+    const {adminData} = useContext(MainContext);
 
     useEffect(() => {
         axios.get('http://localhost:5000/login')
             .then((response) => {
                 if (response.data.loggedIn === true) {
-                    setIsAuth(true)
-                    navigate('/')
+                    setIsAuth(true);
+                    navigate('/');
                 } else {
-                    setIsAuth(false)
+                    setIsAuth(false);
                 }
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
             })
     }, [])
 
     const handleLogin = async (e) => {
-        e.preventDefault()
-        setIsLoading(true)
+        e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await axios.post("/login", {
                 email: email,
                 password: password
             })
             if (response.data.loggedIn === true) {
-                setIsLoading(false)
-                navigate('/')
+                // setIsLoading(false)
+                navigate('/');
+                adminData();
+                // const userData = response.data.user;
+                // localStorage.setItem('userData', JSON.stringify(userData));
             } 
 
             if (response.data.message) {
                 setLoginStatus(response.data.message);
-                setIsLoading(false)
+                // setIsLoading(false)
             }
         } catch (error) {
             if (error) {
                 setLoginStatus("Server error");
-                console.log(error)
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
