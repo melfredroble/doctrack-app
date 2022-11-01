@@ -59,10 +59,13 @@ const SecuritySetting = () => {
             {message && (
               <p
                 style={{
-                  color: "#07bc0c",
+                  color: "#000000",
                   textAlign: "center",
                   marginBottom: "15px",
-                  fontWeight: "bold",
+                  fontSize: "13px",
+                  padding: "8px 0",
+                  backgroundColor: "rgb(198, 238, 200)",
+                  border: "1px solid #07bc0c",
                 }}
               >
                 {message}

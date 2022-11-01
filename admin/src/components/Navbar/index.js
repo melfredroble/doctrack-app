@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaSignOutAlt, FaQuestionCircle, FaCheckCircle } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
 import {
@@ -26,34 +26,18 @@ import MainContext from "../../context/MainContext";
 import userIcon from "../../assets/img/profile1.png";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "../../api/axios";
-// import useFetch from '../../hooks/useFetch'
 
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
-  const [showModalMessage, setShowModalMessage] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const transition = useTransition(isVisible, {
     from: { x: 0, y: 10, opacity: 0 },
     enter: { x: 0, y: 0, opacity: 1 },
     leave: { x: 0, y: 10, opacity: 0 },
   });
-  const [userName, setUserName] = useState("");
 
   const { adminName } = useContext(MainContext);
-
-  // useEffect(()=>{
-  //     adminName();
-  // },[])
-
-  // const adminName = ()=>{
-  //     axios.get("/users/admin")
-  //     .then((response)=>{
-  //         if(response.status === 200){
-  //             setUserName(response.data[0].name);
-  //         }
-  //     })
-  // }
 
   return (
     <>
@@ -111,13 +95,7 @@ const Navbar = () => {
       {showModal && (
         <Modal showModal={setShowModal} showResetModal={setShowResetModal} />
       )}
-      {showResetModal && (
-        <ResetPassword
-          showModal={setShowResetModal}
-          showMessage={setShowModalMessage}
-        />
-      )}
-      {showModalMessage && <MessageModal showModal={setShowModalMessage} />}
+      {showResetModal && <ResetPassword showModal={setShowResetModal} />}
       <Outlet />
     </>
   );
@@ -250,12 +228,11 @@ const Modal = ({ showModal, showResetModal }) => {
 
 // Reset password modal
 
-const ResetPassword = ({ showModal, showMessage }) => {
+const ResetPassword = ({ showModal }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { isValidated } = useContext(MainContext);
 
   const resetPassword = (e) => {
     e.preventDefault();
@@ -268,8 +245,8 @@ const ResetPassword = ({ showModal, showMessage }) => {
         .put("/security/reset", { password })
         .then((response) => {
           if (response.status === 200) {
-            showMessage(true);
-            showModal(false);
+            setMessage("Changes saved");
+            // showModal(false);
           }
         })
         .catch((error) => {
@@ -306,7 +283,11 @@ const ResetPassword = ({ showModal, showMessage }) => {
             <CardHeader>
               <h2>Reset Password</h2>
               <p
-                style={{ marginTop: "10px", color: "red", fontWeight: "bold" }}
+                style={
+                  message === "Changes saved"
+                    ? { marginTop: "10px", color: "green", fontWeight: "bold" }
+                    : { color: "red" }
+                }
               >
                 {message}
               </p>
@@ -343,35 +324,6 @@ const ResetPassword = ({ showModal, showMessage }) => {
             </CardFooter>
           </CardContainer>
         </form>
-      </ModalContainer>
-    </>
-  );
-};
-
-const MessageModal = ({ showModal }) => {
-  setTimeout(() => {
-    showModal(false);
-  }, 2000);
-
-  return (
-    <>
-      <ModalBackDrop onClick={() => showModal(false)} />
-      <ModalContainer width="500px">
-        <ModalMessageBody bg="#07bc0c">
-          <FaCheckCircle />
-          <h3>Success</h3>
-          <CloseButtonContainer>
-            <CloseButton
-              style={{ color: "gray" }}
-              fs="22px"
-              background="none"
-              padding="5px 10px"
-              onClick={() => showModal(false)}
-            >
-              X
-            </CloseButton>
-          </CloseButtonContainer>
-        </ModalMessageBody>
       </ModalContainer>
     </>
   );
