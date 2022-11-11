@@ -8,6 +8,9 @@ export default function useFetch(url) {
   // const [loading, setLoading] = useState(false)
   const { data, setData, error, setError, loading, setLoading } =
     useContext(MainContext);
+    // const [data, setData] = useState([]);
+    // const [error, setError] = useState(null);
+    // const [loading, setLoading] = useState(false);
 
   const fetchData = () => {
     setLoading(true);

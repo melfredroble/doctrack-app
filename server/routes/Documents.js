@@ -158,7 +158,7 @@ router.get("/:id", requireAuth, (req, res) => {
   const userId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, d.destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id WHERE d.sender_id = ? ORDER BY d.id",
+    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, o.office_name destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id INNER JOIN offices o ON d.destination_office = o.id WHERE d.sender_id = ? ORDER BY d.id DESC",
     userId,
     (error, result) => {
       if (result) {
@@ -171,12 +171,12 @@ router.get("/:id", requireAuth, (req, res) => {
   );
 });
 
-// View document of a certain user
+// View document
 router.get("/view/:id", requireAuth, (req, res) => {
   const docId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, d.destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id WHERE d.id = ?",
+    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, o.office_name destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id INNER JOIN offices o ON d.destination_office = o.id WHERE d.id = ?",
     docId,
     (error, result) => {
       if (result) {
@@ -259,16 +259,55 @@ router.post("/trackDoc", (req, res) => {
 });
 
 // Getting outgoing documents.
-router.post("/outGoingDoc", (req, res, next) => {
-  let id = req.body.id;
-  let query = `SELECT id, doctype, destination_office, status FROM documents WHERE
-  sender_id = ? AND status LIKE '%pending%'`;
+// router.post("/outGoingDoc", (req, res, next) => {
+//   let id = req.body.id;
+//   let query = `SELECT id, doctype, destination_office, status FROM documents WHERE
+//   sender_id = ? AND status LIKE '%pending%'`;
 
-  conn.query(query, [id], (err, rows, fields) => {
-    if (err) res.json("0");
-    else res.json(rows);
-  });
+//   conn.query(query, [id], (err, rows, fields) => {
+//     if (err) res.json("0");
+//     else res.json(rows);
+//   });
+// });
+
+// Getting outgoing documents.
+router.get("/outGoingDoc/:id", (req, res) => {
+  const docId = req.params.id;
+
+  conn.query(
+    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, o.office_name destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id INNER JOIN offices o ON d.destination_office = o.id WHERE d.sender_id = ? AND status LIKE '%pending%' ORDER BY d.id DESC",
+    docId,
+    (error, result) => {
+      if (result) {
+        res.json(result);
+      }
+      if (error) {
+        res.json(error);
+      }
+    }
+  );
 });
+
+// Getting outgoing documents.
+router.get("/incomingDoc/:id", (req, res) => {
+  const docId = req.params.id;
+
+  conn.query(
+    "SELECT d.id, d.tracking_id, u.name, o.office_name originating_office, d.owner, d.doctype, d.description, d.destination_office, t.new_destination, d.datetime_created, d.remarks, d.action, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id LEFT JOIN offices o ON u.office_id = o.id LEFT JOIN transactions t ON d.id = t.document_id WHERE d.destination_office = ? OR t.new_destination = ? ORDER BY d.id DESC",
+    [docId, docId],
+    (error, result) => {
+      if (result) {
+        res.json(result);
+      }
+      if (error) {
+        res.json(error);
+      }
+    }
+  );
+});
+
+
+
 
 // Add Document
 // router.post('/add-document', (req, res) => {

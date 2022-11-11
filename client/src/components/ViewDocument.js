@@ -60,6 +60,10 @@ export const ViewDocument = () => {
                         <td>{data.destination_office}</td>
                     </tr>
                     <tr>
+                        <th>Status:</th>
+                        <td style={{color: "red"}}>{data.status}</td>
+                    </tr>
+                    <tr>
                         <th></th>
                         <td><ViewButton>View transaction history</ViewButton></td>
                     </tr>

@@ -23,7 +23,9 @@ import Inquiry from "./userPages/Inquiry";
 import UserDashboard from "./userPages/Dashboard";
 import AddDocument from "./userPages/AddDocument";
 import MyDocuments from "./userPages/Documents";
-import AdminRoutes from "./components/AdminRoutes";
+import OutgoingDoc from "./userPages/OutgoingDoc";
+import IncomingDoc from "./userPages/IncomingDoc";
+import ReceivedDoc from "./userPages/ReceivedDoc";
 // import Document from './adminPages/Documents';
 
 const App = () => {
@@ -45,6 +47,9 @@ const App = () => {
                 {/* </Route> */}
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route path="/my-documents" element={<MyDocuments />} />
+                <Route path="/outgoingDoc" element={<OutgoingDoc/>} />
+                <Route path="/incomingDoc" element={<IncomingDoc/>} />
+                <Route path="/receivedDoc" element={<ReceivedDoc/>} />
                 <Route path="/add-document" element={<AddDocument />} />
               </Route>
             </Route>

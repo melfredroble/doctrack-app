@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   FaSignOutAlt,
   FaQuestionCircle,
-  FaCheckCircle,
   FaRegUser,
-  FaUserCircle,
 } from "react-icons/fa";
 import { Outlet, useNavigate } from "react-router-dom";
 import {
@@ -23,13 +21,12 @@ import {
   CardBody,
   FormGroup,
   CardFooter,
-  ModalMessageBody,
 } from "./styles";
 import { CloseButtonContainer, CloseButton } from "../Modal/styles";
 import { useTransition, animated } from "react-spring";
 import { useContext } from "react";
 import MainContext from "../../context/MainContext";
-import userIcon from "../../assets/img/profile1.png";
+// import userIcon from "../../assets/img/profile1.png";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "../../api/axios";
 

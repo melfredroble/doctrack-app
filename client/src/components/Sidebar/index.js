@@ -156,28 +156,28 @@ const Sidebar = () => {
                 <FaFolderOpen /> My documents
               </Link>
               <Link
-                to="/dashboard"
+                to="/receivedDoc"
                 style={{
-                  backgroundColor: url.pathname === "/" && "#1e282c",
-                  color: url.pathname === "/" && "#ffffff",
+                  backgroundColor: url.pathname === "/receivedDoc" && "#1e282c",
+                  color: url.pathname === "/receivedDoc" && "#ffffff",
                 }}
               >
                 <FaFolderOpen /> Received documents
               </Link>
               <Link
-                to="/dashboard"
+                to="/incomingDoc"
                 style={{
-                  backgroundColor: url.pathname === "/" && "#1e282c",
-                  color: url.pathname === "/" && "#ffffff",
+                  backgroundColor: url.pathname === "/incomingDoc" && "#1e282c",
+                  color: url.pathname === "/incomingDoc" && "#ffffff",
                 }}
               >
                 <FaArrowRight /> Incoming Documents
               </Link>
               <Link
-                to="/dashboard"
+                to="/outgoingDoc"
                 style={{
-                  backgroundColor: url.pathname === "/" && "#1e282c",
-                  color: url.pathname === "/" && "#ffffff",
+                  backgroundColor: url.pathname === "/outgoingDoc" && "#1e282c",
+                  color: url.pathname === "/outgoingDoc" && "#ffffff",
                 }}
               >
                 <FaArrowLeft /> Outgoing Documents

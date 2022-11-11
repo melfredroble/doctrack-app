@@ -31,10 +31,13 @@ export const CardHeader = styled.div`
   border: 1px solid #dcdcdc;
   display: flex;
   align-items: center;
+  justify-content: center;
 
   & h1 {
-    font-size: 14px;
+    font-size: 16px;
+    color: #414a4c;
   }
+
 `;
 
 export const CardBody = styled.div`
@@ -102,3 +105,29 @@ export const CardFooter = styled.div`
     cursor: pointer;
   }
 `;
+
+export const ModalContainer = styled.div`
+  background-color: #ffffff;
+  width: 300px;
+  height: 200px;
+  position: fixed;
+  margin: auto;
+  top: 0;
+  right: 0;
+  left: 20px;
+  color: #414a4c;
+  overflow: hidden !important;
+  z-index: 10;
+  padding: 15px;
+  box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid #dcdcdc;
+`
+
+export const ModalHeader = styled.div`
+`
+
+export const ModalBody = styled.div`
+`
+
+export const ModalFooter = styled.div`
+`

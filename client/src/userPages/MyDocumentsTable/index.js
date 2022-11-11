@@ -40,6 +40,7 @@ const MyDocumentsTable = ({ showDoc, showHome }) => {
         center: true,
         selector: (row) => row.owner,
         sortable: true,
+        width: "200px"
       },
       {
         name: "Destination office",

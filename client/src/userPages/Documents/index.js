@@ -60,7 +60,7 @@ const MyDocuments = () => {
                   display="flex"
                   content="end"
                   align="center"
-                  bg="#66cc99"
+                  bg="#50A8EA"
                   br="100%"
                   padding="8px 10px"
                   onClick={() => navigate("/add-document")}

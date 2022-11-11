@@ -8,12 +8,17 @@ import {
   FormGroup,
   Input,
   CardFooter,
+  ModalContainer,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "./styles";
 import Select from "react-select";
 import Footer from "../../components/Footer";
 import MainContext from "../../context/MainContext";
 import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { ModalBackDrop } from "../../components/Navbar/styles";
 
 const AddDocument = () => {
   const [offices, setOffices] = useState([]);
@@ -24,8 +29,10 @@ const AddDocument = () => {
   const [owner, setOwner] = useState("");
   const [desc, setDesc] = useState("");
   const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  const { usersName, currOffice, usersId } = useContext(MainContext);
+
+  const { currOffice, usersId } = useContext(MainContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,8 +53,8 @@ const AddDocument = () => {
       .then((response) => setTrackingId(response.data.trackingId));
   }, []);
 
-  const officeList = offices.map(({ office_name }) => {
-    const officeName = { value: office_name, label: office_name };
+  const officeList = offices.map(({ office_name, id }) => {
+    const officeName = { value: office_name, label: office_name, id: id };
     return officeName;
   });
 
@@ -64,7 +71,7 @@ const AddDocument = () => {
     });
     const selectedDoctype = mapDoctype.join(", ");
 
-    const destOffice = selectedOffice.value;
+    const destOffice = selectedOffice.id;
 
     axios
       .post("/documents/addDoc", {
@@ -101,9 +108,8 @@ const AddDocument = () => {
       <MainContainer>
         <InnerContainer>
           <CardContainer>
-            <form onSubmit={addDocument}>
               <CardHeader>
-                <h1>Add document</h1>
+                <h1>Add Document</h1>
               </CardHeader>
               <CardBody>
                 <FormGroup>
@@ -121,9 +127,10 @@ const AddDocument = () => {
                   <label style={{ marginTop: "20px" }}>
                     Destination office:
                   </label>
-                  <Select options={officeList} onChange={handleOffice} />
+                  <Select options={officeList} onChange={handleOffice} required />
                   <label style={{ marginTop: "20px" }}>From:</label>
                   <Input
+                  required
                     type="text"
                     onChange={(e) => setOwner(e.target.value)}
                   />
@@ -140,9 +147,9 @@ const AddDocument = () => {
                 </FormGroup>
               </CardBody>
               <CardFooter>
-                <button type="submit">Add document</button>
+                <button onClick={()=>setShowModal(true)}>Add document</button>
               </CardFooter>
-            </form>
+            {showModal && <WarningModal showModal={setShowModal}/>}
           </CardContainer>
         </InnerContainer>
         <Footer />
@@ -150,5 +157,29 @@ const AddDocument = () => {
     </>
   );
 };
+
+const WarningModal = ({showModal})=> {
+  return (
+    <>
+      <ModalBackDrop
+        onClick={() => {
+          showModal(false);
+        }}
+      />
+      <ModalContainer>
+        <ModalHeader>
+          <span>X</span>
+        </ModalHeader>
+        <ModalBody>
+          <h5>You cannot make any changes to this document once it has been submitted. Are you sure you want to proceed?</h5>
+        </ModalBody>
+        <ModalFooter>
+          <button>Cancel</button>
+          <button>Proceed</button>
+        </ModalFooter>
+      </ModalContainer>
+    </>
+  )
+}
 
 export default AddDocument;
