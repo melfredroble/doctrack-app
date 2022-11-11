@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
 const users = require("./routes/Users");
+const login = require("./routes/Login");
 const documents = require("./routes/Documents");
 const offices = require("./routes/Offices");
 const security = require("./routes/Security");
@@ -136,10 +137,9 @@ app.get("/logout", (req, res) => {
     req.session.destroy((error) => {
       if (error) {
         res.send(error);
-      }
-      {
+      } else {
         res.clearCookie("keyin", { domain: "localhost", path: "/" });
-        res.redirect("http://localhost:3000/login");
+        res.json(0);
       }
     });
     req.session = null;
@@ -147,6 +147,7 @@ app.get("/logout", (req, res) => {
 });
 
 // Route Middlewares
+app.use("/app", login);
 app.use("/users", users);
 app.use("/documents", documents);
 app.use("/offices", offices);

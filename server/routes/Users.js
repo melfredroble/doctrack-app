@@ -37,7 +37,7 @@ const requireAuth = (req, res, next) => {
 // Get users list
 router.get("/", requireAuth, (req, res) => {
   conn.query(
-    'SELECT users.id, users.name, users.email, offices.office_name, users.role FROM users JOIN offices ON users.office_id = offices.id WHERE users.role = "employee" OR users.role = "head" ORDER BY users.id ASC',
+    'SELECT users.id, users.name, users.email, offices.office_name, users.role FROM users JOIN offices ON users.office_id = offices.id WHERE users.role != "admin" ORDER BY users.id ASC',
     (err, result) => {
       if (result) {
         res.status(200).json(result);
