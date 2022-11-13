@@ -11,7 +11,7 @@ const IncomingDocTable = ({ showDoc, showHome }) => {
     const [editModal, setEditModal] = useState(false);
     const user = JSON.parse(localStorage.getItem("userData"));
     const { data, loading, error, fetchData } = useFetch(`/documents/incomingDoc/${user.office_id}`);
-    const { setDocId } = useContext(MainContext);
+    const { setDocId, setTransacId } = useContext(MainContext);
 
     useEffect(() => {
         fetchData();
@@ -20,7 +20,7 @@ const IncomingDocTable = ({ showDoc, showHome }) => {
     if (error) {
         console.log(error);
     }
-
+    
     const columns = useMemo(
         () => [
         {
@@ -69,6 +69,7 @@ const IncomingDocTable = ({ showDoc, showHome }) => {
                     showDoc(true);
                     showHome(false);
                     setDocId(row.id);
+                    setTransacId(row.transacId);
                 }}
                 >
                 <FaFolderOpen/>

@@ -14,7 +14,7 @@ import { FaRegFolderOpen, FaPlus } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import MyDocumentsTable from "../MyDocumentsTable";
 import { useNavigate } from "react-router-dom";
-import { ViewDocument } from "../../components/ViewDocument";
+import ViewDocument  from "../../components/ViewDocument";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from "react";
@@ -75,7 +75,7 @@ const MyDocuments = () => {
           </Unordered>
         </Breadcrumb>
         {showDocument ? (
-          <ViewDocument/>
+          <ViewDocument showHome={setIsHome} showDoc={setShowDocument}/>
         ) : (
           <>
             <Container mt="30px">

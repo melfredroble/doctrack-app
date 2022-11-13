@@ -36,9 +36,26 @@ export const Container = styled.div`
   border-radius: 5px;
   padding: 20px;
   margin-top: ${props=>props.mt};
+  margin-bottom: ${props=>props.mb};
   border: 1px solid #dcdcdc;
   
 `;
+
+export const OfficeContainer = styled.div`
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  
+  & h5 {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  & label {
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+`
 
 export const TableContainer = styled.div`
   padding: 20px 0;

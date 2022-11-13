@@ -5,16 +5,26 @@ import {Container,
     BoxContainer,
     Table,
     Tbody,
-    ViewDocumentContainer } from "../../userPages/Documents/styles";
-import { Button } from "./styles";
+    ViewDocumentContainer 
+} from "../../userPages/Documents/styles";
+import {   
+        ModalContainer,
+        ModalHeader,
+        ModalTitle,
+        ModalBody,
+        ModalFooter, 
+} from "../../userPages/AddDocument/styles";
+import { FaArrowDown } from "react-icons/fa";
+import { Button, ModalBackdrop } from "./styles";
 import axios from "../../api/axios";
 import MainContext from "../../context/MainContext";
 
 export const ViewDocument = () => {
-    const { docId } = useContext(MainContext);
+    const { docId, transacId } = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
+    const [showModal, setShowModal] = useState(false)
     useEffect(()=>{
         axios.get(`/documents/view/${docId}`)
         .then((response)=>{
@@ -37,13 +47,12 @@ export const ViewDocument = () => {
             setTime(hours + ":" + minutes + " " + newformat)
         })
         .catch((error)=> console.log(error))
-        },[docId])
+        },[docId]);
 
         const receiveDoc = ()=>{
-            const docId = data.id;
             const user = JSON.parse(localStorage.getItem("userData"));
-            const current_office = user.office_id
-            axios.post('/documents/receiveDoc', {docId, current_office})
+            const received = user.office_id;
+            axios.put('/documents/receiveDoc', {received, transacId})
             .then((response)=>{
                 if(response.status === 200){
                     alert("Received document")
@@ -51,8 +60,7 @@ export const ViewDocument = () => {
             })
             .catch((error)=>console.log(error))
         }
-        
-    
+
         return (
         <ViewDocumentContainer display="center" j="center" align="center">
             <Container w="500px"  mt="30px">
@@ -95,9 +103,34 @@ export const ViewDocument = () => {
                 </Table>
             </BoxContainer>
             <div style={{textAlign: "end"}}>
-            <Button onClick={receiveDoc} padding="10px" bg="#04AA6D" margin="10px 0" br="5px" w="150px">Receive Document</Button>
+            <Button onClick={()=>setShowModal(true)} padding="10px" bg="#50A8EA" margin="30px 0" br="5px" w="150px">Receive Document</Button>
             </div>
             </Container>
+            {showModal && <ReceiveDoc receiveDoc={receiveDoc} showModal={setShowModal}/>}
         </ViewDocumentContainer>
         );
     };
+
+const ReceiveDoc = ({showModal, receiveDoc}) => {
+    return (
+        <>
+            <ModalBackdrop onClick={()=>showModal(false)}/>
+            <ModalContainer>
+                    <ModalHeader>
+                        <ModalTitle>
+                            <FaArrowDown/>
+                            <h1>Receive Document</h1>
+                        </ModalTitle>
+                        <Button onClick={() => showModal(false)} bg="none" border="none"  padding="8px" fs="22px" mr="5px">X</Button>
+                    </ModalHeader>
+                    <ModalBody>
+                    <h5>Are you sure you want to receive this document from your office?</h5>
+                    </ModalBody>
+                    <ModalFooter>
+                    <Button onClick={() => showModal(false)} color="#000000" padding="8px" br="5px" border="1px solid #cecece" mr="5px">Cancel</Button>
+                    <Button onClick={receiveDoc} bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Release</Button>
+                    </ModalFooter>
+                </ModalContainer>
+        </>
+    )
+}

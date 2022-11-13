@@ -7,6 +7,7 @@ import {Container,
     Tbody,
     ViewDocumentContainer,
     Button, 
+    OfficeContainer,
     ModalBackdrop} from "../userPages/Documents/styles";
 import {   
     ModalContainer,
@@ -17,13 +18,36 @@ import {
 import { FaArrowUp } from "react-icons/fa";
 import MainContext from "../context/MainContext";
 import axios from "../api/axios";
+import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 
-export const ViewDocument = () => {
-    const { docId } = useContext(MainContext);
+const ViewDocument = ({showHome, showDoc}) => {
+    const { docId, setShowToast } = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
+    const [offices, setOffices] = useState([]);
+    const [selectedOffice, setSelectedOffice] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        axios.get("/offices").then((response) => {
+            setOffices(response.data);
+        });
+    }, []);
+
+    const officeList = offices.map(({ office_name, id }) => {
+        const officeName = { value: office_name, label: office_name, id: id };
+        return officeName;
+    });
+
+    const destOffice = selectedOffice.id;
+
+    const handleOffice = (officeList) => {
+        setSelectedOffice(officeList);
+    };
+
 
     useEffect(()=>{
         axios.get(`/documents/view/${docId}`)
@@ -49,11 +73,26 @@ export const ViewDocument = () => {
         .catch((error)=> console.log(error))
         },[docId])
         
+
+        const releaseDoc = () => {
+            const action = "released";
+            const releasedFrom = data.originating_office;
+            axios.post('/documents/releaseMyDoc', {docId, action, destOffice, releasedFrom})
+            .then((response)=> {
+                if(response.status === 200){
+                    setShowModal(false);
+                    showHome(true);
+                    showDoc(false);
+                    setShowToast(true);
+                }
+            })
+            .catch((error)=>console.log(error));
+        }
     
         return (
         <ViewDocumentContainer display="center" j="center" align="center">
             {/* {showModal ? */}
-            <Container w="500px"  mt="30px">
+            <Container w="500px" mb="80px"  mt="30px">
             <HeaderContainer justifyContent="center">
                 <HeaderText>Document Overview</HeaderText>
             </HeaderContainer>
@@ -95,11 +134,17 @@ export const ViewDocument = () => {
                     </tr> */}
                     </Tbody>
                 </Table>
+                <OfficeContainer>
+                    <label>
+                        Destination office:
+                    </label>
+                    <Select options={officeList} onChange={handleOffice} required /> 
+                </OfficeContainer>
                 <div style={{paddingTop: "30px", textAlign: "end"}}>
-                    <Button padding="10px" br="5px" mr="10px" border="1px solid #cecece" color="#000000" onClick={()=>setShowModal(true)}>Release document</Button>
-                    <Button padding="10px" br="5px" color="#000000" border="1px solid #cecece">View transactions</Button>
+                    <Button padding="10px" br="5px" color="#000000" mr="10px" border="1px solid #cecece">View transactions</Button>
+                    <Button bg="#50A8EA" padding="10px" br="5px" mr="5px" border="none" color="#ffffff" onClick={()=>setShowModal(true)}>Release document</Button>
                 </div>
-                {showModal && <ReleaseModal showModal={setShowModal}/>}
+                {showModal && <ReleaseModal releaseDoc={releaseDoc} showModal={setShowModal}/>}
             </BoxContainer>
             </Container>
             {/* // : <ReleaseModal/>} */}
@@ -107,7 +152,7 @@ export const ViewDocument = () => {
         );
     };
 
-    const ReleaseModal = ({showModal}) => {
+    const ReleaseModal = ({showModal, releaseDoc}) => {
         return (
             <>
                 <ModalBackdrop onClick={()=>showModal(false)}/>
@@ -124,9 +169,11 @@ export const ViewDocument = () => {
                     </ModalBody>
                     <ModalFooter>
                     <Button onClick={() => showModal(false)} color="#000000" padding="8px" br="5px" border="1px solid #cecece" mr="5px">Cancel</Button>
-                    <Button bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Release</Button>
+                    <Button onClick={releaseDoc} bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Release</Button>
                     </ModalFooter>
                 </ModalContainer>
             </>
         )
     }
+
+export default ViewDocument;

@@ -23,6 +23,7 @@ export const MainContextProvider = ({ children }) => {
   const [docId, setDocId] = useState();
   const [answers, setAnswers] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [transacId, setTransacId] = useState();
 
   Axios.defaults.withCredentials = true;
 
@@ -138,7 +139,9 @@ export const MainContextProvider = ({ children }) => {
     docId,
     setDocId,
     showToast, 
-    setShowToast
+    setShowToast,
+    transacId, 
+    setTransacId
   };
 
   // const dispatch = {

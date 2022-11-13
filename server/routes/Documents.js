@@ -274,7 +274,7 @@ router.get("/outGoingDoc/:id", (req, res) => {
   const docId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.datetime_created, d.remarks, d.originating_office, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id WHERE d.sender_id = ? AND status LIKE '%pending%' ORDER BY d.id DESC",
+    "SELECT * FROM documents d LEFT JOIN transactions t ON d.id = t.document_id WHERE d.sender_id = ? AND t.new_status LIKE '%pending%' ORDER BY d.id DESC;",
     docId,
     (error, result) => {
       if (result) {
@@ -287,12 +287,13 @@ router.get("/outGoingDoc/:id", (req, res) => {
   );
 });
 
+
 // Getting incoming documents.
 router.get("/incomingDoc/:id", (req, res) => {
   const officeId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, o.office_name originating_office, d.owner, d.doctype, d.remarks, d.destination_office, t.new_destination, d.datetime_created, d.remarks, d.action, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id LEFT JOIN offices o ON u.office_id = o.id LEFT JOIN transactions t ON d.id = t.document_id WHERE d.destination_office = ? OR t.new_destination = ? ORDER BY d.id DESC",
+    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.received_by <> ?;",
     [officeId, officeId],
     (error, result) => {
       if (result) {
@@ -305,28 +306,58 @@ router.get("/incomingDoc/:id", (req, res) => {
   );
 });
 
+// INSERT INTO `transactions`(`document_id`, `datetime`, `current_office`, `received_by`) VALUES (43, '2022-11-14 00:14:52', 2, 2);
+
 // Receiving documents.
-router.post("/receiveDoc", (req, res) => {
+router.put("/receiveDoc", (req, res) => {
+  const data = req.body;
+
+  let {
+    received,
+    transacId
+  } = data;
+
+  conn.query(
+    "UPDATE `transactions` SET `received_by`= ? WHERE id = ?",
+    [received, transacId],
+    (error, result) => {
+      if (result) {
+        res.status(200).send();
+        console.log(transacId);
+      } else {
+        res.json(error);
+        console.log(error);
+      }
+    }
+  );
+});
+
+// Releasing Document
+router.post("/releaseMyDoc", (req, res) => {
   const data = req.body;
 
   let {
     docId,
-    current_office,
+    remarks,
+    action,
+    destOffice,
+    currOffice,
+    releasedFrom
   } = data;
 
   conn.query(
-    "INSERT INTO `transactions`(`document_id`, `new_actions`, `new_curroffice`) VALUES (?, 'received', ?)",
-    [docId, current_office],
+    "INSERT INTO `transactions`(`document_id`, `new_remarks`, `actions`, `destination`, `current_office`, `released_from`) VALUES (?, ?, ?, ?, ?, ?)",
+    [docId, remarks, action, destOffice, currOffice, releasedFrom],
     (error, result) => {
       if (result) {
         res.status(200).send();
-      }
-      if (error) {
+      } else {
         res.json(error);
       }
     }
   );
 });
+
 
 
 
