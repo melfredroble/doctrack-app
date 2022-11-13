@@ -9,6 +9,8 @@ import MainContext from "../../context/MainContext";
 const MyDocumentsTable = ({ showDoc, showHome }) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  // const [date, setDate] = useState();
+  // const [time, setTime] = useState();
   const user = JSON.parse(localStorage.getItem("userData"));
   const { data, loading, error, fetchData } = useFetch(`/documents/${user.id}`);
   const { setDocId } = useContext(MainContext);
@@ -16,6 +18,30 @@ const MyDocumentsTable = ({ showDoc, showHome }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+    const formatDate = (dateTime) =>{
+      const myDate = new Date(dateTime);
+      const date = (myDate.getMonth() + 1) + '/' + myDate.getDate() + '/' + myDate.getFullYear();
+      let hours = myDate.getHours();
+      let minutes = myDate.getMinutes();
+      
+      // Check whether AM or PM
+      let newformat = hours >= 12 ? 'PM' : 'AM'; 
+      
+      // Find current hour in AM-PM Format
+      hours = hours % 12; 
+      
+      // To display "0" as "12"
+      hours = hours ? hours : 12; 
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+  
+      const time = hours + ":" + minutes + " " + newformat;
+
+      const createdAt = date + " " + time;
+
+      return createdAt;
+    }
+
 
   if (error) {
     console.log(error);
@@ -43,9 +69,9 @@ const MyDocumentsTable = ({ showDoc, showHome }) => {
         width: "200px"
       },
       {
-        name: "Destination office",
+        name: "Created At",
         center: true,
-        selector: (row) => row.destination_office,
+        selector: (row) => formatDate(row.datetime_created),
         sortable: true,
       },
       {

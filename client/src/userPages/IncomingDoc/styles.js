@@ -56,6 +56,8 @@ export const Container = styled.div`
     color: #ffffff;
     border-radius: ${(props) => props.br};
     cursor: pointer;
+    margin: ${props=>props.margin};
+    width: ${props=>props.w};
     & svg {
         font-size: 18px;
     }

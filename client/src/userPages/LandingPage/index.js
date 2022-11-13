@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../api/axios";
 import logo from "../../assets/img/logo.png";
 import {
   MainContainer,
@@ -13,6 +14,17 @@ import {
 
 const LandingPage = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("/login")
+      .then((response) => {
+        if (response.data.loggedIn === true) {
+          navigate("/dashboard");
+        } 
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   return (
     <>

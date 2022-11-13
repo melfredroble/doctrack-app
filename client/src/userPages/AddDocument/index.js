@@ -11,7 +11,9 @@ import {
   ModalContainer,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  Button,
+  ModalTitle
 } from "./styles";
 import Select from "react-select";
 import Footer from "../../components/Footer";
@@ -19,27 +21,29 @@ import MainContext from "../../context/MainContext";
 import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { ModalBackDrop } from "../../components/Navbar/styles";
+import { FaPlus } from "react-icons/fa";
+
 
 const AddDocument = () => {
-  const [offices, setOffices] = useState([]);
-  const [selectedOffice, setSelectedOffice] = useState([]);
+  // const [offices, setOffices] = useState([]);
+  // const [selectedOffice, setSelectedOffice] = useState([]);
   const [doctypes, setDoctypes] = useState([]);
   const [doctype, setDoctype] = useState([]);
   const [trackingId, setTrackingId] = useState("");
   const [owner, setOwner] = useState("");
-  const [desc, setDesc] = useState("");
+  const [remarks, setRemarks] = useState("");
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
 
-  const { currOffice, usersId } = useContext(MainContext);
+  const { currOffice, usersId, setShowToast } = useContext(MainContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios.get("/offices").then((response) => {
-      setOffices(response.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get("/offices").then((response) => {
+  //     setOffices(response.data);
+  //   });
+  // }, []);
 
   useEffect(() => {
     axios.get("/documents/types").then((response) => {
@@ -53,10 +57,10 @@ const AddDocument = () => {
       .then((response) => setTrackingId(response.data.trackingId));
   }, []);
 
-  const officeList = offices.map(({ office_name, id }) => {
-    const officeName = { value: office_name, label: office_name, id: id };
-    return officeName;
-  });
+  // const officeList = offices.map(({ office_name, id }) => {
+  //   const officeName = { value: office_name, label: office_name, id: id };
+  //   return officeName;
+  // });
 
   const doctypeList = doctypes.map(({ name }) => {
     const docName = { value: name, label: name };
@@ -71,7 +75,7 @@ const AddDocument = () => {
     });
     const selectedDoctype = mapDoctype.join(", ");
 
-    const destOffice = selectedOffice.id;
+    // const destOffice = selectedOffice.id;
 
     axios
       .post("/documents/addDoc", {
@@ -79,13 +83,13 @@ const AddDocument = () => {
         sender: usersId,
         owner,
         doctype: selectedDoctype,
-        current_office: currOffice,
-        destination_office: destOffice,
-        description: desc,
+        origOffice: currOffice,
+        remarks: remarks,
       })
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           navigate("/my-documents");
+          setShowToast(true);
         } else {
           setMessage("Tracking ID already exist");
         }
@@ -97,9 +101,9 @@ const AddDocument = () => {
     setDoctype(doctypeList);
   };
 
-  const handleOffice = (officeList) => {
-    setSelectedOffice(officeList);
-  };
+  // const handleOffice = (officeList) => {
+  //   setSelectedOffice(officeList);
+  // };
 
   //   const date = new Date().toLocaleString();
 
@@ -124,24 +128,24 @@ const AddDocument = () => {
                     classNamePrefix="select"
                     onChange={handleDoctype}
                   />
-                  <label style={{ marginTop: "20px" }}>
+                  {/* <label style={{ marginTop: "20px" }}>
                     Destination office:
                   </label>
-                  <Select options={officeList} onChange={handleOffice} required />
+                  <Select options={officeList} onChange={handleOffice} required /> */}
                   <label style={{ marginTop: "20px" }}>From:</label>
                   <Input
                   required
                     type="text"
                     onChange={(e) => setOwner(e.target.value)}
                   />
-                  <label style={{ marginTop: "10px" }}>Description: <span style={{color: "gray"}}>(optional)</span></label>
+                  <label style={{ marginTop: "10px" }}>Remarks: </label>
                   <textarea
                     name=""
                     id=""
                     cols="30"
                     rows="5"
                     maxLength="500"
-                    onChange={(e) => setDesc(e.target.value)}
+                    onChange={(e) => setRemarks(e.target.value)}
                   ></textarea>
                   <p>Max Length: 500 characters</p>
                 </FormGroup>
@@ -149,7 +153,7 @@ const AddDocument = () => {
               <CardFooter>
                 <button onClick={()=>setShowModal(true)}>Add document</button>
               </CardFooter>
-            {showModal && <WarningModal showModal={setShowModal}/>}
+            {showModal && <WarningModal showModal={setShowModal} addDocument={addDocument}/>}
           </CardContainer>
         </InnerContainer>
         <Footer />
@@ -158,7 +162,7 @@ const AddDocument = () => {
   );
 };
 
-const WarningModal = ({showModal})=> {
+const WarningModal = ({showModal, addDocument})=> {
   return (
     <>
       <ModalBackDrop
@@ -168,14 +172,18 @@ const WarningModal = ({showModal})=> {
       />
       <ModalContainer>
         <ModalHeader>
-          <span>X</span>
+          <ModalTitle>
+            <FaPlus/>
+            <h1>Add Document</h1>
+          </ModalTitle>
+          <Button onClick={() => showModal(false)} b="none" border="none" fs="18px" mr="5px">X</Button>
         </ModalHeader>
         <ModalBody>
           <h5>You cannot make any changes to this document once it has been submitted. Are you sure you want to proceed?</h5>
         </ModalBody>
         <ModalFooter>
-          <button>Cancel</button>
-          <button>Proceed</button>
+          <Button onClick={() => showModal(false)} border="1px solid #cecece"  color="#000000" mr="5px">Cancel</Button>
+          <Button onClick={addDocument} bg="#50A8EA" border="none" color="#ffffff" mr="20px">Proceed</Button>
         </ModalFooter>
       </ModalContainer>
     </>

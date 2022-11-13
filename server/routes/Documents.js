@@ -35,24 +35,25 @@ const requireAuth = (req, res, next) => {
 router.get("/trackingId", requireAuth, (req, res) => {
   const sql =
     "SELECT FLOOR(RAND() * 99999) AS random_num FROM documents WHERE 'random_num' NOT IN (SELECT tracking_id FROM documents) LIMIT 1";
-  // const date = new Date().toLocaleString();
-  const currYear = new Date().getFullYear();
-  const currMonth = new Date().getMonth();
-  const currDay = new Date().getDay();
-  const currMins = new Date().getMinutes();
-  const currHours = new Date().getHours();
-  var milliseconds = new Date().getMilliseconds();
+  const date = new Date();
+  const currYear = date.getFullYear();
+  const currMonth = date.getMonth() + 1;
+  const currDay = date.getDate();
+  const currMins = date.getMinutes();
+  const currHours = date.getHours();
+  var seconds = date.getSeconds();
+  var milliSeconds = date.getMilliseconds();
   conn.query(sql, (error, result) => {
     if (result) {
       const randomNum = result[0].random_num;
       conn.query(
         "select id from documents order by id desc limit 1",
         (error, row) => {
-          const lastId = row[0].id + 1;
+          const lastId = row[0].id + 2;
           if (row) {
-            res.send({
+            res.json({
               trackingId:
-                currYear + "-" + lastId + milliseconds + "-" + randomNum,
+                currYear + "-" + randomNum + "-" + currMonth + currDay  + "-" + currMins + milliSeconds,
             });
           }
         }
@@ -158,7 +159,7 @@ router.get("/:id", requireAuth, (req, res) => {
   const userId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, o.office_name destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id INNER JOIN offices o ON d.destination_office = o.id WHERE d.sender_id = ? ORDER BY d.id DESC",
+    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.datetime_created, d.originating_office, d.remarks, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id WHERE d.sender_id = ? ORDER BY d.id DESC",
     userId,
     (error, result) => {
       if (result) {
@@ -176,7 +177,7 @@ router.get("/view/:id", requireAuth, (req, res) => {
   const docId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, o.office_name destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id INNER JOIN offices o ON d.destination_office = o.id WHERE d.id = ?",
+    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.remarks, d.datetime_created, d.originating_office, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id WHERE d.id = ?",
     docId,
     (error, result) => {
       if (result) {
@@ -197,9 +198,8 @@ router.post("/addDoc", (req, res, next) => {
     sender,
     owner,
     doctype,
-    description,
-    current_office,
-    destination_office,
+    remarks,
+    origOffice
   } = data;
 
   conn.query(
@@ -213,7 +213,7 @@ router.post("/addDoc", (req, res, next) => {
         res.status(400).send();
       } else {
         let query =
-          "INSERT INTO `documents`(`tracking_id`, `sender_id`, `owner`, `doctype`, `description`, `current_office`, `destination_office`) VALUES (?,?,?,?,?,?,?)";
+          "INSERT INTO `documents`(`tracking_id`, `sender_id`, `owner`, `doctype`, `remarks`, `originating_office`) VALUES (?,?,?,?,?,?)";
 
         conn.query(
           query,
@@ -222,9 +222,8 @@ router.post("/addDoc", (req, res, next) => {
             sender,
             owner,
             doctype,
-            description,
-            current_office,
-            destination_office,
+            remarks,
+            origOffice,
           ],
           (error, result) => {
             if (error) {
@@ -275,7 +274,7 @@ router.get("/outGoingDoc/:id", (req, res) => {
   const docId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.description, d.datetime_created, d.current_office, o.office_name destination_office, d.remarks, d.action, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id INNER JOIN offices o ON d.destination_office = o.id WHERE d.sender_id = ? AND status LIKE '%pending%' ORDER BY d.id DESC",
+    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.datetime_created, d.remarks, d.originating_office, d.status FROM documents d INNER JOIN users u ON d.sender_id = u.id WHERE d.sender_id = ? AND status LIKE '%pending%' ORDER BY d.id DESC",
     docId,
     (error, result) => {
       if (result) {
@@ -288,16 +287,39 @@ router.get("/outGoingDoc/:id", (req, res) => {
   );
 });
 
-// Getting outgoing documents.
+// Getting incoming documents.
 router.get("/incomingDoc/:id", (req, res) => {
-  const docId = req.params.id;
+  const officeId = req.params.id;
 
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, o.office_name originating_office, d.owner, d.doctype, d.description, d.destination_office, t.new_destination, d.datetime_created, d.remarks, d.action, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id LEFT JOIN offices o ON u.office_id = o.id LEFT JOIN transactions t ON d.id = t.document_id WHERE d.destination_office = ? OR t.new_destination = ? ORDER BY d.id DESC",
-    [docId, docId],
+    "SELECT d.id, d.tracking_id, u.name, o.office_name originating_office, d.owner, d.doctype, d.remarks, d.destination_office, t.new_destination, d.datetime_created, d.remarks, d.action, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id LEFT JOIN offices o ON u.office_id = o.id LEFT JOIN transactions t ON d.id = t.document_id WHERE d.destination_office = ? OR t.new_destination = ? ORDER BY d.id DESC",
+    [officeId, officeId],
     (error, result) => {
       if (result) {
         res.json(result);
+      }
+      if (error) {
+        res.json(error);
+      }
+    }
+  );
+});
+
+// Receiving documents.
+router.post("/receiveDoc", (req, res) => {
+  const data = req.body;
+
+  let {
+    docId,
+    current_office,
+  } = data;
+
+  conn.query(
+    "INSERT INTO `transactions`(`document_id`, `new_actions`, `new_curroffice`) VALUES (?, 'received', ?)",
+    [docId, current_office],
+    (error, result) => {
+      if (result) {
+        res.status(200).send();
       }
       if (error) {
         res.json(error);

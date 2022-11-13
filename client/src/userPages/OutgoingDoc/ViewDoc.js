@@ -7,18 +7,18 @@ import {Container,
     Tbody,
     ViewDocumentContainer,
     Button, 
-    ModalBackdrop} from "../userPages/Documents/styles";
+    ModalBackdrop} from "../../userPages/Documents/styles";
 import {   
     ModalContainer,
     ModalHeader,
     ModalTitle,
     ModalBody,
-    ModalFooter, } from "../userPages/AddDocument/styles";
+    ModalFooter, } from "../../userPages/AddDocument/styles";
 import { FaArrowUp } from "react-icons/fa";
-import MainContext from "../context/MainContext";
-import axios from "../api/axios";
+import MainContext from "../../context/MainContext";
+import axios from "../../api/axios";
 
-export const ViewDocument = () => {
+export const ViewDoc = () => {
     const { docId } = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
@@ -117,7 +117,7 @@ export const ViewDocument = () => {
                             <FaArrowUp/>
                             <h1>Release Document</h1>
                         </ModalTitle>
-                        <Button onClick={() => showModal(false)} bg="none" border="none"  padding="8px" fs="22px" mr="5px">X</Button>
+                        <Button onClick={() => showModal(false)} border="none"  padding="8px" fs="22px" mr="5px">X</Button>
                     </ModalHeader>
                     <ModalBody>
                     <h5>Are you sure you want to released this document from your office?</h5>

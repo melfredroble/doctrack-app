@@ -50,10 +50,11 @@ export const Button = styled.button`
   align-items: ${(props) => props.align};
   padding: ${(props) => props.padding};
   background-color: ${(props) => props.bg};
-  border: none;
+  border: ${props => props.border};
   outline: none;
-  color: #ffffff;
+  color: ${props => props.color};
   border-radius: ${(props) => props.br};
+  margin-right: ${props => props.mr};
   cursor: pointer;
   & svg {
     font-size: 18px;
@@ -124,7 +125,7 @@ export const FormGroup = styled.div`
 export const BoxContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #dcdcdc;
+
   width: 100%;
   height: 100%;
   margin-top: 10px;
@@ -156,6 +157,7 @@ export const ViewDocumentContainer = styled.div`
 `;
 
 export const Table = styled.table`
+  border-collapse: collapse;
 `
 
 export const Tbody = styled.tbody`
@@ -165,6 +167,7 @@ export const Tbody = styled.tbody`
     border: 1px solid #dcdcdc;
     padding: 15px;
     font-size: 14px;
+    margin: 0;
   }
 
   & th {

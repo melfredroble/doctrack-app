@@ -13,14 +13,13 @@ import {
 import { FaRegFolderOpen, FaPlus } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { ViewDocument } from "../../components/ViewDocument";
+import { ViewDocument } from "./ViewDocument";
 import IncomingDocTable from "../IncomingDocTable";
 
 const IncomingDoc = () => {
     const navigate = useNavigate();
     const [isHome, setIsHome] = useState(true)
     const [showDocument, setShowDocument] = useState(false);
-    const [showTransaction, setShowTransaction] = useState(false);
     
     return (
         <MainContainer>
@@ -40,13 +39,8 @@ const IncomingDoc = () => {
                 <Item color={showDocument ? "#0275d8" : "#a59b9b"} cursor={!isHome ? "pointer" : undefined}>
                     <button onClick={()=> {!isHome && 
                     setShowDocument(true);
-                    setShowTransaction(false);
                     }}>Document overview</button>
-                    <span>/</span>
                 </Item >
-                <Item color={showTransaction ? "#0275d8" : "#a59b9b"}>
-                    <button onClick={()=> !isHome && setShowTransaction(!showTransaction)}>Transactions</button>
-                </Item>
                 </Unordered>
             </Breadcrumb>
             {showDocument ? (

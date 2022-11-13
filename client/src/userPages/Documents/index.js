@@ -15,6 +15,11 @@ import Footer from "../../components/Footer";
 import MyDocumentsTable from "../MyDocumentsTable";
 import { useNavigate } from "react-router-dom";
 import { ViewDocument } from "../../components/ViewDocument";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useContext } from "react";
+import MainContext from "../../context/MainContext";
+import { useEffect } from "react";
 
 const MyDocuments = () => {
   const navigate = useNavigate();
@@ -22,9 +27,29 @@ const MyDocuments = () => {
   const [showDocument, setShowDocument] = useState(false);
   const [showTransaction, setShowTransaction] = useState(false);
 
+  const {showToast, setShowToast} = useContext(MainContext);
+
+  useEffect(()=> {
+    if(showToast) { 
+      toast.success('Document Added Successfully!', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+      setTimeout(()=> setShowToast(false),[3000]);
+    }
+  },[showToast, setShowToast]);
+
+
   return (
     <MainContainer>
       <InnerContainer>
+        {showToast && <ToastContainer />}
         <HeaderContainer mt="15px">
           <FaRegFolderOpen /> <HeaderText> My Documents</HeaderText>
         </HeaderContainer>
@@ -58,6 +83,8 @@ const MyDocuments = () => {
                 <HeaderText>Records</HeaderText>
                 <Button
                   display="flex"
+                  border="none"
+                  color="#ffffff"
                   content="end"
                   align="center"
                   bg="#50A8EA"

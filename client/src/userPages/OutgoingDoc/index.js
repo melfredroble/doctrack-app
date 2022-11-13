@@ -14,7 +14,7 @@ import { FaRegFolderOpen, FaPlus } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import MyDocumentsTable from "../MyDocumentsTable";
 import { useNavigate } from "react-router-dom";
-import { ViewDocument } from "../../components/ViewDocument";
+import { ViewDoc } from "./ViewDoc";
 import OutgoingDocTable from "../OutgoingDocTable";
 const OutgoingDoc = () => {
     const navigate = useNavigate();
@@ -50,7 +50,7 @@ const OutgoingDoc = () => {
                 </Unordered>
             </Breadcrumb>
             {showDocument ? (
-                <ViewDocument/>
+                <ViewDoc/>
             ) : (
                 <>
                 <Container mt="30px">

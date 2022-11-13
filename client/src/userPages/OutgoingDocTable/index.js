@@ -43,12 +43,6 @@ const OutgoingDocTable = ({ showDoc, showHome }) => {
             width: "200px"
         },
         {
-            name: "Destination office",
-            center: true,
-            selector: (row) => row.destination_office,
-            sortable: true,
-        },
-        {
             name: "Status",
             center: true,
             selector: (row) => (
