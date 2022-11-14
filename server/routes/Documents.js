@@ -182,9 +182,27 @@ router.get("/view/:id", requireAuth, (req, res) => {
     (error, result) => {
       if (result) {
         res.json(result);
-      }
-      if (error) {
+      } else {
         res.json(error);
+        console.log(error)
+      }
+    }
+  );
+});
+
+// View outgoing document
+router.get("/viewOutgoing/:id", requireAuth, (req, res) => {
+  const docId = req.params.id;
+
+  conn.query(
+    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.remarks, d.datetime_created, d.originating_office, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id LEFT JOIN transactions t ON d.id = t.document_id WHERE t.id = ?",
+    docId,
+    (error, result) => {
+      if (result) {
+        res.json(result);
+      } else {
+        res.json(error);
+        console.log(error)
       }
     }
   );
@@ -323,7 +341,6 @@ router.put("/receiveDoc", (req, res) => {
     (error, result) => {
       if (result) {
         res.status(200).send();
-        console.log(transacId);
       } else {
         res.json(error);
         console.log(error);

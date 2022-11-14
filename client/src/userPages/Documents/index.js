@@ -31,7 +31,7 @@ const MyDocuments = () => {
 
   useEffect(()=> {
     if(showToast) { 
-      toast.success('Document Added Successfully!', {
+      toast.success('Document has been added!', {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,

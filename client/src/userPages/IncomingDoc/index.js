@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {
     MainContainer,
     Container,
@@ -15,15 +15,37 @@ import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { ViewDocument } from "./ViewDocument";
 import IncomingDocTable from "../IncomingDocTable";
+import MainContext from "../../context/MainContext";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const IncomingDoc = () => {
     const navigate = useNavigate();
     const [isHome, setIsHome] = useState(true)
     const [showDocument, setShowDocument] = useState(false);
+
+    const {showToast, setShowToast} = useContext(MainContext);
+
+    useEffect(()=> {
+        if(showToast) { 
+            toast.success('Document has been received!', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+            setTimeout(()=> setShowToast(false),[3000]);
+        }
+    },[showToast, setShowToast]);
     
     return (
         <MainContainer>
             <InnerContainer>
+            {showToast && <ToastContainer />}
             <HeaderContainer mt="15px">
                 <FaRegFolderOpen /> <HeaderText> Incoming Documents</HeaderText>
             </HeaderContainer>
@@ -44,7 +66,7 @@ const IncomingDoc = () => {
                 </Unordered>
             </Breadcrumb>
             {showDocument ? (
-                <ViewDocument/>
+                <ViewDocument setHome={setIsHome} showDoc={setShowDocument}/>
             ) : (
                 <>
                 <Container mt="30px">

@@ -19,12 +19,13 @@ import { Button, ModalBackdrop } from "./styles";
 import axios from "../../api/axios";
 import MainContext from "../../context/MainContext";
 
-export const ViewDocument = () => {
-    const { docId, transacId } = useContext(MainContext);
+export const ViewDocument = ({showDoc, setHome}) => {
+    const { docId, transacId, setShowToast} = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
     const [showModal, setShowModal] = useState(false)
+
     useEffect(()=>{
         axios.get(`/documents/view/${docId}`)
         .then((response)=>{
@@ -55,7 +56,9 @@ export const ViewDocument = () => {
             axios.put('/documents/receiveDoc', {received, transacId})
             .then((response)=>{
                 if(response.status === 200){
-                    alert("Received document")
+                    setHome(true);
+                    showDoc(false);
+                    setShowToast(true)
                 }
             })
             .catch((error)=>console.log(error))

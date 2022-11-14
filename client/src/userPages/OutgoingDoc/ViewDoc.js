@@ -26,7 +26,7 @@ export const ViewDoc = () => {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(()=>{
-        axios.get(`/documents/view/${docId}`)
+        axios.get(`/documents/viewOutgoing/${docId}`)
         .then((response)=>{
             setdata(response.data[0])
             const myDate = new Date(response.data[0].datetime_created);
@@ -48,7 +48,8 @@ export const ViewDoc = () => {
         })
         .catch((error)=> console.log(error))
         },[docId])
-        
+
+        // console.log(data, docId);
     
         return (
         <ViewDocumentContainer display="center" j="center" align="center">
