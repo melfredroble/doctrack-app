@@ -12,7 +12,6 @@ import {
 } from "./styles";
 import { FaRegFolderOpen, FaPlus } from "react-icons/fa";
 import Footer from "../../components/Footer";
-import MyDocumentsTable from "../MyDocumentsTable";
 import { useNavigate } from "react-router-dom";
 import { ViewDoc } from "./ViewDoc";
 import OutgoingDocTable from "../OutgoingDocTable";

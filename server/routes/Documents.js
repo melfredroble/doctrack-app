@@ -244,11 +244,10 @@ router.post("/addDoc", (req, res, next) => {
             origOffice,
           ],
           (error, result) => {
-            if (error) {
-              res.json(error);
-            }
             if (result) {
               res.status(200).send();
+            } else {
+              res.json(error);
             }
           }
         );
@@ -311,7 +310,7 @@ router.get("/incomingDoc/:id", (req, res) => {
   const officeId = req.params.id;
 
   conn.query(
-    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.received_by <> ?;",
+    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.office <> ? ORDER BY t.id DESC;",
     [officeId, officeId],
     (error, result) => {
       if (result) {
@@ -325,6 +324,24 @@ router.get("/incomingDoc/:id", (req, res) => {
 });
 
 // INSERT INTO `transactions`(`document_id`, `datetime`, `current_office`, `received_by`) VALUES (43, '2022-11-14 00:14:52', 2, 2);
+
+// Getting Received Documents
+router.get("/receivedDoc/:id", (req, res) => {
+  const officeId = req.params.id;
+
+  conn.query(
+    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.received_by = ? ORDER BY t.id DESC;",
+    [officeId, officeId],
+    (error, result) => {
+      if (result) {
+        res.json(result);
+      }
+      if (error) {
+        res.json(error);
+      }
+    }
+  );
+});
 
 // Receiving documents.
 router.put("/receiveDoc", (req, res) => {
@@ -343,7 +360,6 @@ router.put("/receiveDoc", (req, res) => {
         res.status(200).send();
       } else {
         res.json(error);
-        console.log(error);
       }
     }
   );
@@ -355,16 +371,14 @@ router.post("/releaseMyDoc", (req, res) => {
 
   let {
     docId,
-    remarks,
     action,
     destOffice,
-    currOffice,
     releasedFrom
   } = data;
 
   conn.query(
-    "INSERT INTO `transactions`(`document_id`, `new_remarks`, `actions`, `destination`, `current_office`, `released_from`) VALUES (?, ?, ?, ?, ?, ?)",
-    [docId, remarks, action, destOffice, currOffice, releasedFrom],
+    "INSERT INTO `transactions`(`document_id`, `actions`, `destination`, `office`) VALUES (?, ?, ?, ?)",
+    [docId, action, destOffice, releasedFrom],
     (error, result) => {
       if (result) {
         res.status(200).send();
@@ -375,6 +389,21 @@ router.post("/releaseMyDoc", (req, res) => {
   );
 });
 
+
+// Get transactions of a certain document
+router.get('/transactions/:id', (req, res)=>{
+  const docId = req.params.id;
+
+  conn.query('SELECT t.id, t.document_id, d.tracking_id, d.doctype, t.new_remarks, t.actions, (SELECT office_name FROM offices WHERE id = t.office) office, t.datetime FROM transactions t LEFT JOIN documents d ON d.id = t.document_id WHERE t.document_id = ?',
+  [docId],
+  (error, result)=>{
+    if(result) {
+      res.json(result);
+    } else {
+      res.json(error);
+    }
+  })
+});
 
 
 

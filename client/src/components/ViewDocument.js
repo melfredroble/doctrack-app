@@ -21,7 +21,7 @@ import axios from "../api/axios";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 
-const ViewDocument = ({showHome, showDoc}) => {
+const ViewDocument = ({showHome, showDoc, showTransactions}) => {
     const { docId, setShowToast } = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
@@ -29,7 +29,8 @@ const ViewDocument = ({showHome, showDoc}) => {
     const [offices, setOffices] = useState([]);
     const [selectedOffice, setSelectedOffice] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("userData"));
+    // const navigate = useNavigate();
     
     useEffect(() => {
         axios.get("/offices").then((response) => {
@@ -76,7 +77,7 @@ const ViewDocument = ({showHome, showDoc}) => {
 
         const releaseDoc = () => {
             const action = "released";
-            const releasedFrom = data.originating_office;
+            const releasedFrom = user.office_id;
             axios.post('/documents/releaseMyDoc', {docId, action, destOffice, releasedFrom})
             .then((response)=> {
                 if(response.status === 200){
@@ -141,7 +142,17 @@ const ViewDocument = ({showHome, showDoc}) => {
                     <Select options={officeList} onChange={handleOffice} required /> 
                 </OfficeContainer>
                 <div style={{paddingTop: "30px", textAlign: "end"}}>
-                    <Button padding="10px" br="5px" color="#000000" mr="10px" border="1px solid #cecece">View transactions</Button>
+                    <Button 
+                    onClick={()=> {
+                        showDoc(false) 
+                        showTransactions(true)
+                        }} 
+                    padding="10px" 
+                    br="5px" 
+                    color="#000000" 
+                    mr="10px" 
+                    border="1px solid #cecece">
+                        View transactions</Button>
                     <Button bg="#50A8EA" padding="10px" br="5px" mr="5px" border="none" color="#ffffff" onClick={()=>setShowModal(true)}>Release document</Button>
                 </div>
                 {showModal && <ReleaseModal releaseDoc={releaseDoc} showModal={setShowModal}/>}

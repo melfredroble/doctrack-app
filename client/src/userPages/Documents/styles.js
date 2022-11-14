@@ -8,6 +8,7 @@ export const InnerContainer = styled.div`
   margin: 0 30px 30px 30px;
   height: 100%;
   padding: 10px 20px;
+  min-height: 80vh;
 `;
 
 export const HeaderContainer = styled.div`
@@ -226,6 +227,7 @@ export const Item = styled.div`
   border: none;
   cursor: ${props=>props.cursor};
   font-size: 13px;
+  outline: none;
   }
 
   & span {

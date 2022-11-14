@@ -20,14 +20,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from "react";
 import MainContext from "../../context/MainContext";
 import { useEffect } from "react";
+import Transactions from "../../components/Transactions";
 
 const MyDocuments = () => {
   const navigate = useNavigate();
   const [isHome, setIsHome] = useState(true)
   const [showDocument, setShowDocument] = useState(false);
-  const [showTransaction, setShowTransaction] = useState(false);
+  const [showTransactions, setShowTransactions] = useState(false);
 
   const {showToast, setShowToast} = useContext(MainContext);
+
 
   useEffect(()=> {
     if(showToast) { 
@@ -59,25 +61,27 @@ const MyDocuments = () => {
               <button onClick={()=>{
                 setIsHome(true) 
                 setShowDocument(false)
+                setShowTransactions(false)
                 }}>My documents</button>
               <span>/</span>
             </Item>
             <Item color={showDocument ? "#0275d8" : "#a59b9b"} cursor={!isHome ? "pointer" : undefined}>
               <button onClick={()=> {!isHome && 
                 setShowDocument(true);
-                setShowTransaction(false);
+                setShowTransactions(false);
                 }}>Document overview</button>
               <span>/</span>
             </Item >
-            <Item color={showTransaction ? "#0275d8" : "#a59b9b"}>
-              <button onClick={()=> !isHome && setShowTransaction(!showTransaction)}>Transactions</button>
+            <Item color={showTransactions ? "#0275d8" : "#a59b9b"} cursor={!isHome ? "pointer" : undefined}>
+              <button onClick={()=> {!isHome && 
+                setShowTransactions(true)
+                setShowDocument(false);
+              }}>Transactions</button>
             </Item>
           </Unordered>
         </Breadcrumb>
-        {showDocument ? (
-          <ViewDocument showHome={setIsHome} showDoc={setShowDocument}/>
-        ) : (
-          <>
+        {showDocument && <ViewDocument showTransactions={setShowTransactions} showHome={setIsHome} showDoc={setShowDocument}/>}
+        {isHome && <>
             <Container mt="30px">
               <HeaderContainer mb="15px" justifyContent="space-between">
                 <HeaderText>Records</HeaderText>
@@ -98,7 +102,9 @@ const MyDocuments = () => {
               <MyDocumentsTable showDoc={setShowDocument} showHome={setIsHome}/>
             </Container>
           </>
-        )}
+          }
+
+          {showTransactions && <Transactions/>}
       </InnerContainer>
       <Footer />
     </MainContainer>

@@ -6,31 +6,29 @@ import {Container,
     Table,
     Tbody,
     ViewDocumentContainer,
-    Button
-} from "../../userPages/Documents/styles";
+    Button, 
+    ModalBackdrop} from "../../userPages/Documents/styles";
 import {   
-        ModalContainer,
-        ModalHeader,
-        ModalTitle,
-        ModalBody,
-        ModalFooter, 
-} from "../../userPages/AddDocument/styles";
-import { FaArrowDown } from "react-icons/fa";
-import { ModalBackdrop } from "./styles";
-import axios from "../../api/axios";
+    ModalContainer,
+    ModalHeader,
+    ModalTitle,
+    ModalBody,
+    ModalFooter, } from "../../userPages/AddDocument/styles";
+import { FaArrowUp } from "react-icons/fa";
 import MainContext from "../../context/MainContext";
+import axios from "../../api/axios";
 
-export const ViewDocument = ({showDoc, setHome}) => {
-    const { docId, transacId, setShowToast} = useContext(MainContext);
+export const ViewDoc = () => {
+    const { docId } = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
-    const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(()=>{
-        axios.get(`/documents/view/${docId}`)
+        axios.get(`/documents/viewOutgoing/${docId}`)
         .then((response)=>{
-            setdata(response.data[0]);
+            setdata(response.data[0])
             const myDate = new Date(response.data[0].datetime_created);
             setDate((myDate.getMonth() + 1) + '/' + myDate.getDate() + '/' + myDate.getFullYear());
             let hours = myDate.getHours();
@@ -49,24 +47,13 @@ export const ViewDocument = ({showDoc, setHome}) => {
             setTime(hours + ":" + minutes + " " + newformat)
         })
         .catch((error)=> console.log(error))
-        },[docId]);
+        },[docId])
 
-        const receiveDoc = ()=>{
-            const user = JSON.parse(localStorage.getItem("userData"));
-            const received = user.office_id;
-            axios.put('/documents/receiveDoc', {received, transacId})
-            .then((response)=>{
-                if(response.status === 200){
-                    setHome(true);
-                    showDoc(false);
-                    setShowToast(true)
-                }
-            })
-            .catch((error)=>console.log(error))
-        }
-
+        // console.log(data, docId);
+    
         return (
         <ViewDocumentContainer display="center" j="center" align="center">
+            {/* {showModal ? */}
             <Container w="500px"  mt="30px">
             <HeaderContainer justifyContent="center">
                 <HeaderText>Document Overview</HeaderText>
@@ -91,7 +78,7 @@ export const ViewDocument = ({showDoc, setHome}) => {
                         <td>{data.remarks}</td>
                     </tr>
                     <tr>
-                        <th>Date created:</th>
+                        <th>Created at:</th>
                         <td>{date} {time}</td>
                         {/* .replace("T", " ").replace("Z", "").slice(0, -4) */}
                     </tr>
@@ -103,38 +90,44 @@ export const ViewDocument = ({showDoc, setHome}) => {
                         <th>Status:</th>
                         <td style={{color: "red"}}>{data.status}</td>
                     </tr>
+                    {/* <tr>
+                        <th></th>
+                        <td><ViewButton>View transaction history</ViewButton></td>
+                    </tr> */}
                     </Tbody>
                 </Table>
+                <div style={{paddingTop: "30px", textAlign: "end"}}>
+                    <Button padding="10px" br="5px" mr="10px" border="1px solid #cecece" color="#000000" onClick={()=>setShowModal(true)}>Release document</Button>
+                    <Button padding="10px" br="5px" color="#000000" border="1px solid #cecece">View transactions</Button>
+                </div>
+                {showModal && <ReleaseModal showModal={setShowModal}/>}
             </BoxContainer>
-            <div style={{textAlign: "end", margin: "30px 0"}}>
-            <Button onClick={()=>setShowModal(true)} padding="10px" border="none" color="#ffffff" bg="#50A8EA" margin="30px 0" br="5px" w="150px">Receive Document</Button>
-            </div>
             </Container>
-            {showModal && <ReceiveDoc receiveDoc={receiveDoc} showModal={setShowModal}/>}
+            {/* // : <ReleaseModal/>} */}
         </ViewDocumentContainer>
         );
     };
 
-const ReceiveDoc = ({showModal, receiveDoc}) => {
-    return (
-        <>
-            <ModalBackdrop onClick={()=>showModal(false)}/>
-            <ModalContainer>
+    const ReleaseModal = ({showModal}) => {
+        return (
+            <>
+                <ModalBackdrop onClick={()=>showModal(false)}/>
+                <ModalContainer>
                     <ModalHeader>
                         <ModalTitle>
-                            <FaArrowDown/>
-                            <h1>Receive Document</h1>
+                            <FaArrowUp/>
+                            <h1>Release Document</h1>
                         </ModalTitle>
-                        <Button onClick={() => showModal(false)} bg="none" border="none"  padding="8px" fs="22px" mr="5px">X</Button>
+                        <Button onClick={() => showModal(false)} border="none"  padding="8px" fs="22px" mr="5px">X</Button>
                     </ModalHeader>
                     <ModalBody>
-                    <h5>Are you sure you want to receive this document from your office?</h5>
+                    <h5>Are you sure you want to released this document from your office?</h5>
                     </ModalBody>
                     <ModalFooter>
                     <Button onClick={() => showModal(false)} color="#000000" padding="8px" br="5px" border="1px solid #cecece" mr="5px">Cancel</Button>
-                    <Button onClick={receiveDoc} bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Release</Button>
+                    <Button bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Release</Button>
                     </ModalFooter>
                 </ModalContainer>
-        </>
-    )
-}
+            </>
+        )
+    }
