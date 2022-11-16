@@ -26,7 +26,7 @@ const AccountSetting = () => {
   // const {offices} = useContext(MainContext);
   const [message, setMessage] = useState("");
 
-  const { adminData } = useContext(MainContext);
+  const { fetchUsersName } = useContext(MainContext);
 
   useEffect(() => {
     axios
@@ -55,7 +55,7 @@ const AccountSetting = () => {
       .put(`http://localhost:5000/users/update/admin`, { name, email, id })
       .then((response) => {
         if (response) {
-          adminData();
+          fetchUsersName();
           setMessage("Changes saved");
         }
       })

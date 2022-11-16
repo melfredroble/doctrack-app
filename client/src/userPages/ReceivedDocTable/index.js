@@ -14,6 +14,7 @@ const ReceivedDocTable = ({ showDoc, showHome }) => {
         fetchData();
     }, []);
 
+
     const columns = useMemo(
         () => [
         {

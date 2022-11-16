@@ -62,7 +62,7 @@ const Users = () => {
 const Modal = ({ closeModal }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [pin, setPin] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [office, setOffice] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState([]);
@@ -74,13 +74,23 @@ const Modal = ({ closeModal }) => {
     fetchAdmin();
   }, []);
 
+  const randomPassword = (length) => {
+    let result  = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    setNewPassword(result);
+  }
+
   const handleUserModal = (e) => {
     e.preventDefault();
     axios
       .post("http://localhost:5000/users/add-user", {
         name: name,
         email: email,
-        pin: pin,
+        pin: newPassword,
         office: office,
         role: role,
       })
@@ -131,24 +141,19 @@ const Modal = ({ closeModal }) => {
                 />
               </InputGroup>
               <InputGroup>
-                <label>PIN CODE</label>
+                <label>PASSWORD</label>
                 <PinContainer>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPin(Math.floor(1000 + Math.random() * 9000));
-                    }}
-                  >
-                    Generate
-                  </button>
-                  <input
-                    type="number"
-                    name="pin"
-                    placeholder="4 pin code"
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value)}
-                    required
-                  />
+                <button type="button" onClick={()=>randomPassword(6)}>
+                  Generate
+                </button>
+                <input
+                  type="text"
+                  name="pin"
+                  placeholder="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
                 </PinContainer>
               </InputGroup>
               <InputGroup>
@@ -180,9 +185,7 @@ const Modal = ({ closeModal }) => {
                   required
                 >
                   <option value="">Select role</option>
-                  <option value="Head">Office Head</option>
                   <option value="Secretary">Secretary</option>
-                  <option value="Employee">Instructor</option>
                 </select>
               </InputGroup>
             </FormGroup>

@@ -5,14 +5,11 @@ import {
   Container,
   CardContainer,
   CardHeader,
-  LogoContainer,
-  LogoImg,
   CardBody,
   FormGroup,
   CardFooter,
   ErrorText,
 } from "./styles";
-import logo from "../../assets/img/profile1.png";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "../../api/axios";
 import MainContext from "../../context/MainContext";
@@ -24,7 +21,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
+  // const [isAuth, setIsAuth] = useState(false);
 
   const { fetchUsersName, getCurrOffice } = useContext(MainContext);
   
@@ -33,11 +30,8 @@ const Login = () => {
       .get("http://localhost:5000/login")
       .then((response) => {
         if (response.data.loggedIn === true) {
-          setIsAuth(true);
-          navigate("/");
-        } else {
-          setIsAuth(false);
-        }
+          navigate("/dashboard");
+        } 
       })
       .catch((error) => {
         console.log(error);

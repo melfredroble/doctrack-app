@@ -21,7 +21,7 @@ import axios from "../../api/axios";
 import MainContext from "../../context/MainContext";
 
 export const ViewDocument = ({showDoc, setHome}) => {
-    const { docId, transacId, setShowToast} = useContext(MainContext);
+    const { docId, setShowToast, transacId} = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
@@ -53,8 +53,8 @@ export const ViewDocument = ({showDoc, setHome}) => {
 
         const receiveDoc = ()=>{
             const user = JSON.parse(localStorage.getItem("userData"));
-            const received = user.office_id;
-            axios.put('/documents/receiveDoc', {received, transacId})
+            const officeId = user.office_id;
+            axios.post('/documents/receiveDoc', {docId, officeId})
             .then((response)=>{
                 if(response.status === 200){
                     setHome(true);
@@ -132,7 +132,7 @@ const ReceiveDoc = ({showModal, receiveDoc}) => {
                     </ModalBody>
                     <ModalFooter>
                     <Button onClick={() => showModal(false)} color="#000000" padding="8px" br="5px" border="1px solid #cecece" mr="5px">Cancel</Button>
-                    <Button onClick={receiveDoc} bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Release</Button>
+                    <Button onClick={receiveDoc} bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Receive</Button>
                     </ModalFooter>
                 </ModalContainer>
         </>

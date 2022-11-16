@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   FaSignOutAlt,
   FaQuestionCircle,
-  FaRegUser,
+  FaUserCircle,
+  FaBell
 } from "react-icons/fa";
 import { Outlet, useNavigate } from "react-router-dom";
 import {
@@ -21,6 +22,7 @@ import {
   CardBody,
   FormGroup,
   CardFooter,
+  NavSection
 } from "./styles";
 import { CloseButtonContainer, CloseButton } from "../Modal/styles";
 import { useTransition, animated } from "react-spring";
@@ -60,15 +62,18 @@ const Navbar = () => {
           <HeaderText>
             <h3>{userRole !== "admin" && officeName}</h3>
           </HeaderText>
-          <UserProfile
-            onClick={() => {
-              setIsVisible((v) => !v);
-            }}
-          >
-            {/* <img alt="userImg" src={userIcon} /> */}
-            <FaRegUser />
-            <p>{usersName}</p>
-          </UserProfile>
+          <NavSection>
+            <FaBell/>
+            <UserProfile
+              onClick={() => {
+                setIsVisible((v) => !v);
+              }}
+            >
+              {/* <img alt="userImg" src={userIcon} /> */}
+              <FaUserCircle />
+              <p>{usersName}</p>
+            </UserProfile>
+          </NavSection>
         </InnerContainer>
         <Container onClick={() => setIsVisible(false)}>
           {transition((style, item) =>

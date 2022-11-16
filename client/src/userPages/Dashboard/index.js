@@ -66,7 +66,7 @@ const Dashboard = () => {
               <h5>Received documents</h5>
             </CardLeft>
             <CardRight>
-              <h5>{offices}</h5>
+              <h5>1</h5>
             </CardRight>
             <CardBottom>
               <span>
@@ -79,7 +79,7 @@ const Dashboard = () => {
               <h5>Incoming documents</h5>
             </CardLeft>
             <CardRight>
-              <h5>{users}</h5>
+              <h5>2</h5>
             </CardRight>
             <CardBottom>
               <span>

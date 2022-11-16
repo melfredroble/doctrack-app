@@ -12,7 +12,7 @@ import {
   ErrorText,
 } from "./styles";
 import ClipLoader from "react-spinners/ClipLoader";
-
+import { BackgroundImg } from "../../userPages/LandingPage/styles";
 const SecurityQuestions = () => {
   const [ansOne, setAnsOne] = useState("");
   const [ansTwo, setAnsTwo] = useState("");
@@ -47,11 +47,12 @@ const SecurityQuestions = () => {
   };
 
   return (
-    <Container>
-      <form onSubmit={handleAnswers}>
+    <>
+      <BackgroundImg></BackgroundImg>
+      <Container>
         <CardContainer>
           {/* <h1 style={{textAlign: 'center', color: '#50A8EA'}}>Doctrack</h1> */}
-
+          <form onSubmit={handleAnswers}>      
           <CardHeader>
             <h5>Security questions</h5>
             {message && <ErrorText>{message}</ErrorText>}
@@ -62,7 +63,7 @@ const SecurityQuestions = () => {
                 What is the name of your favorite pet?
               </label>
               <input
-                type="password"
+                type="text"
                 value={ansOne}
                 onChange={(e) => setAnsOne(e.target.value)}
                 required
@@ -71,7 +72,7 @@ const SecurityQuestions = () => {
             <FormGroup>
               <label htmlFor="qtnOne">What is your mother's maiden name?</label>
               <input
-                type="password"
+                type="text"
                 value={ansTwo}
                 onChange={(e) => setAnsTwo(e.target.value)}
                 required
@@ -82,7 +83,7 @@ const SecurityQuestions = () => {
                 What was your favorite subject in high school?
               </label>
               <input
-                type="password"
+                type="text"
                 value={ansThree}
                 onChange={(e) => setAnsThree(e.target.value)}
                 required
@@ -93,7 +94,7 @@ const SecurityQuestions = () => {
                 What was your dream job as a child?
               </label>
               <input
-                type="password"
+                type="text"
                 value={ansFour}
                 onChange={(e) => setAnsFour(e.target.value)}
                 required
@@ -102,7 +103,7 @@ const SecurityQuestions = () => {
             <FormGroup>
               <label htmlFor="qtnOne">What is your favorite movie?</label>
               <input
-                type="password"
+                type="text"
                 value={ansFive}
                 onChange={(e) => setAnsFive(e.target.value)}
                 required
@@ -118,9 +119,10 @@ const SecurityQuestions = () => {
               )}
             </button>
           </CardFooter>
+          </form>
         </CardContainer>
-      </form>
-    </Container>
+      </Container>
+    </>
   );
 };
 

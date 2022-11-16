@@ -14,7 +14,7 @@ import { FaRegFolderOpen, FaPlus } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import MyDocumentsTable from "../MyDocumentsTable";
 import { useNavigate } from "react-router-dom";
-import ViewDocument  from "../../components/ViewDocument";
+import ViewDocument  from "./ViewDocument";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from "react";
@@ -31,9 +31,9 @@ const MyDocuments = () => {
   const {showToast, setShowToast} = useContext(MainContext);
 
 
-  useEffect(()=> {
-    if(showToast) { 
-      toast.success('Document has been added!', {
+useEffect(()=>{
+  if(showToast){
+    toast.success('Document has been added!', {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,
@@ -43,9 +43,9 @@ const MyDocuments = () => {
       progress: undefined,
       theme: "colored",
       });
-      setTimeout(()=> setShowToast(false),[3000]);
-    }
-  },[showToast, setShowToast]);
+  setTimeout(()=> setShowToast(false),[3000]);
+  }
+},[showToast, setShowToast])
 
 
   return (

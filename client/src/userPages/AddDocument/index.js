@@ -36,14 +36,12 @@ const AddDocument = () => {
   const [showModal, setShowModal] = useState(false);
 
 
-  const { currOffice, usersId, setShowToast } = useContext(MainContext);
+  const { currOffice, usersId, setShowToast, getCurrOffice } = useContext(MainContext);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   axios.get("/offices").then((response) => {
-  //     setOffices(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    getCurrOffice();
+  }, []);
 
   useEffect(() => {
     axios.get("/documents/types").then((response) => {

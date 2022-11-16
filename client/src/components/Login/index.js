@@ -5,17 +5,16 @@ import {
   Container,
   CardContainer,
   CardHeader,
-  LogoContainer,
-  LogoImg,
   CardBody,
   FormGroup,
   CardFooter,
   ErrorText,
-} from "./styles";
-import logo from "../../assets/img/profile1.png";
+} from "../../userPages/Login/styles";
+// import logo from "../../assets/img/profile1.png";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "../../api/axios";
 import MainContext from "../../context/MainContext";
+import { BackgroundImg } from "../../userPages/LandingPage/styles";
 
 const Login = () => {
   const navigate = useNavigate("");
@@ -73,54 +72,54 @@ const Login = () => {
   };
 
   return (
-    <Container>
-      <CardContainer>
-        <LogoContainer>
-          <LogoImg src={logo} />
-          {/* <LogoText>
-                        <h1 style={{ textAlign: 'center' }}>Doc</h1>
-                        <h1 style={{ textAlign: 'center', color: '#50A8EA' }}>Track</h1>
-                    </LogoText> */}
-        </LogoContainer>
-        <CardHeader>
-          <h2>Admin Login</h2>
-          {loginStatus && <ErrorText>{loginStatus}</ErrorText>}
-        </CardHeader>
-        <form onSubmit={handleLogin}>
-          <CardBody>
-            <FormGroup>
-              <FaEnvelope />
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email address"
-                id="email"
-              />
-            </FormGroup>
-            <FormGroup>
-              <FaLock />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                id="password"
-                autoComplete="true"
-              />
-            </FormGroup>
-          </CardBody>
-          <CardFooter>
-            <button type="submit">
-              {!isLoading ? "Login" : <ClipLoader size={16} color="#ffffff" />}
-            </button>
-            <Link to="/security-questions">Forgot password?</Link>
-          </CardFooter>
-        </form>
-      </CardContainer>
-    </Container>
+    <>
+      <BackgroundImg></BackgroundImg>
+      <Container>
+        <CardContainer>
+          <CardHeader>
+            <h2>Admin Login</h2>
+            {loginStatus && <ErrorText>{loginStatus}</ErrorText>}
+          </CardHeader>
+          <form onSubmit={handleLogin}>
+            <CardBody>
+              <FormGroup>
+                <FaEnvelope />
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                  id="email"
+                />
+              </FormGroup>
+              <FormGroup>
+                <FaLock />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  id="password"
+                  autoComplete="true"
+                />
+              </FormGroup>
+            </CardBody>
+            <CardFooter>
+              <button type="submit">
+                {!isLoading ? (
+                  "Login"
+                ) : (
+                  <ClipLoader size={16} color="#ffffff" />
+                )}
+              </button>
+              <Link to="/security-questions">Forgot password?</Link>
+            </CardFooter>
+          </form>
+        </CardContainer>
+      </Container>
+    </>
   );
 };
 

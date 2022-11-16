@@ -39,7 +39,6 @@ export const HeaderText = styled.div`
     font-size: 14px;
     margin-left: 10px;
     text-transform: uppercase;
-    margin-top: 10px;
   }
 `;
 
@@ -84,17 +83,16 @@ export const UserProfile = styled.button`
   font-weight: bold;
   display: flex;
   align-items: center;
-  margin-top: 5px;
+  /* margin-top: 5px; */
 
   & svg {
-    height: 19px;
-    width: 25px;
-    margin-right: 5px;
+    font-size: 22px;
   }
 
   & p {
     font-weight: 700;
     font-size: 14px;
+    margin-left: 5px;
   }
 `;
 
@@ -240,3 +238,15 @@ export const ModalMessageBody = styled.div`
     font-weight: normal;
   }
 `;
+
+export const NavSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & svg {
+    font-size: 22px;
+    margin-right: 5px;
+    color: #6c757d;
+  }
+`

@@ -53,7 +53,7 @@ router.get("/trackingId", requireAuth, (req, res) => {
           if (row) {
             res.json({
               trackingId:
-                currYear + "-" + randomNum + "-" + currMonth + currDay  + "-" + currMins + milliSeconds,
+                currYear + "-" + currMonth + currDay  +  seconds + "-" + randomNum,
             });
           }
         }
@@ -330,7 +330,7 @@ router.get("/receivedDoc/:id", (req, res) => {
   const officeId = req.params.id;
 
   conn.query(
-    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.received_by = ? ORDER BY t.id DESC;",
+    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.office = ? AND t.actions LIKE '%received%' ORDER BY t.id DESC;",
     [officeId, officeId],
     (error, result) => {
       if (result) {
@@ -344,17 +344,39 @@ router.get("/receivedDoc/:id", (req, res) => {
 });
 
 // Receiving documents.
-router.put("/receiveDoc", (req, res) => {
+// router.put("/receiveDoc", (req, res) => {
+//   const data = req.body;
+
+//   let {
+//     received,
+//     transacId
+//   } = data;
+
+//   conn.query(
+//     "UPDATE `transactions` SET `office`= ? WHERE id = ?",
+//     [received, transacId],
+//     (error, result) => {
+//       if (result) {
+//         res.status(200).send();
+//       } else {
+//         res.json(error);
+//       }
+//     }
+//   );
+// });
+
+// Receiving document
+router.post("/receiveDoc", (req, res) => {
   const data = req.body;
 
   let {
-    received,
-    transacId
+    docId,
+    officeId
   } = data;
 
   conn.query(
-    "UPDATE `transactions` SET `received_by`= ? WHERE id = ?",
-    [received, transacId],
+    "INSERT INTO `transactions`(`document_id`, `actions`, `office`, `new_status`) VALUES (?, 'received', ?, 'received')",
+    [docId,  officeId],
     (error, result) => {
       if (result) {
         res.status(200).send();

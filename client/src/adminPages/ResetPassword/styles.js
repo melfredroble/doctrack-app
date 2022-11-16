@@ -1,21 +1,32 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    min-height: 100vh;
-    background-color: #f8f9fa;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 100vw;
+    padding: 20px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: column;
 `
 
 export const CardContainer = styled.div`
-    background-color: #ffffff;
-    padding: 40px 50px;
-    /* border: 1px solid #cecece; */
-    box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.2);
-    border-radius: 5px;
     width: 400px;
+    height: auto;
+    padding: 50px 50px 50px 50px;
+    margin: auto;
+    /* margin-top: 20px; */
+    /* text-align: center; */
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 1px 1px 3px rgb(0 0 0 / 30%);
+
+    @media screen and (max-width: 767px) {
+        width: 330px;
+        padding: 40px 30px;
+        overflow: hidden;
+    }
 `
 
 export const CardHeader = styled.div`
@@ -56,10 +67,11 @@ export const CardFooter = styled.div`
         cursor: pointer;
         padding: 10px 0;
         border: none;
-        border-radius: 5px;
-        background-color: #2c3246;
-        color: #fff;
+        background-color: #7b1113;
+        color: #ffffff;
+        font-weight: bold;
         text-transform: uppercase;
+        margin-top: 10px;
     }
 
     & a {
@@ -72,7 +84,8 @@ export const CardFooter = styled.div`
 `
 
 export const ModalBackDrop = styled.div`
-    background-color: #ffffff;
+    filter: blur(8px);
+    -webkit-filter: blur(5px);
     height: 100%;
     width: 100%;
     position: fixed;

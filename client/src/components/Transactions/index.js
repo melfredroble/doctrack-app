@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import DataTable from "react-data-table-component";
 import axios from '../../api/axios';
 import MainContext from '../../context/MainContext';
-import useFetch from '../../hooks/useFetch';
+import { Container, Header } from './styles';
 
 const Transactions = () => {
 
@@ -53,14 +53,12 @@ const Transactions = () => {
             center: true,
             selector: (row) => row.tracking_id,
             sortable: true,
-            wrap: true,
         },
         {
             name: "Actions",
             center: true,
             selector: (row) => row.actions,
             sortable: true,
-            wrap: true,
         },
         {
             name: "Office",
@@ -89,8 +87,10 @@ const Transactions = () => {
 
 
     return (
-        <>
-            <h1>Transaction History</h1>
+        <Container mt="20px">
+            <Header>
+                <h1>Transaction History</h1>
+            </Header>
             <DataTable
             columns={columns}
             data={data}
@@ -99,7 +99,7 @@ const Transactions = () => {
             highlightOnHover
             persistTableHead
             />
-        </>
+        </Container>
     )
 }
 

@@ -15,6 +15,7 @@ import MainContext from "../../context/MainContext";
 import { FaRegCheckCircle } from "react-icons/fa";
 import Login from "../../components/Login";
 import ClipLoader from "react-spinners/ClipLoader";
+import { BackgroundImg } from "../../userPages/LandingPage/styles";
 
 const ResetPassword = () => {
   const [showModal, setShowModal] = useState(false);
@@ -51,7 +52,9 @@ const ResetPassword = () => {
   };
 
   return isValidated ? (
-    <Container>
+    <>
+      <BackgroundImg></BackgroundImg>
+      <Container>
       <form onSubmit={resetPassword}>
         <CardContainer>
           {/* <h1 style={{textAlign: 'center', color: '#50A8EA'}}>Doctrack</h1> */}
@@ -91,6 +94,7 @@ const ResetPassword = () => {
       </form>
       {showModal && <Modal showModal={setShowModal} isShowModal={showModal} />}
     </Container>
+    </>
   ) : (
     <Login />
   );

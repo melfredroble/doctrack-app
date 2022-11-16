@@ -54,6 +54,7 @@ const MyDocumentsTable = ({ showDoc, showHome }) => {
         center: true,
         selector: (row) => row.tracking_id,
         sortable: true,
+        wrap: true,
       },
       {
         name: "Document type",
@@ -79,7 +80,7 @@ const MyDocumentsTable = ({ showDoc, showHome }) => {
         center: true,
         selector: (row) => (
           <>
-            <p style={{ color: "red" }}>{row.status}</p>
+            <p style={{ color: "red", backgroundColor: "#f0f0f0", padding: "5px 10px", borderRadius: "5px"}}>{row.status}</p>
           </>
         ),
         sortable: true,

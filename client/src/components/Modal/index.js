@@ -142,10 +142,10 @@ export const DeleteDoctype = ({ closeModal }) => {
   );
 };
 
-export const EditModal = ({ closeModal, openModal }) => {
+export const EditModal = ({ closeModal }) => {
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
-  const [newPin, setNewPin] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [newOffice, setNewOffice] = useState("");
   const [newRole, setNewRole] = useState("");
   const { fetchData, error } = useFetch("/users");
@@ -155,11 +155,21 @@ export const EditModal = ({ closeModal, openModal }) => {
     fetchAdmin();
   }, []);
 
+  const randomPassword = (length) => {
+    let result  = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    setNewPassword(result);
+  }
+
   const editUser = () => {
     Axios.put(`http://localhost:5000/users/update`, {
       name: newName,
       email: newEmail,
-      pin: newPin,
+      pin: newPassword,
       office: newOffice,
       role: newRole,
       id: id,
@@ -216,22 +226,17 @@ export const EditModal = ({ closeModal, openModal }) => {
               />
             </InputGroup>
             <InputGroup>
-              <label>PIN CODE</label>
+              <label>PASSWORD</label>
               <PinContainer>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setNewPin(Math.floor(1000 + Math.random() * 9000));
-                  }}
-                >
+                <button onClick={()=>randomPassword(6)}>
                   Generate
                 </button>
                 <input
-                  type="number"
+                  type="text"
                   name="pin"
-                  placeholder="4 pin code"
-                  value={newPin}
-                  onChange={(e) => setNewPin(e.target.value)}
+                  placeholder="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   required
                 />
               </PinContainer>
