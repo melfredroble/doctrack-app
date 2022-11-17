@@ -8,7 +8,8 @@ import {
   Button,
   Breadcrumb,
   Unordered,
-  Item
+  Item,
+  AlertMessage
 } from "./styles";
 import { FaRegFolderOpen, FaPlus } from "react-icons/fa";
 import Footer from "../../components/Footer";
@@ -28,30 +29,37 @@ const MyDocuments = () => {
   const [showDocument, setShowDocument] = useState(false);
   const [showTransactions, setShowTransactions] = useState(false);
 
-  const {showToast, setShowToast} = useContext(MainContext);
+  const {alertMessage, setAlertMessage} = useContext(MainContext);
 
 
-useEffect(()=>{
-  if(showToast){
-    toast.success('Document has been added!', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
-  setTimeout(()=> setShowToast(false),[3000]);
-  }
-},[showToast, setShowToast])
-
+// useEffect(()=>{
+//   if(showToast){
+//     toast.success('Document has been added!', {
+//       position: "top-right",
+//       autoClose: 2000,
+//       hideProgressBar: false,
+//       closeOnClick: true,
+//       pauseOnHover: true,
+//       draggable: true,
+//       progress: undefined,
+//       theme: "colored",
+//       });
+//   setTimeout(()=> setShowToast(false),[3000]);
+//   }
+// },[showToast, setShowToast])
 
   return (
     <MainContainer>
       <InnerContainer>
-        {showToast && <ToastContainer />}
+        {/* {showToast && <ToastContainer />} */}
+        {alertMessage === "released" && <AlertMessage>
+          <h5>The document has been {alertMessage} succesfully.</h5>
+          <button onClick={()=>setAlertMessage("")}>X</button>
+        </AlertMessage>}
+        {alertMessage === "added" && <AlertMessage>
+          <h5>The document has been {alertMessage} succesfully. You can release the document if the printed document is ready to be submitted to another office.</h5>
+          <button onClick={()=>setAlertMessage("")}>X</button>
+        </AlertMessage>}
         <HeaderContainer mt="15px">
           <FaRegFolderOpen /> <HeaderText> My Documents</HeaderText>
         </HeaderContainer>

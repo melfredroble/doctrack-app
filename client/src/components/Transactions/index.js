@@ -12,6 +12,7 @@ const Transactions = () => {
     const {docId} = useContext(MainContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const dataArray = [];
 
     const formatDate = (dateTime) =>{
         const myDate = new Date(dateTime);
@@ -45,6 +46,16 @@ const Transactions = () => {
         .catch((error)=>console.log(error))
         .finally(()=>setLoading(false))
     },[docId])
+    // useEffect(()=>{
+    //     axios.get('/documents/transacHistory')
+    //     .then((response)=>{
+    //         dataArray.push(JSON.parse(response.data));
+    //         setData(dataArray);
+    //     })
+    //     .catch((error)=>console.log(error))
+    //     .finally(()=>setLoading(false))
+    // },[])
+
 
     const columns = useMemo(
         () => [

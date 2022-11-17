@@ -6,15 +6,8 @@ import {Container,
     Table,
     Tbody,
     ViewDocumentContainer,
-    Button, 
-    ModalBackdrop} from "../../userPages/Documents/styles";
-import {   
-    ModalContainer,
-    ModalHeader,
-    ModalTitle,
-    ModalBody,
-    ModalFooter, } from "../../userPages/AddDocument/styles";
-import { FaArrowUp } from "react-icons/fa";
+    Button
+} from "../../userPages/Documents/styles";
 import MainContext from "../../context/MainContext";
 import axios from "../../api/axios";
 
@@ -23,7 +16,6 @@ export const ViewDoc = () => {
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
-    const [showModal, setShowModal] = useState(false);
 
     useEffect(()=>{
         axios.get(`/documents/viewOutgoing/${docId}`)
@@ -97,37 +89,11 @@ export const ViewDoc = () => {
                     </Tbody>
                 </Table>
                 <div style={{paddingTop: "30px", textAlign: "end"}}>
-                    <Button padding="10px" br="5px" mr="10px" border="1px solid #cecece" color="#000000" onClick={()=>setShowModal(true)}>Release document</Button>
                     <Button padding="10px" br="5px" color="#000000" border="1px solid #cecece">View transactions</Button>
                 </div>
-                {showModal && <ReleaseModal showModal={setShowModal}/>}
             </BoxContainer>
             </Container>
             {/* // : <ReleaseModal/>} */}
         </ViewDocumentContainer>
         );
     };
-
-    const ReleaseModal = ({showModal}) => {
-        return (
-            <>
-                <ModalBackdrop onClick={()=>showModal(false)}/>
-                <ModalContainer>
-                    <ModalHeader>
-                        <ModalTitle>
-                            <FaArrowUp/>
-                            <h1>Release Document</h1>
-                        </ModalTitle>
-                        <Button onClick={() => showModal(false)} border="none"  padding="8px" fs="22px" mr="5px">X</Button>
-                    </ModalHeader>
-                    <ModalBody>
-                    <h5>Are you sure you want to released this document from your office?</h5>
-                    </ModalBody>
-                    <ModalFooter>
-                    <Button onClick={() => showModal(false)} color="#000000" padding="8px" br="5px" border="1px solid #cecece" mr="5px">Cancel</Button>
-                    <Button bg="#50A8EA" color="#ffffff" border="none" padding="8px" br="5px" mr="20px">Release</Button>
-                    </ModalFooter>
-                </ModalContainer>
-            </>
-        )
-    }

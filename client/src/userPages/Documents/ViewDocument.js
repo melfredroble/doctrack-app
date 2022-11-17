@@ -19,10 +19,11 @@ import { FaArrowUp } from "react-icons/fa";
 import MainContext from "../../context/MainContext";
 import axios from "../../api/axios";
 import Select from "react-select";
+import useFetch from "../../hooks/useFetch";
 // import { useNavigate } from "react-router-dom";
 
 const ViewDocument = ({showHome, showDoc, showTransactions}) => {
-    const { docId, setShowToast } = useContext(MainContext);
+    const { docId, setAlertMessage } = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
@@ -84,7 +85,7 @@ const ViewDocument = ({showHome, showDoc, showTransactions}) => {
                     setShowModal(false);
                     showHome(true);
                     showDoc(false);
-                    setShowToast(true);
+                    setAlertMessage("released");
                 }
             })
             .catch((error)=>console.log(error));

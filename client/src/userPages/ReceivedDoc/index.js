@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useContext, useState } from 'react';
 import {
     MainContainer,
     Container,
@@ -15,12 +15,13 @@ import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { ViewDoc } from "./ViewDoc";
 import ReceivedDocTable from '../ReceivedDocTable';
+import MainContext from '../../context/MainContext';
 
 const ReceivedDoc = () => {
     const navigate = useNavigate();
     const [isHome, setIsHome] = useState(true)
     const [showDocument, setShowDocument] = useState(false);
-    const [showTransaction, setShowTransaction] = useState(false);
+    const {alertMessage} = useContext(MainContext);
     
     return (
         <MainContainer>
@@ -40,17 +41,12 @@ const ReceivedDoc = () => {
             <Item color={showDocument ? "#0275d8" : "#a59b9b"} cursor={!isHome ? "pointer" : undefined}>
                 <button onClick={()=> {!isHome && 
                 setShowDocument(true);
-                setShowTransaction(false);
                 }}>Document overview</button>
-                <span>/</span>
             </Item >
-            <Item color={showTransaction ? "#0275d8" : "#a59b9b"}>
-                <button onClick={()=> !isHome && setShowTransaction(!showTransaction)}>Transactions</button>
-            </Item>
             </Unordered>
         </Breadcrumb>
         {showDocument ? (
-            <ViewDoc/>
+            <ViewDoc showHome={setIsHome} showDoc={setShowDocument}/>
         ) : (
             <>
             <Container mt="30px">

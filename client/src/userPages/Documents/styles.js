@@ -234,3 +234,27 @@ export const Item = styled.div`
     margin: 0 5px;
   }
 `
+
+export const AlertMessage = styled.div`
+  background-color: #afffb1a3;
+  border: 1px solid #08a50c;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 20px;
+  border-radius: 5px;
+  margin: 15px 0 20px 0;
+
+  & h5 {
+    color: #08a50c;
+    font-size: 14px;
+  }
+
+  & button {
+    background: none;
+    border: none;
+    outline: none;
+    color: #08a50c;
+    cursor: pointer;
+  }
+`

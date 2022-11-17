@@ -22,8 +22,8 @@ export const MainContextProvider = ({ children }) => {
   const [usersId, setUsersId] = useState();
   const [docId, setDocId] = useState();
   const [answers, setAnswers] = useState("");
-  const [showToast, setShowToast] = useState(false);
   const [transacId, setTransacId] = useState();
+  const [alertMessage, setAlertMessage] = useState("");
 
   Axios.defaults.withCredentials = true;
 
@@ -138,10 +138,10 @@ export const MainContextProvider = ({ children }) => {
     setUsersId,
     docId,
     setDocId,
-    showToast, 
-    setShowToast,
     transacId, 
-    setTransacId
+    setTransacId,
+    alertMessage, 
+    setAlertMessage,
   };
 
   // const dispatch = {

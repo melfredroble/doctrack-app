@@ -36,7 +36,7 @@ const AddDocument = () => {
   const [showModal, setShowModal] = useState(false);
 
 
-  const { currOffice, usersId, setShowToast, getCurrOffice } = useContext(MainContext);
+  const { currOffice, usersId, setAlertMessage, getCurrOffice } = useContext(MainContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const AddDocument = () => {
       .then((response) => {
         if (response.status === 200) {
           navigate("/my-documents");
-          setShowToast(true);
+          setAlertMessage("added");
         } else {
           setMessage("Tracking ID already exist");
         }

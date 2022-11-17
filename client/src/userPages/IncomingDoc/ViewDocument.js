@@ -21,7 +21,7 @@ import axios from "../../api/axios";
 import MainContext from "../../context/MainContext";
 
 export const ViewDocument = ({showDoc, setHome}) => {
-    const { docId, setShowToast, transacId} = useContext(MainContext);
+    const { docId, setAlertMessage, transacId} = useContext(MainContext);
     const [data, setdata] = useState({});
     const [date, setDate] = useState();
     const [time, setTime] = useState();
@@ -54,12 +54,13 @@ export const ViewDocument = ({showDoc, setHome}) => {
         const receiveDoc = ()=>{
             const user = JSON.parse(localStorage.getItem("userData"));
             const officeId = user.office_id;
-            axios.post('/documents/receiveDoc', {docId, officeId})
+            
+            axios.post('/documents/receiveDoc', {docId, officeId, transacId})
             .then((response)=>{
                 if(response.status === 200){
                     setHome(true);
                     showDoc(false);
-                    setShowToast(true)
+                    setAlertMessage("received");
                 }
             })
             .catch((error)=>console.log(error))

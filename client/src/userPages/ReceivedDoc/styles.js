@@ -213,3 +213,21 @@ export const Unordered = styled.div`
         margin: 0 5px;
     }
 `
+
+export const FormContainer = styled.div`
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+
+    & label {
+        margin-bottom: 10px;
+        font-size: 15px;
+        margin-top: 20px;
+    }
+
+    & textarea {
+        border: 1px solid #dcdcdc;
+        outline: none;
+        padding: 10px;
+    }
+`

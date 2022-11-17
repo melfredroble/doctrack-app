@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { ViewDocument } from "./ViewDocument";
 import IncomingDocTable from "../IncomingDocTable";
 import MainContext from "../../context/MainContext";
-import { ToastContainer, toast } from 'react-toastify';
+import { AlertMessage } from "../Documents/styles";
+// import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const IncomingDoc = () => {
@@ -24,28 +25,15 @@ const IncomingDoc = () => {
     const [isHome, setIsHome] = useState(true)
     const [showDocument, setShowDocument] = useState(false);
 
-    const {showToast, setShowToast} = useContext(MainContext);
+    const {alertMessage, setAlertMessage} = useContext(MainContext);
 
-    useEffect(()=> {
-        if(showToast) { 
-            toast.success('Document has been received!', {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            });
-            setTimeout(()=> setShowToast(false),[3000]);
-        }
-    },[showToast, setShowToast]);
-    
     return (
         <MainContainer>
             <InnerContainer>
-            {showToast && <ToastContainer />}
+            {alertMessage === "received" && <AlertMessage>
+            <h5>The document has been {alertMessage} succesfully.</h5>
+            <button onClick={()=>setAlertMessage("")}>X</button>
+            </AlertMessage>}
             <HeaderContainer mt="15px">
                 <FaRegFolderOpen /> <HeaderText> Incoming Documents</HeaderText>
             </HeaderContainer>
