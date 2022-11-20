@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {Link} from "react-router-dom";
 import { BackgroundImg } from "../LandingPage/styles";
 import {
   MainContainer,
@@ -9,15 +10,30 @@ import {
   FormGroup,
   MessageText,
   Table,
+  BackButton
 } from "./styles";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaArrowAltCircleLeft } from "react-icons/fa";
 import axios from "../../api/axios";
+import ViewDocument from "../Documents/ViewDocument";
+import { useContext } from "react";
+import MainContext from "../../context/MainContext";
+import Transactions from "../../components/Transactions";
 
 const Inquiry = () => {
   const [trackingId, setTrackingId] = useState("");
   const [message, setMessage] = useState("");
   const [document, setDocument] = useState();
   const [showDoc, setShowDoc] = useState(true);
+  const { setDocId } = useContext(MainContext);
+  // const [data, setData] = useState([]);
+
+  // useEffect(()=>{
+  //   axios.get(`/documents/view/${docId}`)
+  //   .then((response)=>{
+  //       setData(response.data[0])
+  //   })
+  //   .catch((error)=> console.log(error))
+  //   },[docId])
 
   const trackDocument = () => {
     axios
@@ -34,6 +50,29 @@ const Inquiry = () => {
       .catch((error) => console.log(error));
   };
 
+  const formatDate = (dateTime) =>{
+    const myDate = new Date(dateTime);
+    const date = (myDate.getMonth() + 1) + '/' + myDate.getDate() + '/' + myDate.getFullYear();
+    let hours = myDate.getHours();
+    let minutes = myDate.getMinutes();
+    
+    // Check whether AM or PM
+    let newformat = hours >= 12 ? 'PM' : 'AM'; 
+    
+    // Find current hour in AM-PM Format
+    hours = hours % 12; 
+    
+    // To display "0" as "12"
+    hours = hours ? hours : 12; 
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    const time = hours + ":" + minutes + " " + newformat;
+
+    const createdAt = date + " " + time;
+
+    return createdAt;
+  }
+
   return (
     <>
       <BackgroundImg></BackgroundImg>
@@ -42,8 +81,15 @@ const Inquiry = () => {
           <>
             <Card w="500px" p="50px">
               <CardHeader>
-                <h1>EVSU-OC DOCTRACK</h1>
-                <p>Please provide a valid document tracking ID below.</p>
+                <BackButton>
+                  <Link to="/login">
+                    <FaArrowAltCircleLeft/>
+                  </Link>
+                </BackButton>
+                <div>
+                  <h1>EVSU-OC DOCTRACK</h1>
+                  <p>Please provide a valid document tracking ID below.</p>
+                </div>
               </CardHeader>
               <CardBody>
                 <FormGroup>
@@ -67,60 +113,50 @@ const Inquiry = () => {
               document.map(
                 (
                   {
-                    action,
-                    current_office,
+                    id,
                     datetime_created,
-                    description,
-                    destination_office,
+                    originating_office,
                     doctype,
                     owner,
-                    remarks,
-                    sender,
                     status,
                     tracking_id,
                   },
                   key
                 ) => {
-                  // let datetime = new Date(datetime_created);
-                  const datetime = datetime_created
-                    .replace("T", " ")
-                    .replace("Z", "");
+
                   return (
-                    <CardContainer key={key} w="100%" p="5px">
+                    <Card key={key} w="100%" p="5px" mt="30px">
                       <Table>
                         <tbody>
                           <tr>
                             <th>Tracking ID</th>
                             <th>Document type</th>
-                            {/* <th>From</th>
-                            <th>Sender</th> */}
-                            {/* <th>Destination office</th> */}
-                            <th>Current office</th>
-                            {/* <th>Description</th> */}
-                            <th>Latest remarks</th>
-                            <th>Latest action</th>
+                            <th>Originating office</th>
+                            <th>Owner</th>
+                            <th>Created at</th>
                             <th>Status</th>
-                            <th></th>
                           </tr>
                           <tr>
                             <td>{tracking_id}</td>
                             <td>{doctype}</td>
-                            {/* <td>{owner}</td>
-                            <td>{sender}</td> */}
-                            {/* <td>{destination_office}</td> */}
-                            <td>{current_office}</td>
-                            {/* <td>{description}</td> */}
-                            <td>{remarks}</td>
-                            <td>{action}</td>
+                            <td>{originating_office}</td>
+                            <td>{owner}</td>
+                            <td>{formatDate(datetime_created)}</td>
                             <td style={{ color: "red" }}>{status}</td>
-                            <td>
-                              <button>View</button>
-                            </td>
+                            {/* <td>
+                              <button onClick={() => {
+                                setShowDoc(false);
+                                setDocId(id);
+                              }}>View</button>
+                            </td> */}
                           </tr>
                         </tbody>
                       </Table>
                       <button
-                        onClick={() => setShowDoc(false)}
+                        onClick={() => {
+                          setDocId(id)
+                          setShowDoc(false)
+                        }}
                         style={{
                           border: "none",
                           background: "none",
@@ -133,15 +169,13 @@ const Inquiry = () => {
                       >
                         See transaction history
                       </button>
-                    </CardContainer>
+                    </Card>
                   );
                 }
               )}
           </>
         ) : (
-          <CardContainer w="500px" margin="auto">
-            <h1>Hello</h1>
-          </CardContainer>
+          <Transactions />
         )}
       </MainContainer>
     </>

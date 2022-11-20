@@ -9,18 +9,19 @@ import {
   Breadcrumb,
   Unordered,
   Item,
-  AlertMessage
+  AlertMessage,
+  InfoContainer
 } from "./styles";
-import { FaRegFolderOpen, FaPlus } from "react-icons/fa";
+import { FaRegFolderOpen, FaPlus, FaExclamationCircle } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import MyDocumentsTable from "../MyDocumentsTable";
 import { useNavigate } from "react-router-dom";
 import ViewDocument  from "./ViewDocument";
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from "react";
 import MainContext from "../../context/MainContext";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Transactions from "../../components/Transactions";
 
 const MyDocuments = () => {
@@ -53,15 +54,27 @@ const MyDocuments = () => {
       <InnerContainer>
         {/* {showToast && <ToastContainer />} */}
         {alertMessage === "released" && <AlertMessage>
-          <h5>The document has been {alertMessage} succesfully.</h5>
+          <div>
+            <InfoContainer>
+              <FaExclamationCircle/>
+              <h4>INFO</h4>
+            </InfoContainer>
+            <h5>The document has been {alertMessage} succesfully.</h5>
+          </div>
           <button onClick={()=>setAlertMessage("")}>X</button>
         </AlertMessage>}
         {alertMessage === "added" && <AlertMessage>
-          <h5>The document has been {alertMessage} succesfully. You can release the document if the printed document is ready to be submitted to another office.</h5>
+          <div>
+            <InfoContainer>
+                <FaExclamationCircle/>
+                <h4>INFO</h4>
+              </InfoContainer>
+            <h5>The document has been {alertMessage} succesfully. You can release the document if the printed document is ready to be submitted to another office.</h5>
+          </div>
           <button onClick={()=>setAlertMessage("")}>X</button>
         </AlertMessage>}
         <HeaderContainer mt="15px">
-          <FaRegFolderOpen /> <HeaderText> My Documents</HeaderText>
+          <FaRegFolderOpen /> <HeaderText> Office Documents</HeaderText>
         </HeaderContainer>
         <Breadcrumb>
           <Unordered>
@@ -70,7 +83,7 @@ const MyDocuments = () => {
                 setIsHome(true) 
                 setShowDocument(false)
                 setShowTransactions(false)
-                }}>My documents</button>
+                }}>Office documents</button>
               <span>/</span>
             </Item>
             <Item color={showDocument ? "#0275d8" : "#a59b9b"} cursor={!isHome ? "pointer" : undefined}>

@@ -3,7 +3,16 @@ import styled from 'styled-components'
 import Footer from '../components/Footer';
 import { FaBuilding, FaUsers, FaUserTie } from 'react-icons/fa'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
+
+    const navigate = useNavigate();
+
+    const user = JSON.parse(localStorage.getItem("userData"));
+
+    useEffect(()=> {
+        user.role !== "admin" && navigate('/dashboard');
+    },[])
 
     let fetchUsers = 'http://localhost:5000/users'
     let fetchOffices = 'http://localhost:5000/offices'

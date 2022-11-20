@@ -4,6 +4,7 @@ export const MainContainer = styled.div`
   margin-left: 250px;
   padding-top: 30px;
   height: 100%;
+  background-color: #FCFCFC;
 `;
 
 export const InnerContainer = styled.div`

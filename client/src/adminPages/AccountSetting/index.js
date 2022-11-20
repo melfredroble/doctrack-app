@@ -14,6 +14,7 @@ import Footer from "../../components/Footer";
 import axios from "../../api/axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import MainContext from "../../context/MainContext";
+import { useNavigate } from "react-router-dom";
 
 const AccountSetting = () => {
   axios.defaults.withCredentials = true;
@@ -22,11 +23,17 @@ const AccountSetting = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [id, setId] = useState();
-  // const [office, setOffice] = useState('');
-  // const {offices} = useContext(MainContext);
   const [message, setMessage] = useState("");
 
   const { fetchUsersName } = useContext(MainContext);
+
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("userData"));
+
+  useEffect(()=> {
+      user.role !== "admin" && navigate('/dashboard');
+  },[])
 
   useEffect(() => {
     axios

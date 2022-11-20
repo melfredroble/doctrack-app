@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React, { useEffect, useMemo, useContext } from "react";
 import DataTable from "react-data-table-component";
 import useFetch from "../../hooks/useFetch";
 import { Button, SearchContainer, ClearButton, Input } from "./styles";
 import { FaFolderOpen } from "react-icons/fa";
 import MainContext from "../../context/MainContext";
 
-const OutgoingDocTable = ({ showDoc, showHome }) => {
+const TerminalDocTable = ({ showDoc, showHome }) => {
     const user = JSON.parse(localStorage.getItem("userData"));
-    const { data, loading, fetchData } = useFetch(`/documents/outGoingDoc/${user.id}`);
+    const { data, loading, fetchData } = useFetch(`/documents/receivedDoc/${user.office_id}`);
     const { setDocId } = useContext(MainContext);
 
     useEffect(() => {
@@ -126,4 +126,4 @@ const OutgoingDocTable = ({ showDoc, showHome }) => {
     </SearchContainer>
 );
 
-export default OutgoingDocTable;
+export default TerminalDocTable;

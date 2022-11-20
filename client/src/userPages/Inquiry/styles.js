@@ -12,6 +12,7 @@ export const MainContainer = styled.div`
 `;
 
 export const Card = styled.div`
+position: relative;
   width: ${(props) => props.w};
   height: auto;
   padding: ${(props) => props.p};
@@ -20,6 +21,7 @@ export const Card = styled.div`
   text-align: center;
   background: rgba(255, 255, 255, 0.7);
   box-shadow: 1px 1px 3px rgb(0 0 0 / 30%);
+  margin-top: ${props => props.mt};
 `;
 
 export const CardContainer = styled.div`
@@ -36,6 +38,8 @@ export const CardContainer = styled.div`
 export const CardHeader = styled.div`
   text-align: center;
   color: #2d3436;
+  display: flex;
+  justify-content: center;
 
   & h1 {
     margin-bottom: 20px;
@@ -85,15 +89,29 @@ export const MessageText = styled.div`
 export const Table = styled.table`
   border-collapse: collapse;
   width: 100%;
+  margin: 0;
 
   & td,
   th {
-    border: 1px solid #000000;
+    border: 1px solid #dcdcdc;
     text-align: left;
     padding: 10px 15px;
+    margin: 0;
   }
 
   & th {
     text-align: center;
   }
 `;
+
+export const BackButton = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  & svg {
+    color: #eaaa00;
+    font-size: 36px;
+    margin: 20px 15px;
+  }
+`

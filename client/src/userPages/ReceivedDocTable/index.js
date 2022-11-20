@@ -37,6 +37,13 @@ const ReceivedDocTable = ({ showDoc, showHome }) => {
             width: "200px"
         },
         {
+            name: "Originating office",
+            center: true,
+            selector: (row) => row.originating_office,
+            sortable: true,
+            width: "200px"
+        },
+        {
             name: "Status",
             center: true,
             selector: (row) => (

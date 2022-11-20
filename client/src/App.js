@@ -26,6 +26,7 @@ import MyDocuments from "./userPages/Documents";
 import OutgoingDoc from "./userPages/OutgoingDoc";
 import IncomingDoc from "./userPages/IncomingDoc";
 import ReceivedDoc from "./userPages/ReceivedDoc";
+import TerminalDoc from "./userPages/TerminalDoc";
 // import Document from './adminPages/Documents';
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
                 <Route path="/outgoingDoc" element={<OutgoingDoc/>} />
                 <Route path="/incomingDoc" element={<IncomingDoc/>} />
                 <Route path="/receivedDoc" element={<ReceivedDoc/>} />
+                <Route path="/terminalDoc" element={<TerminalDoc />} />
                 <Route path="/add-document" element={<AddDocument />} />
               </Route>
             </Route>

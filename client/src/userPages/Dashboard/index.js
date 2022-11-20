@@ -24,28 +24,32 @@ import {
 } from "./styles";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
-  let fetchUsers = "/users";
-  let fetchOffices = "/offices";
 
-  const [users, setUsers] = useState(null);
-  const [offices, setOffices] = useState(null);
+  const [outgoing, setOutgoing] = useState(0);
+  const [incoming, setIncoming] = useState(0);
+  const [receivedDoc, setReceivedDoc] = useState(0);
   const [trackingId, setTrackingId] = useState("");
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("userData"));
-
+  const  userId = user.id;
   useEffect(()=> {
       user.role === "admin" && navigate('/admin-dashboard');
   },[])
+  let outgoingNum = `/documents/outgoingCount/${userId}`;
+  let incomingNum = `/documents/incomingDoc/${user.office_id}`;
+  let receivedNum = `/documents/receivedDoc/${user.office_id}`;
 
-  const requestOne = axios.get(fetchUsers);
-  const requestTwo = axios.get(fetchOffices);
+  const requestOne = axios.get(outgoingNum);
+  const requestTwo = axios.get(incomingNum);
+  const requestThree = axios.get(receivedNum);
 
   useEffect(() => {
-    Axios.all([requestOne, requestTwo]).then(
+    Axios.all([requestOne, requestTwo, requestThree]).then(
       Axios.spread((...responses) => {
-        setUsers(responses[0].data.length);
-        setOffices(responses[1].data.length);
+        setOutgoing(responses[0].data.length);
+        setIncoming(responses[1].data.length);
+        setReceivedDoc(responses[2].data.length);
       })
     );
   }, []);
@@ -66,7 +70,7 @@ const Dashboard = () => {
               <h5>Received documents</h5>
             </CardLeft>
             <CardRight>
-              <h5>1</h5>
+              <h5>{receivedDoc}</h5>
             </CardRight>
             <CardBottom>
               <span>
@@ -79,7 +83,7 @@ const Dashboard = () => {
               <h5>Incoming documents</h5>
             </CardLeft>
             <CardRight>
-              <h5>2</h5>
+              <h5>{incoming}</h5>
             </CardRight>
             <CardBottom>
               <span>
@@ -93,7 +97,7 @@ const Dashboard = () => {
               <h5>Outgoing documents</h5>
             </CardLeft>
             <CardRight>
-              <h5>1</h5>
+              <h5>{outgoing}</h5>
             </CardRight>
             <CardBottom>
               <span>

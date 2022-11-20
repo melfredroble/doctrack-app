@@ -46,16 +46,6 @@ const Transactions = () => {
         .catch((error)=>console.log(error))
         .finally(()=>setLoading(false))
     },[docId])
-    // useEffect(()=>{
-    //     axios.get('/documents/transacHistory')
-    //     .then((response)=>{
-    //         dataArray.push(JSON.parse(response.data));
-    //         setData(dataArray);
-    //     })
-    //     .catch((error)=>console.log(error))
-    //     .finally(()=>setLoading(false))
-    // },[])
-
 
     const columns = useMemo(
         () => [

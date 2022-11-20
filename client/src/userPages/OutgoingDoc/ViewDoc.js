@@ -70,13 +70,16 @@ export const ViewDoc = () => {
                         <td>{data.remarks}</td>
                     </tr>
                     <tr>
-                        <th>Created at:</th>
-                        <td>{date} {time}</td>
-                        {/* .replace("T", " ").replace("Z", "").slice(0, -4) */}
+                        <th>Current office:</th>
+                        <td>{data.currOffice}</td>
+                    </tr>
+                    <tr>
+                        <th>Destination office:</th>
+                        <td>{data.destOffice}</td>
                     </tr>
                     <tr>
                         <th>Originating office:</th>
-                        <td>{data.originating_office}</td>
+                        <td>{data.originating_office} <p style={{marginTop: "10px", color: "#a59b9b"}}> {date} {time} </p></td>
                     </tr>
                     <tr>
                         <th>Status:</th>

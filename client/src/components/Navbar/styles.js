@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const MainContainer = styled.div`
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-  height: 80px;
+  /* box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2); */
+  height: 82px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -10,6 +10,7 @@ export const MainContainer = styled.div`
   justify-content: end;
   background-color: #ffffff !important;
   /* background-color: #a91414; */
+  border-bottom: 1px solid #dcdcdc;
   z-index: 1;
 `;
 
@@ -92,7 +93,7 @@ export const UserProfile = styled.button`
   & p {
     font-weight: 700;
     font-size: 14px;
-    margin-left: 5px;
+    margin-left: 6px;
   }
 `;
 
@@ -245,8 +246,17 @@ export const NavSection = styled.div`
   align-items: center;
 
   & svg {
-    font-size: 22px;
-    margin-right: 5px;
-    color: #6c757d;
+    color: #b8b7bd;
+  }
+`
+
+export const NotificationIcon = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+  & svg {
+      font-size: 22px;
+      margin-right: 5px;
+      /* color: #b8b7bd; */
   }
 `

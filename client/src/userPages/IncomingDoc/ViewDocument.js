@@ -54,8 +54,9 @@ export const ViewDocument = ({showDoc, setHome}) => {
         const receiveDoc = ()=>{
             const user = JSON.parse(localStorage.getItem("userData"));
             const officeId = user.office_id;
+            const destOffice = data.destination;
             
-            axios.post('/documents/receiveDoc', {docId, officeId, transacId})
+            axios.post('/documents/receiveDoc', {docId, officeId, transacId, destOffice})
             .then((response)=>{
                 if(response.status === 200){
                     setHome(true);

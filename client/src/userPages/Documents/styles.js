@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const MainContainer = styled.div`
   margin-left: 250px;
   height: 100%;
+  background-color: #fcfcfc;
 `;
 export const InnerContainer = styled.div`
   margin: 0 30px 30px 30px;
@@ -236,25 +237,42 @@ export const Item = styled.div`
 `
 
 export const AlertMessage = styled.div`
-  background-color: #afffb1a3;
-  border: 1px solid #08a50c;
+  /* background-color: #afffb1a3; */
+  background-color: #eef9fd;
+  border-left: 5px solid #4cb3d4;
   width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 30px 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   margin: 15px 0 20px 0;
 
   & h5 {
-    color: #08a50c;
-    font-size: 14px;
+    color: #414a4c;
+    font-size: 16px;
+    font-weight: normal;
   }
 
   & button {
     background: none;
     border: none;
     outline: none;
-    color: #08a50c;
+    color: #414a4c;
     cursor: pointer;
+    font-size: 16px;
+  }
+`
+
+export const InfoContainer = styled.div`
+  display: flex;
+  margin-bottom: 15px;
+  color: #414a4c;
+
+  & h4 {
+    font-size: 14px;
+  }
+  & svg {
+    margin-right: 5px;
+    font-size: 16px;
   }
 `

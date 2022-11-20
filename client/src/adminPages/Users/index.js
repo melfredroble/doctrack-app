@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import Table from "../../components/Table";
 import {
   MainContainer,
   Container,
@@ -24,10 +23,20 @@ import Footer from "../../components/Footer";
 import UsersTable from "../../components/UsersTable";
 import useFetch from "../../hooks/useFetch";
 import MainContext from "../../context/MainContext";
+import { useNavigate } from "react-router-dom";
 // import {useSpring, animated} from 'react-spring';
 
 const Users = () => {
   const [active, setActive] = useState(false);
+
+
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("userData"));
+
+  useEffect(()=> {
+      user.role !== "admin" && navigate('/dashboard');
+  },[])
 
   return (
     <MainContainer>

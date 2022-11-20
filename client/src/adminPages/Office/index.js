@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { FaRegBuilding, FaCheck, FaPlus } from 'react-icons/fa';
 import {
     MainContainer, 
@@ -21,11 +21,18 @@ import axios from '../../api/axios';
 import { ErrorText } from '../Users/styles';
 import OfficeTable from '../../components/OfficeTable';
 import useFetch from '../../hooks/useFetch';
-import MainContext from '../../context/MainContext';
+import { useNavigate } from 'react-router-dom';
 
 const Office = () => {
     
     const [active, setActive] = useState(false);
+
+    const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("userData"));
+
+    useEffect(()=> {
+        user.role !== "admin" && navigate('/dashboard');
+    },[])
     
     return (
         <MainContainer>

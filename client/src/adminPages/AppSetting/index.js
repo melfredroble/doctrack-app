@@ -1,9 +1,19 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { FaCog } from 'react-icons/fa';
 import { MainContainer, CardContainer, CardHeader, CardBody, CardFooter, FormGroup, Text, Button } from './styles'
 import Footer from '../../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const AppSetting = () => {
+
+    const navigate = useNavigate();
+
+    const user = JSON.parse(localStorage.getItem("userData"));
+
+    useEffect(()=> {
+        user.role !== "admin" && navigate('/dashboard');
+    },[])
+
     return (
         <MainContainer>
             <CardContainer>

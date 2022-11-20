@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const MainContainer = styled.div`
     margin-left: 250px;
     height: 100%;
+    background-color: #fcfcfc;
 `;
 
 export const InnerContainer = styled.div`

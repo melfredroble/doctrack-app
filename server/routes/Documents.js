@@ -36,25 +36,32 @@ router.get("/trackingId", requireAuth, (req, res) => {
   const sql =
     "SELECT FLOOR(RAND() * 99999) AS random_num FROM documents WHERE 'random_num' NOT IN (SELECT tracking_id FROM documents) LIMIT 1";
   const date = new Date();
-  const currYear = date.getFullYear();
-  const currMonth = date.getMonth() + 1;
-  const currDay = date.getDate();
-  const currMins = date.getMinutes();
-  const currHours = date.getHours();
-  var seconds = date.getSeconds();
-  var milliSeconds = date.getMilliseconds();
+  let currYear = date.getFullYear();
+  // const currMonth = date.getMonth() + 1;
+  let currDay = date.getDate();
+  let currMins = date.getMinutes();
+  let currHours = date.getHours();
+  let seconds = date.getSeconds();
+  let milliSeconds = date.getMilliseconds();
   conn.query(sql, (error, result) => {
     if (result) {
       const randomNum = result[0].random_num;
       conn.query(
         "select id from documents order by id desc limit 1",
         (error, row) => {
-          const lastId = row[0].id + 2;
+          // const lastId = row[0].id + 2;
+          // Find current hour in AM-PM Format
+          currHours = currHours % 12; 
+            
+          // To display "0" as "12"
+          currHours = currHours ? currHours : 12; 
+
           if (row) {
             res.json({
-              trackingId:
-                currYear + "-" + currMonth + currDay  +  seconds + "-" + randomNum,
+              trackingId: currYear + "-" + currDay + currHours + currMins + "-" + seconds + milliSeconds
             });
+          } else {
+            res.send(error)
           }
         }
       );
@@ -100,6 +107,21 @@ router.get("/type/:id", requireAuth, (req, res) => {
     }
   });
 });
+
+// Count outgoing documents
+router.get("/outgoingCount/:id", requireAuth, (req, res)=>{
+  const userId = req.params.id;
+
+  conn.query("SELECT * FROM documents d LEFT JOIN transactions t ON d.id = t.document_id WHERE d.sender_id = ? AND t.new_status LIKE '%pending%'", [userId],
+  (error, result)=>{
+    if(result){
+      res.json(result);
+    } else {
+      res.json(error);
+    }
+  })
+})
+
 
 // Add document type
 router.post("/addDocType", requireAuth, (req, res) => {
@@ -188,8 +210,10 @@ router.get("/:id", requireAuth, (req, res) => {
 router.get("/view/:id", requireAuth, (req, res) => {
   const docId = req.params.id;
 
+  // SELECT * , (SELECT office_name FROM offices WHERE id = t.office) currentOffice FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.document_id = ? ORDER BY t.id DESC LIMIT 1
+
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.remarks, d.datetime_created, d.originating_office, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id WHERE d.id = ?",
+    "SELECT d.id, d.tracking_id, d.owner, d.doctype, d.remarks, d.datetime_created, d.originating_office, d.status, (SELECT office_name FROM offices WHERE id = t.office) currentOffice, t.destination FROM documents d LEFT JOIN transactions t ON d.id = t.document_id WHERE d.id = ?",
     docId,
     (error, result) => {
       if (result) {
@@ -206,19 +230,78 @@ router.get("/view/:id", requireAuth, (req, res) => {
 router.get("/viewOutgoing/:id", requireAuth, (req, res) => {
   const docId = req.params.id;
 
+  // SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.remarks, d.datetime_created, d.originating_office, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id LEFT JOIN transactions t ON d.id = t.document_id WHERE t.id = ? 
+
   conn.query(
-    "SELECT d.id, d.tracking_id, u.name, d.owner, d.doctype, d.remarks, d.datetime_created, d.originating_office, d.status FROM documents d LEFT JOIN users u ON d.sender_id = u.id LEFT JOIN transactions t ON d.id = t.document_id WHERE t.id = ?",
+    "SELECT d.id, d.tracking_id, d.owner, d.doctype, d.remarks, d.datetime_created, d.originating_office, d.status, (SELECT office_name FROM offices WHERE id = t.destination) destOffice, (SELECT office_name FROM offices WHERE id = t.office) currOffice FROM documents d LEFT JOIN transactions t ON d.id = t.document_id WHERE t.document_id = ? ORDER BY t.id DESC",
     docId,
     (error, result) => {
       if (result) {
         res.json(result);
       } else {
         res.json(error);
-        console.log(error)
       }
     }
   );
 });
+
+// Getting outgoing documents.
+router.get("/outGoingDoc/:id", (req, res) => {
+  const docId = req.params.id;
+
+  conn.query(
+    "SELECT * FROM documents d WHERE d.sender_id = ? AND d.status LIKE '%pending%' ORDER BY d.id DESC;",
+    docId,
+    (error, result) => {
+      if (result) {
+        res.json(result);
+      }
+      if (error) {
+        res.json(error);
+      }
+    }
+  );
+});
+
+
+
+
+// Getting incoming documents.
+router.get("/incomingDoc/:id", (req, res) => {
+  const officeId = req.params.id;
+
+  conn.query(
+    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.new_status <> 'received' ORDER BY t.id DESC;",
+    [officeId],
+    (error, result) => {
+      if (result) {
+        res.json(result);
+      }
+      if (error) {
+        res.json(error);
+      }
+    }
+  );
+});
+
+// Getting Terminal documents.
+router.get("/terminalDoc/:id", (req, res) => {
+  const officeId = req.params.id;
+
+  conn.query(
+    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.new_status <> 'received' ORDER BY t.id DESC;",
+    [officeId],
+    (error, result) => {
+      if (result) {
+        res.json(result);
+      }
+      if (error) {
+        res.json(error);
+      }
+    }
+  );
+});
+
 
 // Adding new documents.
 router.post("/addDoc", (req, res, next) => {
@@ -273,9 +356,8 @@ router.post("/addDoc", (req, res, next) => {
 router.post("/trackDoc", (req, res) => {
   const trackingId = req.body.trackingId;
   const sql = "SELECT * FROM `documents` WHERE tracking_id = ?";
+
   conn.query(sql, [trackingId], (error, result) => {
-    const datetime =
-      "select datetime_created('%Y %D %M %H:%i:%s') from documents";
 
     if (error) {
       res.json(error);
@@ -298,42 +380,6 @@ router.post("/trackDoc", (req, res) => {
 //   });
 // });
 
-// Getting outgoing documents.
-router.get("/outGoingDoc/:id", (req, res) => {
-  const docId = req.params.id;
-
-  conn.query(
-    "SELECT * FROM documents d LEFT JOIN transactions t ON d.id = t.document_id WHERE d.sender_id = ? AND t.new_status LIKE '%pending%' ORDER BY d.id DESC;",
-    docId,
-    (error, result) => {
-      if (result) {
-        res.json(result);
-      }
-      if (error) {
-        res.json(error);
-      }
-    }
-  );
-});
-
-
-// Getting incoming documents.
-router.get("/incomingDoc/:id", (req, res) => {
-  const officeId = req.params.id;
-
-  conn.query(
-    "SELECT *, t.id transacId FROM transactions t LEFT JOIN documents d ON t.document_id = d.id WHERE t.destination = ? AND t.new_status <> 'received' ORDER BY t.id DESC;",
-    [officeId],
-    (error, result) => {
-      if (result) {
-        res.json(result);
-      }
-      if (error) {
-        res.json(error);
-      }
-    }
-  );
-});
 
 // INSERT INTO `transactions`(`document_id`, `datetime`, `current_office`, `received_by`) VALUES (43, '2022-11-14 00:14:52', 2, 2);
 
@@ -355,6 +401,32 @@ router.get("/receivedDoc/:id", (req, res) => {
   );
 });
 
+
+router.post("/terminal", (req,res)=>{
+  const docId = req.body.docId;
+  const actions = req.body.actions;
+  const remarks = req.body.remarks;
+
+  const sql = "INSERT into transactions (`document_id`, `actions`, `office`, `remarks`, `new_status`) VALUES (?, 'terminal', ?, ?, 'terminal')";
+
+  conn.query(sql, [docId, actions, remarks], (error, result)=>{
+    if(result.length > 0){
+
+      conn.query("UPDATE `documents` SET `status`= 'complete' WHERE id = ?", [docId], (error, result)=>{
+
+        if(result.length > 0){
+          res.status(200).send();
+        } else {
+          res.send(error);
+        }
+
+      })
+
+    } else {
+      res.send(error);
+    }
+  })
+})
 // Receiving documents.
 // router.put("/receiveDoc", (req, res) => {
 //   const data = req.body;
@@ -383,13 +455,14 @@ router.post("/receiveDoc", (req, res) => {
 
   let {
     docId,
+    destOffice,
     officeId,
     transacId
   } = data;
 
   conn.query(
-    "INSERT INTO `transactions`(`document_id`, `actions`, `office`) VALUES (?, 'received', ?)",
-    [docId,  officeId],
+    "INSERT INTO `transactions`(`document_id`, `actions`, `destination`, `office`, `new_status`) VALUES (?, 'received', ?, ?, 'received')",
+    [docId, destOffice, officeId],
     (error, result) => {
       if (error) {
         res.send(error);
@@ -400,7 +473,6 @@ router.post("/receiveDoc", (req, res) => {
           (error, result) => {
             if (error) {
               res.send(error);
-              console.log(error);
             } else {
               res.status(200).send();
             }
@@ -477,77 +549,5 @@ router.get('/transactions/:id', (req, res)=>{
   })
 });
 
-
-
-
-// Add Document
-// router.post('/add-document', (req, res) => {
-
-//     const userId = req.body.userId
-//     const docType = req.body.docType
-//     const description = req.body.description
-//     const currentOffice = req.body.currentOffice
-//     const destOffice = req.body.destOffice
-//     const remark = req.body.remarks
-
-//     conn.query("INSERT INTO `documents`(`user_id`, `doctype_id`, `description`, `current_office`, `destination_office`, `remarks`) VALUES (?,?,?,?,?,?)",
-//     [userId, docType, description, currentOffice, destOffice, remark],
-//     (error, result) => {
-//         if(result) {
-//             res.status(201).json({message: "Added Document"})
-//         }
-
-//         if(error) {
-//             res.status(401).send(error)
-//         }
-//     })
-
-// })
-
-// // Incoming documents
-// router.get('/incoming/:id', (req, res) => {
-//     const office_id = req.params.id
-
-//     conn.query("SELECT d.user_id, u.name, dt.name doctype, d.description, d.datetime, o.office_name OriginatingOffice, d.remarks, d.action FROM documents d LEFT JOIN users u ON d.user_id = u.id LEFT JOIN offices o ON u.office_id = o.id LEFT JOIN doctypes dt ON d.doctype_id = dt.id WHERE d.destination_office = ?",
-//     office_id,
-//     (error, result) => {
-//         if(result) {
-//             res.status(201).json(result)
-//         }
-//         if(error) {
-//             res.send(error)
-//         }
-//     })
-
-// })
-
-// // Outgoing documents
-// router.get('/outgoing/:id', (req, res) => {
-//     const user_id = req.params.id
-
-//     conn.query("SELECT d.id, d.user_id, dt.name documentName, d.description, d.datetime, c.office_name currentOffice, de.office_name destinationOffice, d.remarks, d.action, d.status FROM documents d INNER JOIN doctypes dt ON d.doctype_id = dt.id INNER JOIN offices c ON d.current_office = c.id INNER JOIN offices de ON d.destination_office = de.id INNER JOIN users u ON d.user_id = u.id WHERE d.user_id = ? ORDER BY d.id DESC",
-//     user_id,
-//     (error, result) => {
-//         if(result) {
-//             res.status(201).json(result)
-//         }else {
-//             res.status(401).json(error.message)
-//         }
-//     })
-// })
-
-// // Fetch received doc
-// router.get('/received_doc/:id', (req,res) => {
-//     const office_id = req.params.id
-//     conn.query("SELECT r.id, dt.name doctype, u.name sender, d.description, o.office_name OriginatingOffice, r.received_at, d.remarks latestRemarks, d.action latestAction, d.status FROM received_doc r LEFT JOIN documents d ON r.document_id = d.id LEFT JOIN users u ON d.user_id = u.id LEFT JOIN offices o ON r.received_by = o.id LEFT JOIN doctypes dt ON d.doctype_id = dt.id WHERE received_by = ? ORDER BY r.id DESC",
-//     office_id,
-//     (error, result)=>{
-//         if(result){
-//             res.status(201).json(result)
-//         } else {
-//             res.status(401).json(error.message)
-//         }
-//     })
-// })
 
 module.exports = router;

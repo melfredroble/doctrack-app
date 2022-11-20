@@ -15,7 +15,6 @@ import {
   FaRegUser,
   FaUserShield,
   FaTachometerAlt,
-  FaRegFolder,
   FaUserCog,
   FaRegFileAlt,
   FaArrowRight,
@@ -23,7 +22,6 @@ import {
   FaStop,
   FaCog,
   FaFolderOpen,
-  FaRegSquare,
 } from "react-icons/fa";
 import logo from "../../assets/img/logo.png";
 
@@ -153,7 +151,7 @@ const Sidebar = () => {
                   color: url.pathname === "/my-documents" && "#ffffff",
                 }}
               >
-                <FaFolderOpen /> My documents
+                <FaFolderOpen /> Office documents
               </Link>
               <Link
                 to="/receivedDoc"
@@ -183,19 +181,19 @@ const Sidebar = () => {
                 <FaArrowLeft /> Outgoing Documents
               </Link>
               <Link
-                to="/dashboard"
+                to="/terminalDoc"
                 style={{
-                  backgroundColor: url.pathname === "/" && "#1e282c",
-                  color: url.pathname === "/" && "#ffffff",
+                  backgroundColor: url.pathname === "/terminalDoc" && "#1e282c",
+                  color: url.pathname === "/terminalDoc" && "#ffffff",
                 }}
               >
                 <FaStop /> Tagged as terminal
               </Link>
               <Link
-                to="/dashboard"
+                to="/terminalDoc"
                 style={{
-                  backgroundColor: url.pathname === "/" && "#1e282c",
-                  color: url.pathname === "/" && "#ffffff",
+                  backgroundColor: url.pathname === "/terminalDoc" && "#1e282c",
+                  color: url.pathname === "/terminalDoc" && "#ffffff",
                 }}
               >
                 <FaCog /> Account settings

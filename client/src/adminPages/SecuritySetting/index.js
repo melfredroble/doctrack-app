@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { FaUserShield } from "react-icons/fa";
 import {
   MainContainer,
@@ -14,6 +14,7 @@ import Footer from "../../components/Footer";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "../../api/axios";
 import MainContext from "../../context/MainContext";
+import { useNavigate } from "react-router-dom";
 
 const SecuritySetting = () => {
   const [qtnOne, setQtnOne] = useState("");
@@ -25,6 +26,14 @@ const SecuritySetting = () => {
   const [message, setMessage] = useState("");
 
   const { fetchAnswers, answers } = useContext(MainContext);
+
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("userData"));
+
+  useEffect(()=> {
+      user.role !== "admin" && navigate('/dashboard');
+  },[])
 
   const handleSecurity = (e) => {
     e.preventDefault();

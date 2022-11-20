@@ -2,14 +2,17 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const dotenv = require("dotenv").config();
-const users = require("./routes/Users");
+const dotenv = require("dotenv").config({path: './.env'});
+const usersRoute = require("./routes/Users");
 const login = require("./routes/Login");
 const documents = require("./routes/Documents");
 const offices = require("./routes/Offices");
 const security = require("./routes/Security");
+const notifications = require("./routes/Notifications");
 const config = require("./config/db");
-const MySQLStore = require("express-mysql-session")(session);
+const http = require("http");
+const { Server } = require("socket.io");
+const { sessionMiddleware, wrap, corsConfig } = require("./controllers/session");
 
 const app = express();
 
@@ -17,54 +20,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const bcrypt = require("bcrypt");
 
-// CORS
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    credentials: true,
-  })
-);
-
 // DB CONNECTION
 let conn = config.connection;
-//
 
-// SET SESSION STORE
-var sessionStore = new MySQLStore(
-  {
-    expiration: 1000 * 60 * 60 * 24,
-    createDatabaseTable: true,
-    schema: {
-      tableName: "sessiontbl",
-      columnNames: {
-        session_id: "session_id",
-        expires: "expires",
-        data: "data",
-      },
-    },
-  },
-  conn
-);
+const server = http.createServer(app);
 
-// app.set('trust proxy', 1)
+const io = new Server(server, {
+  cors: corsConfig,
+});
 
+app.use(cors(corsConfig));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 // SET SESSION
-app.use(
-  session({
-    key: "keyin",
-    secret: process.env.SESSION_SECRET,
-    store: sessionStore,
-    resave: false, //true
-    saveUninitialized: false, //true
-    cookie: {
-      httpOnly: false, // true
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24,
-      sameSite: true,
-    },
-  })
-);
+app.use(sessionMiddleware);
+
+io.use(wrap(sessionMiddleware));
 
 // Persist Session
 app.use((req, res, next) => {
@@ -75,9 +46,29 @@ app.use((req, res, next) => {
 });
 
 // PORT LISTEN
-app.listen(process.env.PORT || 5000, () => {
-  console.log("Server is listening on port " + process.env.PORT);
+server.listen(process.env.PORT || 5000, () => {
+  console.log("Server running on port " + process.env.PORT);
 });
+
+// Route Middlewares
+app.use("/app", login);
+app.use("/users", usersRoute);
+app.use("/documents", documents);
+app.use("/offices", offices);
+app.use("/security", security);
+app.use("/notifications", notifications)
+
+// users
+let users = [];
+
+io.on("connection", (socket) => {
+  socket.on("connected", (myId) => {
+    users[myId] = socket.id;
+    console.log(myId);
+  });
+});
+
+
 
 // CHECK IF USER SESSION EXIST
 app.get("/login", (req, res) => {
@@ -146,9 +137,3 @@ app.get("/logout", (req, res) => {
   }
 });
 
-// Route Middlewares
-app.use("/app", login);
-app.use("/users", users);
-app.use("/documents", documents);
-app.use("/offices", offices);
-app.use("/security", security);

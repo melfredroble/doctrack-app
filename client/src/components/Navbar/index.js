@@ -22,7 +22,8 @@ import {
   CardBody,
   FormGroup,
   CardFooter,
-  NavSection
+  NavSection,
+  NotificationIcon
 } from "./styles";
 import { CloseButtonContainer, CloseButton } from "../Modal/styles";
 import { useTransition, animated } from "react-spring";
@@ -63,7 +64,9 @@ const Navbar = () => {
             <h3>{userRole !== "admin" && officeName}</h3>
           </HeaderText>
           <NavSection>
-            <FaBell/>
+            <NotificationIcon>
+              <FaBell/>
+            </NotificationIcon>
             <UserProfile
               onClick={() => {
                 setIsVisible((v) => !v);
