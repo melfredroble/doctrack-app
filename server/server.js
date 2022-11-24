@@ -73,7 +73,7 @@ io.on("connection", (socket) => {
 // CHECK IF USER SESSION EXIST
 app.get("/login", (req, res) => {
   if (req.session.user) {
-    res.json({ loggedIn: true });
+    res.json({ loggedIn: true, userRole: req.session.user });
   } else {
     res.json({ loggedIn: false });
   }

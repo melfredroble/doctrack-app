@@ -22,7 +22,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
+  // const [isAuth, setIsAuth] = useState(false);
 
   const { fetchUsersName } = useContext(MainContext);
 
@@ -31,11 +31,8 @@ const Login = () => {
       .get("http://localhost:5000/login")
       .then((response) => {
         if (response.data.loggedIn === true) {
-          setIsAuth(true);
           navigate("/");
-        } else {
-          setIsAuth(false);
-        }
+        } 
       })
       .catch((error) => {
         console.log(error);
@@ -51,7 +48,6 @@ const Login = () => {
         password: password,
       });
       if (response.data.loggedIn === true) {
-        // setIsLoading(false)
         navigate("/admin-dashboard");
         fetchUsersName();
         const userData = response.data.user;
@@ -60,7 +56,6 @@ const Login = () => {
 
       if (response.data.message) {
         setLoginStatus(response.data.message);
-        // setIsLoading(false)
       }
     } catch (error) {
       if (error) {

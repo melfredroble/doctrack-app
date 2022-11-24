@@ -33,9 +33,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("userData"));
   const  userId = user.id;
-  useEffect(()=> {
-      user.role === "admin" && navigate('/admin-dashboard');
-  },[])
+  // useEffect(()=> {
+  //     user.role === "admin" && navigate('/admin-dashboard');
+  // },[])
   let outgoingNum = `/documents/outgoingCount/${userId}`;
   let incomingNum = `/documents/incomingDoc/${user.office_id}`;
   let receivedNum = `/documents/receivedDoc/${user.office_id}`;

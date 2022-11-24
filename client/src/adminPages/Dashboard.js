@@ -6,13 +6,13 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const user = JSON.parse(localStorage.getItem("userData"));
+    // const user = JSON.parse(localStorage.getItem("userData"));
 
-    useEffect(()=> {
-        user.role !== "admin" && navigate('/dashboard');
-    },[])
+    // useEffect(()=> {
+    //     user.role !== "admin" && navigate('/dashboard');
+    // },[])
 
     let fetchUsers = 'http://localhost:5000/users'
     let fetchOffices = 'http://localhost:5000/offices'

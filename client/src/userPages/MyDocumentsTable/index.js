@@ -61,13 +61,15 @@ const MyDocumentsTable = ({ showDoc, showHome }) => {
         center: true,
         selector: (row) => row.doctype,
         sortable: true,
+        wrap: true
       },
       {
         name: "From",
         center: true,
         selector: (row) => row.owner,
         sortable: true,
-        width: "200px"
+        width: "200px",
+        wrap: true
       },
       {
         name: "Created At",
@@ -76,15 +78,22 @@ const MyDocumentsTable = ({ showDoc, showHome }) => {
         sortable: true,
       },
       {
-        name: "Status",
+        name: "Remarks",
         center: true,
-        selector: (row) => (
-          <>
-            <p style={{ color: "red", backgroundColor: "#f0f0f0", padding: "5px 10px", borderRadius: "5px"}}>{row.status}</p>
-          </>
-        ),
+        selector: (row) => row.remarks,
         sortable: true,
+        wrap: true
       },
+      // {
+      //   name: "Status",
+      //   center: true,
+      //   selector: (row) => (
+      //     <>
+      //       <p style={{ color: "red", backgroundColor: "#f0f0f0", padding: "5px 10px", borderRadius: "5px"}}>{row.status}</p>
+      //     </>
+      //   ),
+      //   sortable: true,
+      // },
       {
         name: "",
         selector: (row) => (
